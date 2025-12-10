@@ -1,20 +1,48 @@
-{
-  "name": "NOPE",
-  "short_name": "NOPE",
-  "start_url": "/register.html",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#ff2d55",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+<!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(console.error);
+    });
+  }
+</script>
+
+<!-- Emoji Favicon (no PNGs needed) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖤</text></svg>"/>
+```
+
+---
+
+## 📄 4. `sw.js` (Service Worker)
+
+Create file: **`sw.js`**
+
+```js
+// sw.js – minimal service worker for offline PWA
+const CACHE_NAME = 'nope-v1';
+const urlsToCache = [
+  '/register.html',
+  '/onboarding.html',
+  '/inner.html',
+  '/luar.html',
+  '/manifest.json'
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request)
+      .then((response) => response || fetch(event.request))
+  );
+});
+
+Mau aku bantu uji PWA compliance via Lighthouse? Atau kita sebut MVP ini **done**? 🖤
