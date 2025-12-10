@@ -1,13 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>NOPE</title>
-  <script>
-    window.location.href = "register.html";
-  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOPE • Veranda</title>
+  <meta name="description" content="Tempat lo ngomong tanpa takut dikenalin.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+    .container {
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.03em;
+    }
+    .headline {
+      font-size: 1.25rem;
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      background: linear-gradient(to right, #ff2d55, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subhead {
+      font-size: 0.875rem;
+      color: #666;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    .btn-enter {
+      background: #ff2d55;
+      color: #000;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      width: 100%;
+      max-width: 280px;
+      margin: 0 auto;
+      letter-spacing: 0.5px;
+    }
+    .btn-enter:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 12px rgba(255, 45, 85, 0.4);
+    }
+    .footer {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: #444;
+    }
+  </style>
 </head>
 <body>
-  Loading NOPE...
+  <div class="container">
+    <div class="logo">NOPE</div>
+    <h1 class="headline">Di sini, kamu tidak melihat dunia.</h1>
+    <p class="subhead">Kamu melihat jejakmu — di setiap ruang dan waktu.</p>
+    <button class="btn-enter" onclick="window.location.href='register.html'">
+      MASUK JIKA KAU SIAP
+    </button>
+    <div class="footer">Sebuah ruang untuk mereka yang berani jujur.</div>
+  </div>
 </body>
 </html>
