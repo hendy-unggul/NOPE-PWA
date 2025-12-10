@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOPE • Onboarding</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+    .step { @apply mb-8; }
+    .step-title { @apply text-xs uppercase tracking-wider text-gray-400 mb-2; }
+    .hashtag-item {
+      @apply bg-[#222] text-gray-300 py-2 px-3 rounded-xl mb-2 text-sm cursor-pointer;
+    }
+    .hashtag-item.selected { @apply bg-[#ff2d55] text-black; }
+    .btn-continue {
+      @apply w-full bg-[#ff2d55] text-black font-bold py-3 rounded-xl mt-4 opacity-50 cursor-not-allowed;
+    }
+    .btn-continue.active { @apply opacity-100 cursor-pointer; }
+    .welcome-id { @apply text-[#ff2d55] font-bold; }
+  </style>
+</head>
+<body class="min-h-screen p-4">
+  <div class="max-w-md mx-auto">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-black mb-1">NOPE</h1>
+      <p class="text-sm text-gray-400">Pilih 3 hal yang beneran lo nggak suka.</p>
+      <p id="welcomeId" class="welcome-id mt-3"></p>
+    </div>
+    <form id="onboardingForm">
+      <div class="step">
+        <div class="step-title">#Pilih</div>
+        <p class="text-xs text-gray-500 mb-3">Yang bikin lo kesel, tapi masih bisa ketawa</p>
+        <div class="space-y-2" data-category="pilih">
+          <div class="hashtag-item" data-value="#FilmBioskopMahal">#FilmBioskopMahal</div>
+          <div class="hashtag-item" data-value="#NgaretTanpaRasaBersalah">#NgaretTanpaRasaBersalah</div>
+          <div class="hashtag-item" data-value="#OrangBilangPositiveVibesOnly">#PositiveVibesOnly</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-title">#PersonalPain</div>
+        <p class="text-xs text-gray-500 mb-3">Yang lo sembunyiin, tapi beneran nyakitin</p>
+        <div class="space-y-2" data-category="personal">
+          <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
+          <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
+          <div class="hashtag-item" data-value="#DibilangAnakDurhakaKalauNggakNurut">#DibilangAnakDurhakaKalauNggakNurut</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-title">#SocialSickness</div>
+        <p class="text-xs text-gray-500 mb-3">Yang bikin lo ngerasa sistem ini salah</p>
+        <div class="space-y-2" data-category="social">
+          <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
+          <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
+          <div class="hashtag-item" data-value="#NgomonginPrivilegeTapiPakeiPhone">#NgomonginPrivilegeTapiPakeiPhone</div>
+        </div>
+      </div>
+      <button type="submit" id="continueBtn" class="btn-continue">LANJUT</button>
+    </form>
+  </div>
 
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    if (!currentUser) window.location.href = 'register.html';
+    document.getElementById('welcomeId').textContent = `Hai, @${currentUser.nope_id}.`;
+
+    const selections = { pilih: null, personal: null, social: null };
+    document.querySelectorAll('.hashtag-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const cat = item.closest('[data-category]').dataset.category;
+        document.querySelectorAll(`[data-category="${cat}"] .selected`).forEach(e => e.classList.remove('selected'));
+        item.classList.add('selected');
+        selections[cat] = item.dataset.value;
+        const ready = selections.pilih && selections.personal && selections.social;
+        document.getElementById('continueBtn').classList.toggle('active', ready);
+      });
+    });
+    document.getElementById('onboardingForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!selections.pilih || !selections.personal || !selections.social) return;
+      const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
+      users[currentUser.email].onboarding_done = true;
+      users[currentUser.email].hashtags = selections;
+      localStorage.setItem('nope_users', JSON.stringify(users));
+      window.location.href = 'inner.html';
+    });
+  </script>
+</body>
+</html>
