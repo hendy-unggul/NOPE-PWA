@@ -22,12 +22,10 @@
       padding: 20px 16px;
       min-height: 100vh;
     }
-
     .container {
       max-width: 360px;
       margin: 0 auto;
     }
-
     .header {
       text-align: center;
       margin-bottom: 24px;
@@ -43,11 +41,7 @@
       margin-top: 4px;
       opacity: 0.7;
     }
-
-    /* === ARTEFAK TERBARU (PALING ATAS) === */
-    .artefak-current {
-      margin-bottom: 24px;
-    }
+    .artefak-current { margin-bottom: 24px; }
     .artefak-img {
       width: 100%;
       height: 200px;
@@ -68,9 +62,7 @@
       opacity: 0;
       transition: opacity 0.2s;
     }
-    .artefak-img:hover .artefak-notasi {
-      opacity: 1;
-    }
+    .artefak-img:hover .artefak-notasi { opacity: 1; }
     .artefak-emoji {
       display: flex;
       justify-content: center;
@@ -78,18 +70,12 @@
       margin-top: 14px;
       font-size: 24px;
     }
-    .emoji-item {
-      cursor: default;
-    }
-    .emoji-item.has-reactions {
-      animation: pulse 2s infinite;
-    }
+    .emoji-item { cursor: default; }
+    .emoji-item.has-reactions { animation: pulse 2s infinite; }
     @keyframes pulse {
       0%, 100% { opacity: 0.6; transform: scale(1); }
       50% { opacity: 1; transform: scale(1.1); }
     }
-
-    /* === RANT BOX USER === */
     .rant-box {
       background: var(--card);
       border: 1px solid var(--border);
@@ -120,8 +106,6 @@
       font-size: 14px;
       cursor: pointer;
     }
-
-    /* === FREKUENSI YANG LALU === */
     .section-title {
       font-size: 12px;
       color: var(--muted);
@@ -172,8 +156,6 @@
       opacity: 1;
       transform: scale(1.1);
     }
-
-    /* === JURNAL RANT USER === */
     .jurnal-item {
       background: var(--card);
       border: 1px solid var(--border);
@@ -197,8 +179,6 @@
       margin-top: 10px;
       font-size: 24px;
     }
-
-    /* === ARSIP ARTEFAK (PALING BAWAH) === */
     .artefak-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -212,8 +192,6 @@
       border-radius: 8px;
       border: 1px solid var(--border);
     }
-
-    /* === MODAL === */
     .modal {
       position: fixed;
       top: 0;
@@ -271,7 +249,6 @@
       <div class="nope-id" id="nopeId">...</div>
     </div>
 
-    <!-- 🖼️ ARTEFAK TERBARU — PALING ATAS -->
     <div class="artefak-current">
       <div class="artefak-img">
         <div class="artefak-notasi">Kopi dingin, tak terminum</div>
@@ -283,13 +260,11 @@
       </div>
     </div>
 
-    <!-- 📝 RANT BOX USER -->
     <div class="rant-box">
       <textarea class="rant-input" placeholder="Curahkan kegundahan hatimu..."></textarea>
       <button class="rant-btn">Rant</button>
     </div>
 
-    <!-- 👁️ FREKUENSI YANG LALU -->
     <div class="section-title">frekuensi yang lewat</div>
     <div class="freq-rant">
       Aku lelah jadi tempat curhat tapi tak pernah didengar.
@@ -318,7 +293,6 @@
       </div>
     </div>
 
-    <!-- 📖 JURNAL RANT USER -->
     <div class="section-title">jurnalmu</div>
     <div class="jurnal-item">
       Aku capek jadi 'anak baik' yang selalu nurut.
@@ -333,7 +307,6 @@
       </div>
     </div>
 
-    <!-- 📦 ARSIP ARTEFAK — PALING BAWAH -->
     <div class="section-title">arsip artefak</div>
     <div class="artefak-grid">
       <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a1/100/100')"></div>
@@ -345,7 +318,6 @@
     </div>
   </div>
 
-  <!-- MODAL -->
   <div class="modal" id="reactionModal">
     <div class="modal-content">
       <div id="modalText">2 orang mendengarmu.</div>
@@ -358,17 +330,14 @@
   </div>
 
   <script type="module">
-    // 🔑 GANTI DENGAN DARI SUPABASE > SETTINGS > API
     const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
     import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
       .then(async ({ createClient }) => {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
         const {  { user } } = await supabase.auth.getUser();
         if (!user) return window.location.href = 'onboarding.html';
-
         const {  { profiles } } = await supabase
           .from('profiles')
           .select('nope_username')
@@ -377,7 +346,6 @@
         document.getElementById('nopeId').textContent = profiles?.nope_username || 'nope_anon';
       });
 
-    // Emoji interaction + resonance simulation (sama seperti sebelumnya)
     const modal = document.getElementById('reactionModal');
     const modalText = document.getElementById('modalText');
     const usernameList = document.getElementById('usernameList');
@@ -411,11 +379,8 @@
         const emoji = btn.textContent.trim();
         if (emoji === '✎') {
           const text = prompt("Tulis resonansimu (maks 60 karakter):");
-          if (text && text.length <= 60) {
-            alert("Resonansi diam-diam telah terkirim.");
-          } else if (text) {
-            alert("Maksimal 60 karakter.");
-          }
+          if (text && text.length <= 60) alert("Resonansi diam-diam telah terkirim.");
+          else if (text) alert("Maksimal 60 karakter.");
         } else {
           alert("Resonansi diam-diam telah terkirim.");
         }
