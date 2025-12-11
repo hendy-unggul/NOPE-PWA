@@ -1,100 +1,203 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><link rel="manifest" href="/manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js');
-  }
-</script>
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE • Inner</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
-    .header-id { @apply text-[#ff2d55] font-bold mb-4; }
-    .input-rage {
-      @apply w-full bg-[#222] text-white rounded-xl px-4 py-3 text-sm border-none outline-none mb-4;
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+    }
+    .user-id {
+      color: #ff2d55;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0.5rem 1.5rem 1.25rem;
+    }
+    .container {
+      padding: 0 1.5rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .rage-input {
+      width: 100%;
+      background: #222;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 1rem;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      min-height: 100px;
+      resize: none;
+    }
+    .section-title {
+      font-size: 0.75rem;
+      color: #555;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
     .hashtag-selector {
-      @apply bg-[#222] rounded-xl p-3 mb-4;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
     }
     .hashtag-item {
-      @apply inline-block bg-[#333] text-gray-300 px-3 py-1 rounded-full text-xs mr-2 mb-2 cursor-pointer;
+      background: #333;
+      color: #aaa;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      cursor: pointer;
     }
     .hashtag-item.active {
-      @apply bg-[#ff2d55] text-black;
+      background: #ff2d55;
+      color: #000;
+      font-weight: 600;
     }
     .preview-box {
-      @apply bg-[#222] rounded-xl p-3 mt-4;
+      background: #222;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .preview-label {
+      font-size: 0.75rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .preview-text {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: #ddd;
+      margin-bottom: 0.5rem;
+    }
+    .preview-hashtag {
+      color: #ff2d55;
+      font-size: 0.85rem;
     }
     .btn-leave {
-      @apply w-full bg-[#ff2d55] text-black font-bold py-3 rounded-xl mt-4;
+      background: #ff2d55;
+      color: #000;
+      border: none;
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .btn-leave:hover {
+      transform: scale(1.02);
+    }
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+    }
+    .nav-item {
+      font-size: 0.75rem;
+      color: #666;
+    }
+    .nav-item.active {
+      color: #ff2d55;
+      font-weight: 600;
     }
   </style>
 </head>
-<body class="min-h-screen p-4">
-  <div class="max-w-md mx-auto">
+<body>
+  <div class="header">
+    <div class="logo">NOPE</div>
+    <div style="width: 8px; height: 8px; background: #ff2d55; border-radius: 50%;"></div>
+  </div>
 
-    <div class="flex justify-between items-center mb-2">
-      <h1 class="text-xl font-bold">NOPE</h1>
-      <div class="w-2 h-2 rounded-full bg-red-500"></div>
-    </div>
+  <div class="user-id" id="userId"></div>
 
-    <div id="userId" class="header-id"></div>
-
+  <div class="container">
     <form id="rageForm">
       <textarea 
         id="rageInput" 
-        class="input-rage" 
-        placeholder="Ngomong pelan-pelan… gue denger." 
+        class="rage-input" 
+        placeholder="Ngomong pelan-pelan… gue denger."
         rows="4"
       ></textarea>
 
-      <div class="hashtag-selector">
-        <p class="text-xs text-gray-400 mb-2">Pilih zona jejak lo:</p>
-        <div id="hashtagOptions"></div>
-      </div>
+      <div class="section-title">PILIH ZONA</div>
+      <div class="hashtag-selector" id="hashtagOptions"></div>
 
       <div class="preview-box">
-        <p class="text-xs text-gray-400 mb-1">Preview jejak:</p>
-        <p id="previewText" class="text-sm text-gray-300 italic">“...”</p>
-        <p id="previewHashtag" class="text-xs text-[#ff2d55] mt-1"></p>
+        <div class="preview-label">Preview jejak:</div>
+        <div class="preview-text" id="previewText">“...”</div>
+        <div class="preview-hashtag" id="previewHashtag"></div>
       </div>
 
       <button type="submit" class="btn-leave">TINGGALKAN JEJAK</button>
     </form>
+  </div>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800">
-      <div class="flex justify-around py-2">
-        <div class="text-gray-400 text-xs">Luar</div>
-        <div class="text-gray-600 text-xs">Notifikasi</div>
-        <div class="text-[#ff2d55] font-bold text-xs">Rage</div>
-        <div class="text-gray-600 text-xs">Inner</div>
-      </div>
-    </div>
+  <div class="nav">
+    <div class="nav-item">Luar</div>
+    <div class="nav-item">Notifikasi</div>
+    <div class="nav-item active">Rage</div>
+    <div class="nav-item">Inner</div>
   </div>
 
   <script>
+    // Ambil user dari localStorage
     const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    if (!currentUser) window.location.href = 'register.html';
+    if (!currentUser) {
+      window.location.href = 'index.html';
+    }
+
+    // Tampilkan @nope_username
     document.getElementById('userId').textContent = `@${currentUser.nope_id}`;
 
+    // Muat hashtag dari onboarding
     const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
     const userData = users[currentUser.email];
-    const hashtags = userData.hashtags || { pilih: '#Pilih', personal: '#PersonalPain', social: '#SocialSickness' };
+    const hashtags = userData.hashtags || {
+      pilih: '#Pilih',
+      personal: '#PersonalPain',
+      social: '#SocialSickness'
+    };
 
-    const hashtagList = [
+    // Render pilihan hashtag
+    const options = [
       { key: 'pilih', label: hashtags.pilih },
       { key: 'personal', label: hashtags.personal },
       { key: 'social', label: hashtags.social }
     ];
 
     const container = document.getElementById('hashtagOptions');
-    hashtagList.forEach(item => {
+    options.forEach((item, i) => {
       const el = document.createElement('div');
-      el.className = 'hashtag-item';
+      el.className = 'hashtag-item' + (i === 0 ? ' active' : '');
       el.textContent = item.label;
       el.onclick = () => {
         document.querySelectorAll('.hashtag-item').forEach(e => e.classList.remove('active'));
@@ -103,8 +206,8 @@
       };
       container.appendChild(el);
     });
-    if (container.firstChild) container.firstChild.classList.add('active');
 
+    // Preview
     const rageInput = document.getElementById('rageInput');
     const previewText = document.getElementById('previewText');
     const previewHashtag = document.getElementById('previewHashtag');
@@ -119,13 +222,19 @@
     rageInput.addEventListener('input', updatePreview);
     updatePreview();
 
+    // Submit
     document.getElementById('rageForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const text = rageInput.value.trim();
       const active = document.querySelector('.hashtag-item.active');
       const hashtag = active ? active.textContent : '#Pilih';
-      if (!text) return alert('Jejak lo kosong.');
 
+      if (!text) {
+        alert('Jejak lo kosong.');
+        return;
+      }
+
+      // Simpan ke localStorage (mock feed)
       const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
       feeds.push({
         id: Date.now(),
@@ -135,6 +244,8 @@
         timestamp: new Date().toISOString()
       });
       localStorage.setItem('nope_feeds', JSON.stringify(feeds));
+
+      // Reset form
       rageInput.value = '';
       updatePreview();
       alert('Jejak lo sudah meninggalkan gema.');
@@ -142,3 +253,4 @@
   </script>
 </body>
 </html>
+Atau kita anggap ini **final** dan siap untuk traksi 1.000 user? 🖤
