@@ -3,212 +3,223 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE — Luar</title>
-  <link rel="manifest" href="/manifest.json" />
+  <title>NOPE — Onboarding</title>
   <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --muted: #777780;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #00f3ff; /* biru neon deep */
+      --accent1: #ff2d55;
+    }
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
     }
-
     body {
-      background: #000;
-      color: #fff;
-      line-height: 1.5;
-      padding: 24px 20px 32px; /* bottom padding cukup agar tidak bocor */
-      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.3;
     }
 
-    .logo {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-
-    .tabs {
+    /* Container utama — dipastikan center */
+    .onboarding-container {
       display: flex;
-      gap: 16px;
-      margin-bottom: 32px;
-      font-size: 14px;
-      color: #666;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 16px;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .section-list > div {
-      font-size: 16px;
-      margin-bottom: 12px;
-      color: #aaa;
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
     }
-
-    /* --- Feed --- */
-    .feed {
-      margin-top: 32px;
+    .header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.2;
     }
-
-    .post {
-      background: #0a0a0a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      border: 1px solid #1a1a1a;
-    }
-
-    /* Rant */
-    .rant-text {
-      font-size: 15px;
-      line-height: 1.5;
-      color: #fff;
-      margin-bottom: 12px;
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 20px;
+    .header p {
       font-size: 13px;
-      color: #888;
-    }
-    .post-actions span {
-      cursor: pointer;
-    }
-    .post-actions span:hover {
-      color: #ddd;
+      color: var(--muted);
     }
 
-    .comment-input {
+    .zones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
       width: 100%;
+    }
+    .zone {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .zone-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00f3ff;
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+    }
+    .hashtag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .hashtag-item {
+      background: rgba(255,255,255,0.02);
+      color: #aaa;
       padding: 8px;
       border-radius: 8px;
-      background: #151515;
-      border: 1px solid #222;
-      color: #ccc;
-      font-size: 13px;
-      margin-top: 12px;
+      cursor: pointer;
     }
-    .comment-input::placeholder {
-      color: #444;
-    }
-
-    /* Artefak */
-    .artefak-image-wrapper {
-      position: relative;
-      width: 100%;
-      padding-bottom: 80%; /* height = 80% of width */
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    .artefak-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      /* Real photo — worn-out shoes */
-      background-image: url('https://images.unsplash.com/photo-1605296866204-7d5d0c1d2f5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
-    }
-
-    .artefak-note {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0, 0, 0, 0.6);
+    .hashtag-item.selected {
+      background: rgba(0, 243, 255, 0.15);
       color: white;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 4px;
-      backdrop-filter: blur(4px);
-      max-width: 70%;
+      border: 1px solid #00f3ff;
+    }
+    .hashtag-item.locked {
+      opacity: 0.15;
+      cursor: not-allowed;
     }
 
-    .emotion-meta {
-      font-size: 12px;
-      color: #4F86F7;
-      font-style: italic;
-      margin-top: 10px;
-      opacity: 0.8;
+    .status {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 13px;
+      width: 100%;
+    }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 6px 0;
+    }
+    .status-value.complete { color: #00f3ff; }
+    .status-value.incomplete { color: #ff9500; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #00f3ff, #00a8ff);
+      color: black;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn:disabled {
+      opacity: 0.4;
     }
   </style>
 </head>
 <body>
-  <!-- Original luar.html content -->
-  <div class="logo">NOPE</div>
+  <div class="onboarding-container">
+    <div class="header">
+      <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
+      <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
+        * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
+      </p>
+    </div>
 
-  <div class="tabs">
-    <div>Sefrekuensi</div>
-    <div>Segelombang</div>
-    <div>✊ Solidaritas</div>
+    <div class="zones-grid">
+      <!-- Zona akan di-generate oleh JS -->
+    </div>
+
+    <div class="status">
+      <!-- Status akan diisi oleh JS -->
+    </div>
+
+    <button class="btn" disabled>Lanjut</button>
   </div>
 
-  <div class="section-list">
-    <div class="section-title">Luar</div>
-    <div>Inspirasi</div>
-    <div>Rage</div>
-    <div>Inner</div>
-  </div>
+  <script>
+    // ... (script asli tetap utuh — tidak diubah)
+    const zones = [
+      { id: 'luar', title: 'Luar', hashtags: ['#WorkRage', '#FamilyPain', '#SocialDrain'] },
+      { id: 'inspirasi', title: 'Inspirasi', hashtags: ['#DeepTalk', '#QuietTruth', '#StillThinking'] },
+      { id: 'rage', title: 'Rage', hashtags: ['#Betrayed', '#Used', '#Ghosted'] },
+      { id: 'inner', title: 'Inner', hashtags: ['#AloneAgain', '#NotSad', '#JustTired'] }
+    ];
 
-  <!-- Feed Preview (for layout review) -->
-  <div class="feed">
-    <!-- Rant 1 -->
-    <div class="post">
-      <div class="rant-text">“Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”</div>
-      <div class="post-actions">
-        <span>💬 Gue ngerti banget</span>
-        <span>👯‍♀️ Peluk kenceng</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 2 jam lalu • 3 reaksi</div>
-    </div>
+    let selections = {};
 
-    <!-- Artefak -->
-    <div class="post">
-      <div class="artefak-image-wrapper">
-        <div class="artefak-image"></div>
-        <div class="artefak-note">Kado terakhir dari ayah</div>
-      </div>
-      <div class="post-actions">
-        <span>💙</span>
-        <span>🕊️</span>
-        <span>🕯️</span>
-      </div>
-      <div class="emotion-meta">— 18 hari lalu • 12 reaksi</div>
-    </div>
+    function renderZones() {
+      const grid = document.querySelector('.zones-grid');
+      grid.innerHTML = '';
+      zones.forEach(zone => {
+        const div = document.createElement('div');
+        div.className = 'zone';
+        div.innerHTML = `
+          <div class="zone-title">${zone.title}</div>
+          <div class="hashtag-list" id="zone-${zone.id}">
+            ${zone.hashtags.map(h => `<div class="hashtag-item" data-hashtag="${h}">${h}</div>`).join('')}
+          </div>
+        `;
+        grid.appendChild(div);
+      });
 
-    <!-- Rant 2 -->
-    <div class="post">
-      <div class="rant-text">“Aku gak mau dibilang kuat. Kadang aku cuma pengen diem aja.”</div>
-      <div class="post-actions">
-        <span>💤 Aku juga</span>
-        <span>🫂 Lo udah cukup</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 1 hari lalu • 14 reaksi</div>
-    </div>
+      document.querySelectorAll('.hashtag-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const zoneId = el.closest('.zone').querySelector('.zone-title').textContent.toLowerCase();
+          const validZone = ['luar','inspirasi','rage','inner'].find(z => zoneId.includes(z)) || zoneId;
+          const current = selections[validZone];
+          if (current === el.dataset.hashtag) {
+            delete selections[validZone];
+            el.classList.remove('selected');
+          } else {
+            selections[validZone] = el.dataset.hashtag;
+            // Hapus seleksi sebelumnya di zona ini
+            el.closest('.hashtag-list').querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+          }
+          updateStatus();
+        });
+      });
+    }
 
-    <!-- Rant 3 -->
-    <div class="post">
-      <div class="rant-text">“Pernah ngerasa semua orang move on, tapi lo stuck di titik yang sama?”</div>
-      <div class="post-actions">
-        <span>🌀 Iya</span>
-        <span>🕊️ Lo gak sendirian</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 1 hari lalu • 9 reaksi</div>
-    </div>
-  </div>
+    function updateStatus() {
+      const statusDiv = document.querySelector('.status');
+      statusDiv.innerHTML = '';
+      let completed = 0;
+      zones.forEach(zone => {
+        const id = zone.id;
+        const selected = selections[id];
+        const statusRow = document.createElement('div');
+        statusRow.className = 'status-row';
+        statusRow.innerHTML = `
+          <span>${zone.title}</span>
+          <span class="status-value ${selected ? 'complete' : 'incomplete'}">${selected || 'belum dipilih'}</span>
+        `;
+        statusDiv.appendChild(statusRow);
+        if (selected) completed++;
+      });
+
+      const btn = document.querySelector('.btn');
+      btn.disabled = completed < 4;
+      if (completed === 4) {
+        btn.textContent = 'Lanjut';
+        btn.onclick = () => {
+          localStorage.setItem('nope_selections', JSON.stringify(selections));
+          window.location.href = '/luar';
+        };
+      }
+    }
+
+    renderZones();
+    updateStatus();
+  </script>
 </body>
 </html>
