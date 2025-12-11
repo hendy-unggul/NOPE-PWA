@@ -1,88 +1,282 @@
 <!DOCTYPE html>
 <html lang="id">
-<head><link rel="manifest" href="/manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js');
-  }
-</script>
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE • Luar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
-    .nope-tab { @apply px-4 py-2 text-sm font-medium rounded-full; }
-    .nope-tab.active { background: #ff2d55; color: #000; }
-    .nope-tab.inactive { color: #888; }
-    .reaction-btn {
-      @apply flex flex-col items-center justify-center w-16 h-16 bg-transparent border-none cursor-pointer transition-transform;
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
     }
-    .reaction-btn:hover { transform: scale(1.05); }
-    .reaction-text { @apply text-[10px] mt-1 text-center leading-tight; }
-    .comment-item { @apply bg-[#222] rounded-xl p-3 mb-2; }
-    .comment-username { @apply text-[#ff2d55] text-xs font-bold; }
-    .comment-text { @apply text-xs mt-1; }
-    .comment-box { @apply w-full bg-[#111] rounded-xl p-3 mt-3 text-sm; }
-    .send-btn { @apply mt-2 bg-[#ff2d55] text-black px-4 py-1.5 rounded-full text-sm font-bold; }
+    .header {
+      padding: 1.25rem 1.5rem 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-weight: 800; font-size: 1.25rem; }
+    .tabs {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.5rem;
+      padding: 0 1.5rem 1rem;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      background: #222;
+      color: #666;
+      padding: 0.3rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .tab.active {
+      background: #ff2d55;
+      color: #000;
+    }
+    .container {
+      padding: 0 1.5rem;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .empty {
+      text-align: center;
+      color: #555;
+      font-size: 0.9rem;
+      margin: 2rem 0;
+    }
+    .post {
+      background: #111;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .post-text {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .reactions {
+      display: flex;
+      gap: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .reaction {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+    .reaction-emoji { font-size: 1.2rem; }
+    .reaction-label {
+      font-size: 0.65rem;
+      text-align: center;
+      line-height: 1.2;
+      color: #888;
+    }
+    .comment {
+      background: #222;
+      padding: 0.6rem 0.8rem;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+    }
+    .comment-user {
+      color: #ff2d55;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .comment-text {
+      font-size: 0.85rem;
+      color: #ddd;
+      margin-top: 0.2rem;
+    }
+    .comment-input {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+    .comment-field {
+      flex: 1;
+      background: #222;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+    .comment-send {
+      background: #ff2d55;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+    }
+    .nav-item { font-size: 0.75rem; color: #666; }
+    .nav-item.active { color: #ff2d55; font-weight: 600; }
   </style>
 </head>
-<body class="min-h-screen bg-black text-white p-4">
-  <div class="max-w-md mx-auto">
-
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-xl font-bold">NOPE</h1>
-      <div class="flex space-x-2">
-        <div class="w-2 h-2 rounded-full bg-red-500"></div>
-      </div>
-    </div>
-
-    <div class="flex space-x-2 mb-6 overflow-x-auto no-scrollbar">
-      <div class="nope-tab active">Sefrekuensi</div>
-      <div class="nope-tab inactive">Segelombang</div>
-      <div class="nope-tab inactive">✊ Solidaritas</div>
-    </div>
-
-    <div class="bg-[#111] rounded-2xl p-4">
-      <p class="text-sm mb-3">“Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”</p>
-      
-      <div class="flex space-x-4 mt-4">
-        <button class="reaction-btn">
-          <span>🫶</span>
-          <span class="reaction-text">Gue ngerti banget</span>
-        </button>
-        <button class="reaction-btn">
-          <span>🤲</span>
-          <span class="reaction-text">Peluk kenceng,<br>gak perlu jawab</span>
-        </button>
-      </div>
-
-      <div class="mt-4 space-y-2">
-        <div class="comment-item">
-          <div class="comment-username">@nope_8x2m4</div>
-          <div class="comment-text">Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.</div>
-        </div>
-        <div class="comment-item">
-          <div class="comment-username">@nope_3q9r1</div>
-          <div class="comment-text">Peluk diam-diam dari jauh. Lo udah cukup berani.</div>
-        </div>
-      </div>
-
-      <div class="comment-box">
-        <textarea placeholder="Balas pelan-pelan..." class="w-full bg-transparent border-none focus:outline-none text-white placeholder:text-gray-500 text-sm" rows="2"></textarea>
-        <button class="send-btn">KIRIM</button>
-      </div>
-    </div>
-
-    <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800">
-      <div class="flex justify-around py-2">
-        <div class="text-gray-400 text-xs">Luar</div>
-        <div class="text-gray-600 text-xs">Notifikasi</div>
-        <div class="text-gray-600 text-xs">Rage</div>
-        <div class="text-gray-600 text-xs">Inner</div>
-      </div>
-    </div>
+<body>
+  <div class="header">
+    <div class="logo">NOPE</div>
+    <div style="width: 8px; height: 8px; background: #ff2d55; border-radius: 50%;"></div>
   </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="sefrekuensi">Sefrekuensi</div>
+    <div class="tab" data-tab="segelombang">Segelombang</div>
+    <div class="tab" data-tab="solidaritas">✊ Solidaritas</div>
+  </div>
+
+  <div class="container">
+    <div id="feedContent"></div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-item active">Luar</div>
+    <div class="nav-item">Notifikasi</div>
+    <div class="nav-item">Rage</div>
+    <div class="nav-item">Inner</div>
+  </div>
+
+  <script>
+    // Ambil user & feed
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
+    const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
+
+    if (!currentUser) {
+      window.location.href = 'index.html';
+    }
+
+    const userHashtags = new Set(Object.values(users[currentUser.email]?.hashtags || {}));
+
+    // Kelompokkan feed
+    const sefrekuensi = [];
+    const segelombang = [];
+    const solidaritas = [];
+
+    feeds.forEach(feed => {
+      const feedHashtag = feed.hashtag;
+      let match = 0;
+      if (userHashtags.has(feedHashtag)) match = 1;
+
+      // Untuk MVP, anggap semua feed punya 1 hashtag → match 1 = segelombang, match 3 = sefrekuensi (nanti di backend)
+      // Sementara, kita asumsikan:
+      if (feed.user === 'nope_demo1' || feed.user === 'nope_demo2') {
+        sefrekuensi.push(feed);
+      } else if (feed.user === 'nope_demo3') {
+        segelombang.push(feed);
+      } else {
+        solidaritas.push(feed);
+      }
+    });
+
+    // Atau, untuk MVP sederhana: tampilkan semua di Sefrekuensi saja dulu
+    const mockFeeds = [
+      {
+        user: 'nope_demo1',
+        text: 'Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’',
+        hashtag: '#PersonalPain'
+      },
+      {
+        user: 'nope_demo2',
+        text: 'Nggak tahan liat influencer pake isu mental health buat jualan skincare.',
+        hashtag: '#SocialSickness'
+      }
+    ];
+
+    const comments = {
+      'nope_demo1': [
+        { user: 'nope_8x2m4', text: 'Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.' },
+        { user: 'nope_3q9r1', text: 'Peluk diam-diam dari jauh. Lo udah cukup berani.' }
+      ],
+      'nope_demo2': [
+        { user: 'nope_k9m2p', text: 'Bener banget. Mental health bukan gimmick.' }
+      ]
+    };
+
+    // Render
+    function renderFeed(feeds, tabName) {
+      const container = document.getElementById('feedContent');
+      if (feeds.length === 0) {
+        container.innerHTML = `<div class="empty">Belum ada jejak ${tabName}.</div>`;
+        return;
+      }
+
+      let html = '';
+      feeds.forEach(feed => {
+        const feedComments = comments[feed.user] || [];
+        html += `
+          <div class="post">
+            <div class="post-text">“${feed.text}”</div>
+            <div class="reactions">
+              <div class="reaction">
+                <div class="reaction-emoji">🫶</div>
+                <div class="reaction-label">Gue ngerti<br>banget</div>
+              </div>
+              <div class="reaction">
+                <div class="reaction-emoji">🤲</div>
+                <div class="reaction-label">Peluk<br>kenceng</div>
+              </div>
+            </div>
+            ${feedComments.map(c => `
+              <div class="comment">
+                <div class="comment-user">@${c.user}</div>
+                <div class="comment-text">${c.text}</div>
+              </div>
+            `).join('')}
+            <div class="comment-input">
+              <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
+              <button class="comment-send">KIRIM</button>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const tabId = tab.dataset.tab;
+        if (tabId === 'sefrekuensi') {
+          renderFeed(mockFeeds, 'Sefrekuensi');
+        } else if (tabId === 'segelombang') {
+          renderFeed([mockFeeds[1]], 'Segelombang');
+        } else {
+          renderFeed([], 'Solidaritas');
+        }
+      });
+    });
+
+    // Render default
+    renderFeed(mockFeeds, 'Sefrekuensi');
+  </script>
 </body>
 </html>
+Atau bikin technical brief final buat engineer? 🖤
