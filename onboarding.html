@@ -13,81 +13,76 @@
       --border: #1a1a25;
       --neon-blue: #00f3ff;
     }
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box; /* wajib */
+      margin: 0;
+      padding: 0;
+    }
     body {
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-      padding: 16px;
-      margin: 0;
+      padding: 16px; /* sesuai commit asli */
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      width: 100%;
+      overflow-x: hidden; /* pastikan tidak ada scroll horizontal */
     }
 
     .header {
       text-align: center;
-      margin-bottom: 16px;
-      width: 100%;
+      margin-bottom: 24px;
     }
     .header h1 {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 800;
-      margin-bottom: 6px;
+      color: #ffffff;
+      margin-bottom: 8px;
       line-height: 1.2;
     }
     .header p {
-      font-size: 10px;
+      font-size: 11px;
       color: #666;
-      margin: 8px 0;
+      margin: 12px 0;
+      text-align: center;
     }
 
     .zones-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      width: 100%;
-      max-width: 390px; /* iPhone 13 width */
+      grid-template-columns: 1fr 1fr; /* 2 kolom */
+      gap: 16px; /* cukup untuk iPhone */
+      width: 100%; /* pastikan tidak melebar */
     }
 
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
-      height: 160px; /* tetapkan tinggi agar muat 2 baris */
-      display: flex;
-      flex-direction: column;
+      border-radius: 12px;
+      padding: 16px;
     }
 
     .zone-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       color: var(--neon-blue);
-      font-size: 12px;
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+      margin-bottom: 12px;
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 4px;
-      text-shadow: 0 0 4px rgba(0, 243, 255, 0.3);
     }
 
     .hashtag-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      overflow-y: auto;
-      flex: 1;
-      padding-right: 4px;
+      gap: 8px;
     }
 
     .hashtag-item {
       background: rgba(255,255,255,0.02);
       color: #aaa;
-      padding: 6px 8px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 8px;
+      border-radius: 8px;
       cursor: pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .hashtag-item.selected {
@@ -97,8 +92,8 @@
     }
 
     /* LOCK ZONE 4 */
-    .zone:nth-child(4) .hashtag-item {
-      opacity: 0.2;
+    .zones-grid > .zone:nth-child(4) .hashtag-item {
+      opacity: 0.15;
       cursor: not-allowed;
       pointer-events: none;
     }
@@ -106,97 +101,117 @@
     .status {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
-      margin: 16px 0;
+      border-radius: 12px;
+      padding: 16px;
+      margin: 24px 0;
       width: 100%;
-      max-width: 390px;
-      font-size: 11px;
+      font-size: 13px;
     }
 
     .status-row {
       display: flex;
       justify-content: space-between;
-      margin: 4px 0;
+      margin: 6px 0;
     }
 
     .status-value.complete { color: var(--neon-blue); }
-    .status-value.incomplete { color: #ff9500; }
+    .status-value.incomplete { color: #555; }
 
     .btn {
-      width: fit-content;
-      padding: 10px 20px;
+      width: 100%;
+      padding: 14px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      margin-left: auto;
+      margin-top: 8px;
     }
-    .btn:disabled { opacity: 0.4; }
+    .btn:disabled {
+      opacity: 0.4;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-    <p>* Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.</p>
+    <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
+      * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
+    </p>
   </div>
 
   <div class="zones-grid">
+    <!-- PopCulture -->
     <div class="zone">
       <div class="zone-title">#PopCulture</div>
       <div class="hashtag-list">
-        <div class="hashtag-item">#FilmEndingGaje</div>
-        <div class="hashtag-item">#BeliTiketJualGinjal</div>
-        <div class="hashtag-item">#InfluencerNgehek</div>
-        <div class="hashtag-item">#TikTokBikinGila</div>
-        <div class="hashtag-item">#SelebPuraPuraBahagia</div>
+        <div class="hashtag-item" data-value="#FilmEndingGaje">#FilmEndingGaje</div>
+        <div class="hashtag-item" data-value="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
+        <div class="hashtag-item" data-value="#InfluencerNgehek">#InfluencerNgehek</div>
+        <div class="hashtag-item" data-value="#TikTokBikinGila">#TikTokBikinGila</div>
+        <div class="hashtag-item" data-value="#SelebPuraPuraBahagia">#SelebPuraPuraBahagia</div>
       </div>
     </div>
+
+    <!-- PersonalPain -->
     <div class="zone">
       <div class="zone-title">#PersonalPain</div>
       <div class="hashtag-list">
-        <div class="hashtag-item">#GakBisaBilangTidak</div>
-        <div class="hashtag-item">#MauSendiriTapiTakutDibilangJutek</div>
-        <div class="hashtag-item">#DibilangAnakDurhakaKalauNggakNurut</div>
-        <div class="hashtag-item">#CemasTerusPasOrangTidur</div>
-        <div class="hashtag-item">#GakPunyaAlasanHidup</div>
+        <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
+        <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
+        <div class="hashtag-item" data-value="#DibilangAnakDurhakaKalauNggakNurut">#DibilangAnakDurhakaKalauNggakNurut</div>
+        <div class="hashtag-item" data-value="#CemasTerusPasOrangTidur">#CemasTerusPasOrangTidur</div>
+        <div class="hashtag-item" data-value="#GakPunyaAlasanHidup">#GakPunyaAlasanHidup</div>
       </div>
     </div>
+
+    <!-- SocialSickness -->
     <div class="zone">
       <div class="zone-title">#SocialSickness</div>
       <div class="hashtag-list">
-        <div class="hashtag-item">#MentalHealthDijadiinTrend</div>
-        <div class="hashtag-item">#KerjaKerasDipujiTapiGajiNggakNaik</div>
-        <div class="hashtag-item">#NgomonginPrivilegeTapiPakeiPhone</div>
-        <div class="hashtag-item">#KapitalisNgegas</div>
-        <div class="hashtag-item">#LGBTQDijadiinKonten</div>
+        <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
+        <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
+        <div class="hashtag-item" data-value="#NgomonginPrivilegeTapiPakeiPhone">#NgomonginPrivilegeTapiPakeiPhone</div>
+        <div class="hashtag-item" data-value="#KapitalisNgegas">#KapitalisNgegas</div>
+        <div class="hashtag-item" data-value="#LGBTQDijadiinKonten">#LGBTQDijadiinKonten</div>
       </div>
     </div>
+
+    <!-- SayNOPE (LOCKED) -->
     <div class="zone">
       <div class="zone-title">#SayNOPE</div>
       <div class="hashtag-list">
-        <div class="hashtag-item">#LawanEksploitasiBuruh</div>
-        <div class="hashtag-item">#TolakDiskriminasiGender</div>
-        <div class="hashtag-item">#HentikanPenggusuranRakyat</div>
-        <div class="hashtag-item">#StopKekerasanSeksual</div>
-        <div class="hashtag-item">#BoikotPerusahaanRusakBumi</div>
+        <div class="hashtag-item" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
+        <div class="hashtag-item" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
+        <div class="hashtag-item" data-value="#HentikanPenggusuranRakyat">#HentikanPenggusuranRakyat</div>
+        <div class="hashtag-item" data-value="#StopKekerasanSeksual">#StopKekerasanSeksual</div>
+        <div class="hashtag-item" data-value="#BoikotPerusahaanRusakBumi">#BoikotPerusahaanRusakBumi</div>
       </div>
     </div>
   </div>
 
   <div class="status">
-    <div class="status-row"><span>#PopCulture</span><span class="status-value incomplete">belum dipilih</span></div>
-    <div class="status-row"><span>#PersonalPain</span><span class="status-value incomplete">belum dipilih</span></div>
-    <div class="status-row"><span>#SocialSickness</span><span class="status-value incomplete">belum dipilih</span></div>
+    <div class="status-row">
+      <span>#PopCulture</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
+    <div class="status-row">
+      <span>#PersonalPain</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
+    <div class="status-row">
+      <span>#SocialSickness</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
   </div>
 
   <button class="btn" disabled>Lanjut</button>
 
   <script>
-    const zones = document.querySelectorAll('.zone:not(:nth-child(4))');
+    // Logika JS tetap seperti commit asli — tidak diubah
+    const zones = document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))');
     const statusRows = document.querySelectorAll('.status-row');
     const btn = document.querySelector('.btn');
 
@@ -205,19 +220,19 @@
         item.addEventListener('click', () => {
           zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
           item.classList.add('selected');
+          statusRows[idx].querySelector('.status-value').textContent = item.dataset.value;
           statusRows[idx].querySelector('.status-value').className = 'status-value complete';
-          statusRows[idx].querySelector('.status-value').textContent = item.textContent;
           checkBtn();
         });
       });
     });
 
     function checkBtn() {
-      const allSelected = Array.from(statusRows).every(row =>
+      const allComplete = Array.from(statusRows).every(row =>
         row.querySelector('.status-value').className.includes('complete')
       );
-      btn.disabled = !allSelected;
-      if (allSelected) btn.textContent = 'Lanjut';
+      btn.disabled = !allComplete;
+      if (allComplete) btn.textContent = 'Lanjut';
     }
   </script>
 </body>
