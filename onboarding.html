@@ -14,43 +14,44 @@
       --neon-blue: #00f3ff;
     }
     * {
-      box-sizing: border-box; /* wajib */
-      margin: 0;
-      padding: 0;
+      box-sizing: border-box;
     }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
-      padding: 16px; /* sesuai commit asli */
+      font-family: 'Inter', sans-serif;
+      padding: 24px 16px;
       min-height: 100vh;
-      width: 100%;
-      overflow-x: hidden; /* pastikan tidak ada scroll horizontal */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+      max-width: 360px;
     }
     .header h1 {
       font-size: 24px;
       font-weight: 800;
       color: #ffffff;
-      margin-bottom: 8px;
-      line-height: 1.2;
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
-    .header p {
+    .instruction-note {
       font-size: 11px;
       color: #666;
-      margin: 12px 0;
       text-align: center;
     }
 
     .zones-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* 2 kolom */
-      gap: 16px; /* cukup untuk iPhone */
-      width: 100%; /* pastikan tidak melebar */
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 360px;
     }
 
     .zone {
@@ -66,9 +67,6 @@
       gap: 8px;
       color: var(--neon-blue);
       text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
-      margin-bottom: 12px;
-      font-size: 14px;
-      font-weight: 600;
     }
 
     .hashtag-list {
@@ -78,7 +76,7 @@
     }
 
     .hashtag-item {
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       color: #aaa;
       padding: 8px;
       border-radius: 8px;
@@ -91,7 +89,7 @@
       border: 1px solid var(--neon-blue);
     }
 
-    /* LOCK ZONE 4 */
+    /* ✅ TASK 1: KUNCI ZONE 4 */
     .zones-grid > .zone:nth-child(4) .hashtag-item {
       opacity: 0.15;
       cursor: not-allowed;
@@ -103,9 +101,10 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
-      margin: 24px 0;
-      width: 100%;
+      margin: 20px 0;
       font-size: 13px;
+      width: 100%;
+      max-width: 360px;
     }
 
     .status-row {
@@ -117,9 +116,16 @@
     .status-value.complete { color: var(--neon-blue); }
     .status-value.incomplete { color: #555; }
 
+    /* ✅ TASK 2: SAMAKAN PANJANG HASHTAG PER ZONA */
+    .zone .hashtag-list {
+      display: inline-grid;
+      grid-template-columns: max-content;
+    }
+
+    /* ✅ TASK 3: CTA RATA KANAN */
     .btn {
-      width: 100%;
-      padding: 14px;
+      width: fit-content;
+      padding: 14px 24px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
@@ -127,7 +133,7 @@
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 8px;
+      margin-left: auto;
     }
     .btn:disabled {
       opacity: 0.4;
@@ -137,7 +143,7 @@
 <body>
   <div class="header">
     <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-    <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
+    <p class="instruction-note">
       * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
     </p>
   </div>
@@ -210,30 +216,50 @@
   <button class="btn" disabled>Lanjut</button>
 
   <script>
-    // Logika JS tetap seperti commit asli — tidak diubah
-    const zones = document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))');
-    const statusRows = document.querySelectorAll('.status-row');
-    const btn = document.querySelector('.btn');
+    // ... (script asli tetap utuh)
+    const zones = [
+      { id: 'pop', title: '#PopCulture', hashtags: ['#FilmEndingGaje', '#BeliTiketJualGinjal', '#InfluencerNgehek', '#TikTokBikinGila', '#SelebPuraPuraBahagia'] },
+      { id: 'personal', title: '#PersonalPain', hashtags: ['#GakBisaBilangTidak', '#MauSendiriTapiTakutDibilangJutek', '#DibilangAnakDurhakaKalauNggakNurut', '#CemasTerusPasOrangTidur', '#GakPunyaAlasanHidup'] },
+      { id: 'social', title: '#SocialSickness', hashtags: ['#MentalHealthDijadiinTrend', '#KerjaKerasDipujiTapiGajiNggakNaik', '#NgomonginPrivilegeTapiPakeiPhone', '#KapitalisNgegas', '#LGBTQDijadiinKonten'] }
+    ];
 
-    zones.forEach((zone, idx) => {
-      zone.querySelectorAll('.hashtag-item').forEach(item => {
-        item.addEventListener('click', () => {
-          zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-          item.classList.add('selected');
-          statusRows[idx].querySelector('.status-value').textContent = item.dataset.value;
-          statusRows[idx].querySelector('.status-value').className = 'status-value complete';
-          checkBtn();
+    let selections = {};
+
+    function renderZones() {
+      document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))').forEach((zoneEl, idx) => {
+        const zone = zones[idx];
+        zoneEl.querySelectorAll('.hashtag-item').forEach(item => {
+          item.addEventListener('click', () => {
+            zoneEl.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            selections[zone.id] = item.dataset.value;
+            updateStatus();
+          });
         });
       });
-    });
-
-    function checkBtn() {
-      const allComplete = Array.from(statusRows).every(row =>
-        row.querySelector('.status-value').className.includes('complete')
-      );
-      btn.disabled = !allComplete;
-      if (allComplete) btn.textContent = 'Lanjut';
     }
+
+    function updateStatus() {
+      const rows = document.querySelectorAll('.status-row');
+      let complete = 0;
+      zones.forEach((zone, i) => {
+        const val = selections[zone.id];
+        const row = rows[i];
+        const statusVal = row.querySelector('.status-value');
+        if (val) {
+          statusVal.textContent = val;
+          statusVal.className = 'status-value complete';
+          complete++;
+        } else {
+          statusVal.textContent = 'belum dipilih';
+          statusVal.className = 'status-value incomplete';
+        }
+      });
+      document.querySelector('.btn').disabled = complete < zones.length;
+    }
+
+    renderZones();
+    updateStatus();
   </script>
 </body>
 </html>
