@@ -3,87 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Veranda</title>
-  <meta name="description" content="Tempat lo ngomong tanpa takut dikenalin.">
+  <title>NOPE</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
       background: #000;
       color: #fff;
       font-family: 'Inter', sans-serif;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
-      overflow-x: hidden;
+      overflow: hidden;
     }
-    .container {
-      text-align: center;
-      max-width: 500px;
-      width: 100%;
-    }
-    .logo {
-      font-weight: 800;
-      font-size: 2.5rem;
+    .heart {
+      font-size: 4rem;
+      animation: pulse 1.8s infinite;
       margin-bottom: 2rem;
-      letter-spacing: -0.03em;
     }
-    .headline {
-      font-size: 1.25rem;
-      line-height: 1.5;
-      margin-bottom: 1.25rem;
-      background: linear-gradient(to right, #ff2d55, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.9; }
     }
-    .subhead {
-      font-size: 0.875rem;
-      color: #666;
-      margin-bottom: 2.5rem;
-      line-height: 1.6;
+    .input-container {
+      position: relative;
+      width: 90%;
+      max-width: 360px;
     }
-    .btn-enter {
+    .email-input {
+      width: 100%;
+      background: #222;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 0.8rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.95rem;
+      caret-color: #ff2d55;
+    }
+    .email-input::placeholder {
+      color: #555;
+    }
+    .btn-gas {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
       background: #ff2d55;
       color: #000;
       border: none;
-      padding: 0.75rem 2rem;
+      padding: 0.4rem 1rem;
       border-radius: 9999px;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: all 0.25s ease;
-      width: 100%;
-      max-width: 280px;
-      margin: 0 auto;
-      letter-spacing: 0.5px;
+      transition: all 0.2s;
     }
-    .btn-enter:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 12px rgba(255, 45, 85, 0.4);
+    .btn-gas:hover {
+      transform: translateY(-50%) scale(1.05);
     }
-    .footer {
-      margin-top: 3rem;
+    .hint {
       font-size: 0.75rem;
       color: #444;
+      margin-top: 2rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">NOPE</div>
-    <h1 class="headline">Di sini, kamu tidak melihat dunia.</h1>
-    <p class="subhead">Kamu melihat jejakmu — di setiap ruang dan waktu.</p>
-    <button class="btn-enter" onclick="window.location.href='register.html'">
-      MASUK JIKA KAU SIAP
-    </button>
-    <div class="footer">Sebuah ruang untuk mereka yang berani jujur.</div>
+  <div class="heart">🖤</div>
+  <div class="input-container">
+    <input 
+      type="email" 
+      id="emailInput" 
+      class="email-input" 
+      placeholder="Masukan emailmu jika berani" 
+    />
+    <button id="gasBtn" class="btn-gas">GAS</button>
   </div>
+  <p class="hint">Tekan Enter atau klik GAS</p>
+
+  <script>
+    function generateNopeId() {
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      return 'nope_' + Array.from({ length: 6 }, () => 
+        chars.charAt(Math.floor(Math.random() * chars.length))
+      ).join('');
+    }
+
+    function handleEmail(email) {
+      const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
+      
+      if (users[email]) {
+        // User lama → ke inner
+        localStorage.setItem('current_user', JSON.stringify({
+          email: email,
+          nope_id: users[email].nope_id
+        }));
+        window.location.href = 'inner.html';
+      } else {
+        // User baru → ke onboarding
+        const nope_id = generateNopeId();
+        users[email] = { nope_id, onboarding_done: false };
+        localStorage.setItem('nope_users', JSON.stringify(users));
+        localStorage.setItem('current_user', JSON.stringify({ email, nope_id }));
+        window.location.href = 'onboarding.html';
+      }
+    }
+
+    // Submit via button
+    document.getElementById('gasBtn').addEventListener('click', () => {
+      const email = document.getElementById('emailInput').value.trim().toLowerCase();
+      if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        handleEmail(email);
+      }
+    });
+
+    // Submit via Enter
+    document.getElementById('emailInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const email = e.target.value.trim().toLowerCase();
+        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          handleEmail(email);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
