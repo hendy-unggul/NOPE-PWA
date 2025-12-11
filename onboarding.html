@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE — Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #000;
@@ -12,12 +13,9 @@
       --card: #0a0a0f;
       --border: #1a1a25;
       --neon-blue: #00f3ff;
-      --accent-gradient: linear-gradient(135deg, #00f3ff, #00a8ff);
     }
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
     body {
       background: var(--bg);
@@ -32,22 +30,34 @@
 
     .header {
       text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       max-width: 360px;
     }
+
+    /* ✅ SOPHISTICATED HEADLINE */
     .header h1 {
-      font-size: 24px;
       font-weight: 800;
+      font-size: 28px;
+      line-height: 1.1;
+      margin: 0;
+      letter-spacing: -0.5px;
+    }
+
+    .header .line1 {
       color: #ffffff;
-      margin-bottom: 12px;
-      line-height: 1.3;
+    }
+    .header .line2 {
+      color: var(--neon-blue);
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+      margin-top: 4px;
+      display: block;
     }
 
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 18px;
-      margin-bottom: 24px;
+      margin-bottom: 16px; /* dikurangi */
       width: 100%;
       max-width: 360px;
     }
@@ -65,6 +75,9 @@
       gap: 8px;
       color: var(--neon-blue);
       text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 14px;
     }
 
     .hashtag-list {
@@ -79,6 +92,7 @@
       padding: 8px;
       border-radius: 8px;
       cursor: pointer;
+      font-weight: 400;
     }
 
     .hashtag-item.selected {
@@ -93,12 +107,21 @@
       pointer-events: none;
     }
 
+    /* ✅ INSTRUKSI DIPINDAH KE BAWAH ZONA */
+    .instruction-note {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      margin: 16px 0;
+      max-width: 360px;
+    }
+
     .status {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
-      margin: 20px 0;
+      margin: 16px 0;
       font-size: 13px;
       width: 100%;
       max-width: 360px;
@@ -111,20 +134,19 @@
     }
 
     .status-value.complete { color: var(--neon-blue); }
-    .status-value.incomplete { color: #555; }
+    .status-value.incomplete { color: #ff9500; }
 
     .btn {
       width: 100%;
       max-width: 360px;
       padding: 14px;
-      background: var(--accent-gradient);
+      background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
       border-radius: 12px;
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
-      margin-top: 8px;
     }
     .btn:disabled {
       opacity: 0.4;
@@ -133,10 +155,11 @@
 </head>
 <body>
   <div class="header">
-    <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-    <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
-      * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
-    </p>
+    <!-- ✅ HEADLINE LEBIH DRAMATIS & SOPHISTICATED -->
+    <h1>
+      <span class="line1">Jangan pilih yang kau suka.</span><br>
+      <span class="line2">Pilih yang kau benci.</span>
+    </h1>
   </div>
 
   <div class="zones-grid">
@@ -188,6 +211,11 @@
       </div>
     </div>
   </div>
+
+  <!-- ✅ INSTRUKSI DIPINDAH KE SINI -->
+  <p class="instruction-note">
+    * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
+  </p>
 
   <div class="status">
     <div class="status-row">
