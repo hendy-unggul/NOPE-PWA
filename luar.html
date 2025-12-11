@@ -3,309 +3,211 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Luar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>NOPE — Luar</title>
+  <link rel="manifest" href="/manifest.json" />
   <style>
-    body {
-      background: #000000;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      min-height: 100vh;
-      padding-bottom: 60px;
-      font-size: 14px;
-      line-height: 1.4;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
     }
-    .header {
-      padding: 16px 16px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    body {
+      background: #000;
+      color: #fff;
+      line-height: 1.5;
+      padding: 24px 20px 40px;
     }
+
     .logo {
-      font-weight: 800;
       font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
     }
+
     .tabs {
       display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      font-size: 14px;
+      color: #666;
       overflow-x: auto;
-      gap: 12px;
-      padding: 0 16px 12px;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
     .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-      background: #111111;
-      color: #888888;
-      padding: 6px 14px;
-      border-radius: 9999px;
-      font-size: 14px;
+
+    .section-title {
+      font-size: 18px;
       font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
+      margin-bottom: 16px;
     }
-    .tab.active {
-      background: #0f62fe;
-      color: #000000;
+
+    .section-list > div {
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: #aaa;
     }
-    .container {
-      padding: 0 16px;
+
+    /* --- Feed --- */
+    .feed {
+      margin-top: 32px;
     }
-    .empty {
-      text-align: center;
-      color: #555555;
-      font-size: 14px;
-      margin: 24px 0;
-    }
+
     .post {
       background: #0a0a0a;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
-      margin-bottom: 20px;
-    }
-    .post-text {
-      font-size: 14px;
       margin-bottom: 16px;
-      line-height: 1.45;
+      border: 1px solid #1a1a1a;
     }
-    .reactions {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
+
+    /* Rant */
+    .rant-text {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #fff;
+      margin-bottom: 12px;
     }
-    .reaction {
+
+    .post-actions {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: #888;
+    }
+    .post-actions span {
       cursor: pointer;
     }
-    .reaction-emoji {
-      font-size: 18px;
+    .post-actions span:hover {
+      color: #ddd;
     }
-    .reaction-label {
-      font-size: 11px;
-      text-align: center;
-      line-height: 1.3;
-      color: #777777;
-      font-weight: 500;
-    }
-    .comment {
-      background: #111111;
-      padding: 8px 12px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-    }
-    .comment-user {
-      color: #0f62fe;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .comment-text {
-      font-size: 13px;
-      color: #cccccc;
-      margin-top: 2px;
-    }
-    .comment-instruction {
-      font-size: 11px;
-      color: #666;
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
+
     .comment-input {
-      display: flex;
-      gap: 8px;
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background: #151515;
+      border: 1px solid #222;
+      color: #ccc;
+      font-size: 13px;
       margin-top: 12px;
     }
-    .comment-field {
-      flex: 1;
-      background: #111111;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 13px;
+    .comment-input::placeholder {
+      color: #444;
     }
-    .comment-send {
-      background: #0f62fe;
-      color: #000000;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
+
+    /* Artefak */
+    .artefak-image-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 80%; /* height = 80% of width */
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 10px;
     }
-    .nav {
-      position: fixed;
-      bottom: 0;
+
+    .artefak-image {
+      position: absolute;
+      top: 0;
       left: 0;
-      right: 0;
-      background: #000000;
-      border-top: 1px solid #1a1a1a;
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      /* Real photo — worn-out shoes */
+      background-image: url('https://images.unsplash.com/photo-1605296866204-7d5d0c1d2f5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
     }
-    .nav-item {
-      font-size: 12px;
-      color: #666666;
-    }
-    .nav-item.active {
-      color: #0f62fe;
+
+    .artefak-note {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 14px;
       font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+      max-width: 70%;
     }
-    .notification-dot {
-      width: 6px;
-      height: 6px;
-      background: #ff2d55;
-      border-radius: 50%;
+
+    .emotion-meta {
+      font-size: 12px;
+      color: #4F86F7;
+      font-style: italic;
+      margin-top: 10px;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logo">NOPE</div>
-    <div class="notification-dot"></div>
-  </div>
+  <!-- Original luar.html content -->
+  <div class="logo">NOPE</div>
 
   <div class="tabs">
-    <div class="tab active" data-tab="sefrekuensi">Sefrekuensi</div>
-    <div class="tab" data-tab="segelombang">Segelombang</div>
-    <div class="tab" data-tab="solidaritas">✊ Solidaritas</div>
+    <div>Sefrekuensi</div>
+    <div>Segelombang</div>
+    <div>✊ Solidaritas</div>
   </div>
 
-  <div class="container">
-    <div id="feedContent"></div>
+  <div class="section-list">
+    <div class="section-title">Luar</div>
+    <div>Inspirasi</div>
+    <div>Rage</div>
+    <div>Inner</div>
   </div>
 
-  <div class="nav">
-    <div class="nav-item active">Luar</div>
-    <div class="nav-item">Inspirasi</div>
-    <div class="nav-item">Rage</div>
-    <div class="nav-item">Inner</div>
+  <!-- Feed Preview (for layout review) -->
+  <div class="feed">
+    <!-- Rant 1 -->
+    <div class="post">
+      <div class="rant-text">“Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”</div>
+      <div class="post-actions">
+        <span>💬 Gue ngerti banget</span>
+        <span>👯‍♀️ Peluk kenceng</span>
+      </div>
+      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
+      <div class="emotion-meta">— 2 jam lalu • 3 reaksi</div>
+    </div>
+
+    <!-- Artefak -->
+    <div class="post">
+      <div class="artefak-image-wrapper">
+        <div class="artefak-image"></div>
+        <div class="artefak-note">Kado terakhir dari ayah</div>
+      </div>
+      <div class="post-actions">
+        <span>💙</span>
+        <span>🕊️</span>
+        <span>🕯️</span>
+      </div>
+      <div class="emotion-meta">— 18 hari lalu • 12 reaksi</div>
+    </div>
+
+    <!-- Rant 2 -->
+    <div class="post">
+      <div class="rant-text">“Aku gak mau dibilang kuat. Kadang aku cuma pengen diem aja.”</div>
+      <div class="post-actions">
+        <span>💤 Aku juga</span>
+        <span>🫂 Lo udah cukup</span>
+      </div>
+      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
+      <div class="emotion-meta">— 1 hari lalu • 14 reaksi</div>
+    </div>
+
+    <!-- Rant 3 -->
+    <div class="post">
+      <div class="rant-text">“Pernah ngerasa semua orang move on, tapi lo stuck di titik yang sama?”</div>
+      <div class="post-actions">
+        <span>🌀 Iya</span>
+        <span>🕊️ Lo gak sendirian</span>
+      </div>
+      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
+      <div class="emotion-meta">— 1 hari lalu • 9 reaksi</div>
+    </div>
   </div>
-
-  <script>
-    const mockFeeds = {
-      sefrekuensi: [
-        {
-          text: "Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’",
-          comments: [
-            { user: "nope_a1b2c", text: "Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah." },
-            { user: "nope_x9y8z", text: "Peluk diam-diam dari jauh. Lo udah cukup berani." }
-          ]
-        }
-      ],
-      segelombang: [
-        {
-          text: "Nggak tahan liat influencer pake isu mental health buat jualan skincare.",
-          comments: []
-        }
-      ],
-      solidaritas: [],
-      inspirasi: [
-        {
-          title: "Resensi oleh komunitas NOPE",
-          content: "@nope_7x3n8 tentang Buku ‘Dunia Tanpa Cermin’\n“Buku ini nggak ngajarin lo jadi orang baik. Tapi ngajarin lo berani jujur sama rasa jahat lo sendiri.”"
-        }
-      ]
-    };
-
-    function renderFeed(tabName) {
-      const container = document.getElementById('feedContent');
-      const feeds = mockFeeds[tabName] || [];
-      
-      if (feeds.length === 0) {
-        container.innerHTML = `<div class="empty">Belum ada jejak ${tabName}.</div>`;
-        return;
-      }
-
-      let html = '';
-      feeds.forEach(post => {
-        if (tabName === 'inspirasi') {
-          html += `
-            <div class="post" style="border-left: 3px solid #0f62fe; padding-left: 12px;">
-              <div class="post-text">${post.content.replace(/\n/g, '<br>')}</div>
-            </div>
-          `;
-        } else {
-          html += `
-            <div class="post">
-              <div class="post-text">“${post.text}”</div>
-              <div class="reactions">
-                ${tabName === 'segelombang' ? `
-                  <div class="reaction"><div class="reaction-emoji">🫶</div><div class="reaction-label">Gue ngerti</div></div>
-                  <div class="reaction"><div class="reaction-emoji">🤲</div><div class="reaction-label">Peluk</div></div>
-                  <div class="reaction"><div class="reaction-emoji">👏</div><div class="reaction-label">Bangga</div></div>
-                  <div class="reaction"><div class="reaction-emoji">😮‍💨</div><div class="reaction-label">Napas dulu</div></div>
-                  <div class="reaction"><div class="reaction-emoji">💥</div><div class="reaction-label">Gue juga</div></div>
-                ` : `
-                  <div class="reaction" data-emoji="🫶">
-                    <div class="reaction-emoji">🫶</div>
-                    <div class="reaction-label">Gue ngerti<br>banget</div>
-                  </div>
-                  <div class="reaction" data-emoji="🤲">
-                    <div class="reaction-emoji">🤲</div>
-                    <div class="reaction-label">Peluk<br>kenceng</div>
-                  </div>
-                `}
-              </div>
-              ${tabName === 'sefrekuensi' ? `
-                ${post.comments.map(c => `
-                  <div class="comment">
-                    <div class="comment-user">@${c.user}</div>
-                    <div class="comment-text">${c.text}</div>
-                  </div>
-                `).join('')}
-                <div class="comment-instruction">Gunakan empatimu sebelum merespon...</div>
-                <div class="comment-input">
-                  <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
-                  <button class="comment-send">KIRIM</button>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        }
-      });
-      container.innerHTML = html;
-
-      if (tabName === 'sefrekuensi') {
-        document.querySelectorAll('.reaction').forEach(el => {
-          el.addEventListener('click', () => {
-            const emoji = el.dataset.emoji;
-            // Mock: simpan ke localStorage nanti
-            console.log('Reaksi:', emoji);
-          });
-        });
-        document.querySelectorAll('.comment-send').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const input = btn.previousElementSibling;
-            const text = input.value.trim();
-            if (text) {
-              input.value = '';
-              alert('Komentar dikirim.');
-            }
-          });
-        });
-      }
-    }
-
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const tabName = tab.dataset.tab;
-        if (tabName === 'inspirasi') {
-          renderFeed('inspirasi');
-        } else {
-          renderFeed(tabName);
-        }
-      });
-    });
-
-    renderFeed('sefrekuensi');
-  </script>
 </body>
 </html>
