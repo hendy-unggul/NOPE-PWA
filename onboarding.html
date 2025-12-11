@@ -247,41 +247,75 @@
 
   <button class="btn" disabled>Masuk ke frekuensimu</button>
 
-  <script>
-    const zones = document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))');
-    const statusRows = document.querySelectorAll('.status-row');
-    const btn = document.querySelector('.btn');
+  <script type="module">
+    // 🔑 GANTI DENGAN DATA DARI SUPABASE > SETTINGS > API
+    const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co
+Anon Key';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
-    zones.forEach((zone, idx) => {
-      zone.querySelectorAll('.hashtag-item').forEach(item => {
-        item.addEventListener('click', () => {
-          zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-          item.classList.add('selected');
-          const statusVal = statusRows[idx].querySelector('.status-value');
-          statusVal.textContent = item.dataset.value;
-          statusVal.className = 'status-value complete';
-          checkBtn();
+    import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
+      .then(async ({ createClient }) => {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const zones = document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))');
+        const statusRows = document.querySelectorAll('.status-row');
+        const btn = document.querySelector('.btn');
+        let userSelections = {};
+
+        zones.forEach((zone, idx) => {
+          zone.querySelectorAll('.hashtag-item').forEach(item => {
+            item.addEventListener('click', () => {
+              zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+              item.classList.add('selected');
+
+              const zoneName = zone.querySelector('.zone-title').textContent;
+              userSelections[zoneName] = item.dataset.value;
+              localStorage.setItem('nope_selections', JSON.stringify(userSelections));
+
+              const statusVal = statusRows[idx].querySelector('.status-value');
+              statusVal.textContent = item.dataset.value;
+              statusVal.className = 'status-value complete';
+
+              checkBtn();
+            });
+          });
+        });
+
+        function checkBtn() {
+          const allComplete = Array.from(statusRows).every(row =>
+            row.querySelector('.status-value').className.includes('complete')
+          );
+          btn.disabled = !allComplete;
+          if (allComplete) {
+            btn.textContent = 'Masuk ke frekuensimu';
+          }
+        }
+
+        btn.addEventListener('click', async () => {
+          if (btn.disabled) return;
+
+          const email = prompt("Masukkan emailmu jika berani:");
+          if (!email || !email.includes('@')) {
+            alert("Email valid diperlukan.");
+            return;
+          }
+
+          try {
+            const { error } = await supabase.auth.signInWithOtp({ email });
+            if (error) throw error;
+
+            alert("Cek emailmu — klik link ajaib untuk masuk ke frekuensimu.");
+            // Data akan disimpan setelah user klik magic link & redirect ke inner.html
+            // (Penyimpanan dilakukan di inner.html — lebih aman setelah auth selesai)
+
+            // Simpan sementara di localStorage untuk diproses nanti
+            localStorage.setItem('nope_pending_email', email);
+          } catch (err) {
+            console.error(err);
+            alert("Gagal mengirim akses. Coba lagi.");
+          }
         });
       });
-    });
-
-    function checkBtn() {
-      const allComplete = Array.from(statusRows).every(row =>
-        row.querySelector('.status-value').classList.contains('complete')
-      );
-      btn.disabled = !allComplete;
-      if (allComplete) {
-        btn.textContent = 'Masuk ke frekuensimu';
-      }
-    }
-
-    btn.addEventListener('click', () => {
-      if (!btn.disabled) {
-        setTimeout(() => {
-          window.location.href = 'inner.html';
-        }, 150);
-      }
-    });
   </script>
 </body>
 </html>
