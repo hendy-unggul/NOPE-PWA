@@ -12,7 +12,7 @@
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -26,51 +26,52 @@
     }
     @keyframes pulse {
       0% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 1; }
       100% { transform: scale(1); opacity: 0.9; }
     }
     .input-container {
-      position: relative;
       width: 90%;
       max-width: 360px;
+      position: relative;
     }
     .email-input {
       width: 100%;
-      background: #222;
+      background: #121212;
       color: white;
       border: none;
       outline: none;
-      padding: 0.8rem 1rem;
-      border-radius: 9999px;
-      font-size: 0.95rem;
-      caret-color: #ff2d55;
+      padding: 0 64px 0 13px; /* kiri 13px, kanan dikosongkan */
+      height: 35px; /* 80% dari 44px */
+      border-radius: 17.5px; /* 80% dari 22px */
+      font-size: 0.9rem;
+      caret-color: #e0134a;
     }
     .email-input::placeholder {
       color: #555;
+      font-size: 0.65rem; /* sedikit lebih kecil */
+      font-style: italic;
     }
     .btn-gas {
       position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #ff2d55;
-      color: #000;
+      right: 0;
+      top: 0;
+      height: 35px;
+      width: 51px; /* 80% dari 64px */
+      background: #e0134a;
+      color: white;
       border: none;
-      padding: 0.4rem 1rem;
-      border-radius: 9999px;
+      border-radius: 0 17.5px 17.5px 0;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s ease;
     }
     .btn-gas:hover {
-      transform: translateY(-50%) scale(1.05);
-    }
-    .hint {
-      font-size: 0.75rem;
-      color: #444;
-      margin-top: 2rem;
-      text-align: center;
+      transform: scale(1.03);
+      box-shadow: 0 0 8px rgba(224, 19, 74, 0.4);
     }
   </style>
 </head>
@@ -81,11 +82,10 @@
       type="email" 
       id="emailInput" 
       class="email-input" 
-      placeholder="Masukan emailmu jika berani" 
+      placeholder="@emailmu ...di sini rahasia lo terjaga" 
     />
     <button id="gasBtn" class="btn-gas">GAS</button>
   </div>
-  <p class="hint">Tekan Enter atau klik GAS</p>
 
   <script>
     function generateNopeId() {
@@ -97,16 +97,10 @@
 
     function handleEmail(email) {
       const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
-      
       if (users[email]) {
-        // User lama → ke inner
-        localStorage.setItem('current_user', JSON.stringify({
-          email: email,
-          nope_id: users[email].nope_id
-        }));
+        localStorage.setItem('current_user', JSON.stringify({ email, nope_id: users[email].nope_id }));
         window.location.href = 'inner.html';
       } else {
-        // User baru → ke onboarding
         const nope_id = generateNopeId();
         users[email] = { nope_id, onboarding_done: false };
         localStorage.setItem('nope_users', JSON.stringify(users));
@@ -115,7 +109,6 @@
       }
     }
 
-    // Submit via button
     document.getElementById('gasBtn').addEventListener('click', () => {
       const email = document.getElementById('emailInput').value.trim().toLowerCase();
       if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -123,7 +116,6 @@
       }
     });
 
-    // Submit via Enter
     document.getElementById('emailInput').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') {
         const email = e.target.value.trim().toLowerCase();
