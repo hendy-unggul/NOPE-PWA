@@ -32,7 +32,7 @@
     }
     .container {
       padding: 0 1.5rem;
-      max-width: 400px;
+      max-width: 420px;
       margin: 0 auto;
     }
     .rage-input {
@@ -58,15 +58,15 @@
     .hashtag-selector {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.4rem;
       margin-bottom: 1.5rem;
     }
     .hashtag-item {
       background: #333;
       color: #aaa;
-      padding: 0.4rem 0.8rem;
+      padding: 0.45rem 0.8rem;
       border-radius: 9999px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       cursor: pointer;
     }
     .hashtag-item.active {
@@ -148,7 +148,7 @@
         rows="4"
       ></textarea>
 
-      <div class="section-title">PILIH ZONA</div>
+      <div class="section-title">RAGE TENTANG</div>
       <div class="hashtag-selector" id="hashtagOptions"></div>
 
       <div class="preview-box">
@@ -178,27 +178,33 @@
     // Tampilkan @nope_username
     document.getElementById('userId').textContent = `@${currentUser.nope_id}`;
 
-    // Muat hashtag dari onboarding
-    const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
-    const userData = users[currentUser.email];
-    const hashtags = userData.hashtags || {
+    // Hashtag default 4 zona (sesuai onboarding)
+    const defaultHashtags = {
       pilih: '#Pilih',
       personal: '#PersonalPain',
-      social: '#SocialSickness'
+      social: '#SocialSickness',
+      movement: '#SayNOPE'
     };
 
-    // Render pilihan hashtag
-    const options = [
-      { key: 'pilih', label: hashtags.pilih },
-      { key: 'personal', label: hashtags.personal },
-      { key: 'social', label: hashtags.social }
+    // Ambil dari onboarding jika ada
+    const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
+    const userData = users[currentUser.email];
+    const saved = userData?.hashtags || defaultHashtags;
+
+    // Urutan zona
+    const zones = [
+      { key: 'pilih', label: saved.pilih || '#Pilih' },
+      { key: 'personal', label: saved.personal || '#PersonalPain' },
+      { key: 'social', label: saved.social || '#SocialSickness' },
+      { key: 'movement', label: saved.movement || '#SayNOPE' }
     ];
 
+    // Render pilihan
     const container = document.getElementById('hashtagOptions');
-    options.forEach((item, i) => {
+    zones.forEach((zone, i) => {
       const el = document.createElement('div');
       el.className = 'hashtag-item' + (i === 0 ? ' active' : '');
-      el.textContent = item.label;
+      el.textContent = zone.label;
       el.onclick = () => {
         document.querySelectorAll('.hashtag-item').forEach(e => e.classList.remove('active'));
         el.classList.add('active');
@@ -234,7 +240,7 @@
         return;
       }
 
-      // Simpan ke localStorage (mock feed)
+      // Simpan ke localStorage
       const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
       feeds.push({
         id: Date.now(),
@@ -245,7 +251,7 @@
       });
       localStorage.setItem('nope_feeds', JSON.stringify(feeds));
 
-      // Reset form
+      // Reset
       rageInput.value = '';
       updatePreview();
       alert('Jejak lo sudah meninggalkan gema.');
@@ -253,4 +259,3 @@
   </script>
 </body>
 </html>
-Atau kita anggap ini **final** dan siap untuk traksi 1.000 user? 🖤
