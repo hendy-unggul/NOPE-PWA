@@ -3,259 +3,237 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Inner</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>NOPE — Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --muted: #777780;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #00f3ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: #000;
-      color: #fff;
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
+      padding: 20px 16px;
       min-height: 100vh;
     }
     .header {
-      padding: 1.25rem 1.5rem 0.75rem;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: -0.4px;
+    }
+    .nope-id {
+      font-size: 12px;
+      color: var(--neon-blue);
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* === ARTEFAK SAAT INI === */
+    .artefak-current {
+      max-width: 360px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .artefak-img {
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .artefak-notasi {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .artefak-img:hover .artefak-notasi {
+      opacity: 1;
+    }
+    .artefak-emoji {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 12px;
+      font-size: 22px;
+    }
+
+    /* === RANT BOX === */
+    .rant-box {
+      max-width: 360px;
+      margin: 0 auto 24px;
+    }
+    .rant-input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      resize: none;
+      height: 80px;
+    }
+    .rant-btn {
+      width: 100%;
+      max-width: 360px;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--neon-blue);
+      color: black;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* === RANT LIST === */
+    .rant-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .rant-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
     }
-    .logo {
-      font-weight: 800;
-      font-size: 1.25rem;
+
+    /* === ARTEFAK ARSIP (6 place holder) === */
+    .artefak-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 360px;
+      margin: 24px auto 0;
     }
-    .user-id {
-      color: #ff2d55;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin: 0.5rem 1.5rem 1.25rem;
+    .artefak-thumb {
+      height: 80px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      border: 1px solid var(--border);
     }
-    .container {
-      padding: 0 1.5rem;
-      max-width: 420px;
-      margin: 0 auto;
-    }
-    .rage-input {
-      width: 100%;
-      background: #222;
-      color: white;
-      border: none;
-      outline: none;
-      padding: 1rem;
-      border-radius: 16px;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-      min-height: 100px;
-      resize: none;
-    }
+
     .section-title {
-      font-size: 0.75rem;
-      color: #555;
-      margin-bottom: 0.75rem;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 28px 0 12px;
+      text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
-    }
-    .hashtag-selector {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 1.5rem;
-    }
-    .hashtag-item {
-      background: #333;
-      color: #aaa;
-      padding: 0.45rem 0.8rem;
-      border-radius: 9999px;
-      font-size: 0.82rem;
-      cursor: pointer;
-    }
-    .hashtag-item.active {
-      background: #ff2d55;
-      color: #000;
-      font-weight: 600;
-    }
-    .preview-box {
-      background: #222;
-      border-radius: 16px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .preview-label {
-      font-size: 0.75rem;
-      color: #555;
-      margin-bottom: 0.5rem;
-    }
-    .preview-text {
-      font-style: italic;
-      font-size: 0.95rem;
-      color: #ddd;
-      margin-bottom: 0.5rem;
-    }
-    .preview-hashtag {
-      color: #ff2d55;
-      font-size: 0.85rem;
-    }
-    .btn-leave {
-      background: #ff2d55;
-      color: #000;
-      border: none;
-      width: 100%;
-      padding: 0.9rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .btn-leave:hover {
-      transform: scale(1.02);
-    }
-    .nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #000;
-      border-top: 1px solid #222;
-      display: flex;
-      justify-content: space-around;
-      padding: 0.75rem 0;
-    }
-    .nav-item {
-      font-size: 0.75rem;
-      color: #666;
-    }
-    .nav-item.active {
-      color: #ff2d55;
-      font-weight: 600;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="logo">NOPE</div>
-    <div style="width: 8px; height: 8px; background: #ff2d55; border-radius: 50%;"></div>
+    <h1>frekuensimu sedang bergetar</h1>
+    <div class="nope-id" id="nopeId">...</div>
   </div>
 
-  <div class="user-id" id="userId"></div>
+  <!-- ARTEFAK TERBARU -->
+  <div class="artefak-current">
+    <div class="artefak-img" style="background-image: url('https://picsum.photos/seed/artefak1/400/200')">
+      <div class="artefak-notasi">Kopi dingin, tak terminum</div>
+    </div>
+    <div class="artefak-emoji">☕️ 💔 🕯️</div>
+  </div>
 
-  <div class="container">
-    <form id="rageForm">
-      <textarea 
-        id="rageInput" 
-        class="rage-input" 
-        placeholder="Ngomong pelan-pelan… gue denger."
-        rows="4"
-      ></textarea>
+  <!-- RANT BOX -->
+  <div class="rant-box">
+    <textarea class="rant-input" placeholder="Rant yang tak terucap..."></textarea>
+    <button class="rant-btn">Rant</button>
+  </div>
 
-      <div class="section-title">RAGE TENTANG</div>
-      <div class="hashtag-selector" id="hashtagOptions"></div>
-
-      <div class="preview-box">
-        <div class="preview-label">Preview jejak:</div>
-        <div class="preview-text" id="previewText">“...”</div>
-        <div class="preview-hashtag" id="previewHashtag"></div>
+  <!-- 3 RANT TERAKHIR -->
+  <div class="section-title">jejak rant-mu</div>
+  <div id="myRants">
+    <div class="rant-item">
+      Aku lelah jadi tempat curhat tapi tak pernah didengar.
+      <div class="rant-meta">
+        <span>2 hari lalu</span>
+        <span>#GakBisaBilangTidak</span>
       </div>
-
-      <button type="submit" class="btn-leave">TINGGALKAN JEJAK</button>
-    </form>
+    </div>
+    <div class="rant-item">
+      Setiap kali bilang "aku baik-baik saja", itu adalah kebohongan terbesar hari ini.
+      <div class="rant-meta">
+        <span>5 hari lalu</span>
+        <span>#MauSendiriTapiTakutDibilangJutek</span>
+      </div>
+    </div>
+    <div class="rant-item">
+      Aku benci cara orang merayakan kerendahan hati sambil diam-diam ingin dipuji.
+      <div class="rant-meta">
+        <span>12 hari lalu</span>
+        <span>#KerjaKerasDipujiTapiGajiNggakNaik</span>
+      </div>
+    </div>
   </div>
 
-  <div class="nav">
-    <div class="nav-item">Luar</div>
-    <div class="nav-item">Notifikasi</div>
-    <div class="nav-item active">Rage</div>
-    <div class="nav-item">Inner</div>
+  <!-- 6 ARTEFAK LAMA -->
+  <div class="section-title">arsip artefak</div>
+  <div class="artefak-grid">
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a1/100/100')"></div>
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a2/100/100')"></div>
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a3/100/100')"></div>
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a4/100/100')"></div>
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a5/100/100')"></div>
+    <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a6/100/100')"></div>
   </div>
 
-  <script>
-    // Ambil user dari localStorage
-    const currentUser = JSON.parse(localStorage.getItem('current_user'));
-    if (!currentUser) {
-      window.location.href = 'index.html';
-    }
+  <script type="module">
+    // 🔑 GANTI DENGAN DARI SUPABASE > SETTINGS > API
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-    // Tampilkan @nope_username
-    document.getElementById('userId').textContent = `@${currentUser.nope_id}`;
+    import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
+      .then(async ({ createClient }) => {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Hashtag default 4 zona (sesuai onboarding)
-    const defaultHashtags = {
-      pilih: '#Pilih',
-      personal: '#PersonalPain',
-      social: '#SocialSickness',
-      movement: '#SayNOPE'
-    };
+        const {  { user } } = await supabase.auth.getUser();
+        if (!user) {
+          alert("Kamu belum masuk.");
+          window.location.href = 'onboarding.html';
+          return;
+        }
 
-    // Ambil dari onboarding jika ada
-    const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
-    const userData = users[currentUser.email];
-    const saved = userData?.hashtags || defaultHashtags;
+        // Ambil profil untuk tampilkan nope_id
+        const {  { profiles } } = await supabase
+          .from('profiles')
+          .select('nope_username')
+          .eq('id', user.id)
+          .single();
 
-    // Urutan zona
-    const zones = [
-      { key: 'pilih', label: saved.pilih || '#Pilih' },
-      { key: 'personal', label: saved.personal || '#PersonalPain' },
-      { key: 'social', label: saved.social || '#SocialSickness' },
-      { key: 'movement', label: saved.movement || '#SayNOPE' }
-    ];
-
-    // Render pilihan
-    const container = document.getElementById('hashtagOptions');
-    zones.forEach((zone, i) => {
-      const el = document.createElement('div');
-      el.className = 'hashtag-item' + (i === 0 ? ' active' : '');
-      el.textContent = zone.label;
-      el.onclick = () => {
-        document.querySelectorAll('.hashtag-item').forEach(e => e.classList.remove('active'));
-        el.classList.add('active');
-        updatePreview();
-      };
-      container.appendChild(el);
-    });
-
-    // Preview
-    const rageInput = document.getElementById('rageInput');
-    const previewText = document.getElementById('previewText');
-    const previewHashtag = document.getElementById('previewHashtag');
-
-    function updatePreview() {
-      const text = rageInput.value.trim() || '“...”';
-      previewText.textContent = `“${text}”`;
-      const active = document.querySelector('.hashtag-item.active');
-      previewHashtag.textContent = active ? active.textContent : '';
-    }
-
-    rageInput.addEventListener('input', updatePreview);
-    updatePreview();
-
-    // Submit
-    document.getElementById('rageForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = rageInput.value.trim();
-      const active = document.querySelector('.hashtag-item.active');
-      const hashtag = active ? active.textContent : '#Pilih';
-
-      if (!text) {
-        alert('Jejak lo kosong.');
-        return;
-      }
-
-      // Simpan ke localStorage
-      const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
-      feeds.push({
-        id: Date.now(),
-        user: currentUser.nope_id,
-        text: text,
-        hashtag: hashtag,
-        timestamp: new Date().toISOString()
+        const nopeId = profiles?.nope_username || 'nope_anon';
+        document.getElementById('nopeId').textContent = nopeId;
       });
-      localStorage.setItem('nope_feeds', JSON.stringify(feeds));
-
-      // Reset
-      rageInput.value = '';
-      updatePreview();
-      alert('Jejak lo sudah meninggalkan gema.');
-    });
   </script>
 </body>
 </html>
