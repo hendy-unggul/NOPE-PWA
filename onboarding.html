@@ -11,72 +11,86 @@
       color: #fff;
       font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
       min-height: 100vh;
     }
     .container {
+      padding: 2rem 1.5rem 2rem;
       max-width: 420px;
       margin: 0 auto;
     }
     .welcome {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.8rem;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
     .welcome-id {
+      color: #e0134a;
       font-weight: 600;
-      color: #ff2d55;
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-    .step {
-      margin-bottom: 2rem;
+    .zone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
     }
-    .step-title {
+    .zone {
+      background: #121212;
+      border-radius: 16px;
+      padding: 1rem;
+    }
+    .zone-title {
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #555;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.4rem;
     }
-    .step-desc {
-      font-size: 0.75rem;
+    .zone-desc {
+      font-size: 0.7rem;
       color: #666;
       margin-bottom: 0.8rem;
     }
-    .hashtag-options {
+    .hashtag-scroll {
       display: flex;
-      flex-wrap: wrap;
       gap: 0.4rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      height: 64px;
     }
+    .hashtag-scroll::-webkit-scrollbar { display: none; }
     .hashtag-item {
       background: #222;
       color: #aaa;
-      padding: 0.45rem 0.8rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 9999px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
+      white-space: nowrap;
       cursor: pointer;
-      transition: all 0.2s;
-    }
-    .hashtag-item:hover {
-      background: #333;
+      flex: 0 0 auto;
     }
     .hashtag-item.selected {
-      background: #ff2d55;
-      color: #000;
+      background: #e0134a;
+      color: #fff;
       font-weight: 600;
     }
     .btn-continue {
-      background: #ff2d55;
-      color: #000;
+      background: #e0134a;
+      color: white;
       border: none;
       width: 100%;
-      padding: 0.85rem;
+      padding: 0.9rem;
       border-radius: 9999px;
       font-weight: 600;
       font-size: 0.95rem;
       cursor: pointer;
-      margin-top: 1rem;
-      opacity: 0.5;
+      opacity: 0.6;
       pointer-events: none;
       transition: opacity 0.2s;
     }
@@ -89,17 +103,17 @@
 <body>
   <div class="container">
     <div class="welcome">
-      <div class="logo" style="font-weight:800;font-size:2rem;margin-bottom:0.5rem;">NOPE</div>
+      <div class="logo">NOPE</div>
       <p>Pilih 4 hal yang beneran lo rasain.</p>
       <div id="welcomeId" class="welcome-id"></div>
     </div>
 
-    <form id="onboardingForm">
-      <!-- #PILIH -->
-      <div class="step">
-        <div class="step-title">#PILIH</div>
-        <p class="step-desc">Yang bikin lo kesel, tapi masih bisa ketawa</p>
-        <div class="hashtag-options" data-category="pilih">
+    <div class="zone-grid">
+      <!-- Zona 1: #PILIH -->
+      <div class="zone">
+        <div class="zone-title">#PILIH</div>
+        <p class="zone-desc">Yang bikin lo kesel, tapi masih bisa ketawa</p>
+        <div class="hashtag-scroll" data-category="pilih">
           <div class="hashtag-item" data-value="#FilmBioskopMahal">#FilmBioskopMahal</div>
           <div class="hashtag-item" data-value="#NgaretTanpaRasaBersalah">#NgaretTanpaRasaBersalah</div>
           <div class="hashtag-item" data-value="#PositiveVibesOnly">#PositiveVibesOnly</div>
@@ -108,11 +122,11 @@
         </div>
       </div>
 
-      <!-- #PERSONALPAIN -->
-      <div class="step">
-        <div class="step-title">#PERSONALPAIN</div>
-        <p class="step-desc">Yang lo sembunyiin, tapi beneran nyakitin</p>
-        <div class="hashtag-options" data-category="personal">
+      <!-- Zona 2: #PERSONALPAIN -->
+      <div class="zone">
+        <div class="zone-title">#PERSONALPAIN</div>
+        <p class="zone-desc">Yang lo sembunyiin, tapi beneran nyakitin</p>
+        <div class="hashtag-scroll" data-category="personal">
           <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
           <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
           <div class="hashtag-item" data-value="#DibilangAnakDurhakaKalauNggakNurut">#DibilangAnakDurhakaKalauNggakNurut</div>
@@ -121,11 +135,11 @@
         </div>
       </div>
 
-      <!-- #SOCIALSICKNESS -->
-      <div class="step">
-        <div class="step-title">#SOCIALSICKNESS</div>
-        <p class="step-desc">Yang bikin lo ngerasa sistem ini salah</p>
-        <div class="hashtag-options" data-category="social">
+      <!-- Zona 3: #SOCIALSICKNESS -->
+      <div class="zone">
+        <div class="zone-title">#SOCIALSICKNESS</div>
+        <p class="zone-desc">Yang bikin lo ngerasa sistem ini salah</p>
+        <div class="hashtag-scroll" data-category="social">
           <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
           <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
           <div class="hashtag-item" data-value="#NgomonginPrivilegeTapiPakeiPhone">#NgomonginPrivilegeTapiPakeiPhone</div>
@@ -134,11 +148,11 @@
         </div>
       </div>
 
-      <!-- #SAYNOPE -->
-      <div class="step">
-        <div class="step-title">#SAYNOPE</div>
-        <p class="step-desc">Yang lo berani lawan, meski sendirian</p>
-        <div class="hashtag-options" data-category="movement">
+      <!-- Zona 4: #SAYNOPE -->
+      <div class="zone">
+        <div class="zone-title">#SAYNOPE</div>
+        <p class="zone-desc">Yang lo berani lawan, meski sendirian</p>
+        <div class="hashtag-scroll" data-category="movement">
           <div class="hashtag-item" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
           <div class="hashtag-item" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
           <div class="hashtag-item" data-value="#HentikanPenggusuranRakyat">#HentikanPenggusuranRakyat</div>
@@ -146,9 +160,9 @@
           <div class="hashtag-item" data-value="#BoikotPerusahaanRusakBumi">#BoikotPerusahaanRusakBumi</div>
         </div>
       </div>
+    </div>
 
-      <button type="submit" id="continueBtn" class="btn-continue">TINGGALKAN JEJAK PERTAMA</button>
-    </form>
+    <button id="continueBtn" class="btn-continue">TINGGALKAN JEJAK PERTAMA</button>
   </div>
 
   <script>
@@ -161,8 +175,8 @@
 
     document.querySelectorAll('.hashtag-item').forEach(item => {
       item.addEventListener('click', () => {
-        const cat = item.closest('.hashtag-options').dataset.category;
-        document.querySelectorAll(`[data-category="${cat}"] .selected`).forEach(el => el.classList.remove('selected'));
+        const cat = item.closest('.hashtag-scroll').dataset.category;
+        document.querySelectorAll(`[data-category="${cat}"] .hashtag-item`).forEach(el => el.classList.remove('selected'));
         item.classList.add('selected');
         selections[cat] = item.dataset.value;
 
@@ -171,10 +185,7 @@
       });
     });
 
-    document.getElementById('onboardingForm').addEventListener('submit', e => {
-      e.preventDefault();
-      if (!selections.pilih || !selections.personal || !selections.social || !selections.movement) return;
-
+    document.getElementById('continueBtn').addEventListener('click', () => {
       const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
       users[currentUser.email].onboarding_done = true;
       users[currentUser.email].hashtags = selections;
@@ -184,3 +195,5 @@
   </script>
 </body>
 </html>
+
+Mau lanjut ke **`inner.html`** berikutnya?
