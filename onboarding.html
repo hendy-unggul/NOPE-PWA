@@ -11,8 +11,7 @@
       --muted: #777780;
       --card: #0a0a0f;
       --border: #1a1a25;
-      --neon-blue: #00f3ff; /* biru deep seperti Qwen */
-      --accent1: #ff2d55;
+      --neon-blue: #00f3ff;
     }
     * {
       box-sizing: border-box;
@@ -67,8 +66,8 @@
     .hashtag-list {
       display: flex;
       flex-direction: column;
-      align-items: flex-end; /* rata kanan */
       gap: 8px;
+      width: 100%; /* pastikan container lebar penuh */
     }
 
     .hashtag-item {
@@ -77,7 +76,8 @@
       padding: 8px 12px;
       border-radius: 8px;
       cursor: pointer;
-      width: fit-content; /* lebar sesuai teks */
+      text-align: right; /* teks rata kanan */
+      width: 100%; /* container lebar penuh */
     }
 
     .hashtag-item.selected {
@@ -112,7 +112,7 @@
     .status-value.incomplete { color: #ff9500; }
 
     .btn {
-      width: fit-content; /* tidak full width */
+      width: fit-content;
       padding: 14px 24px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
