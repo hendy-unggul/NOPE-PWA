@@ -13,6 +13,7 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      padding-bottom: 60px;
     }
     .header {
       padding: 1.25rem 1.5rem 0.75rem;
@@ -44,7 +45,7 @@
     }
     .container {
       padding: 0 1.5rem;
-      max-width: 400px;
+      max-width: 420px;
       margin: 0 auto;
     }
     .empty {
@@ -162,15 +163,13 @@
   </div>
 
   <script>
-    // Ambil user & feed
     const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    if (!currentUser) window.location.href = 'index.html';
+
     const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
     const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
 
-    if (!currentUser) {
-      window.location.href = 'index.html';
-    }
-
+    // Ambil 4 hashtag user
     const userHashtags = new Set(Object.values(users[currentUser.email]?.hashtags || {}));
 
     // Kelompokkan feed
@@ -179,47 +178,28 @@
     const solidaritas = [];
 
     feeds.forEach(feed => {
-      const feedHashtag = feed.hashtag;
-      let match = 0;
-      if (userHashtags.has(feedHashtag)) match = 1;
-
-      // Untuk MVP, anggap semua feed punya 1 hashtag → match 1 = segelombang, match 3 = sefrekuensi (nanti di backend)
-      // Sementara, kita asumsikan:
-      if (feed.user === 'nope_demo1' || feed.user === 'nope_demo2') {
+      if (userHashtags.has(feed.hashtag)) {
         sefrekuensi.push(feed);
-      } else if (feed.user === 'nope_demo3') {
+      } else if (['#Pilih', '#PersonalPain', '#SocialSickness'].some(h => feed.hashtag.startsWith(h))) {
         segelombang.push(feed);
       } else {
         solidaritas.push(feed);
       }
     });
 
-    // Atau, untuk MVP sederhana: tampilkan semua di Sefrekuensi saja dulu
-    const mockFeeds = [
-      {
-        user: 'nope_demo1',
-        text: 'Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’',
-        hashtag: '#PersonalPain'
-      },
-      {
-        user: 'nope_demo2',
-        text: 'Nggak tahan liat influencer pake isu mental health buat jualan skincare.',
-        hashtag: '#SocialSickness'
-      }
-    ];
-
-    const comments = {
-      'nope_demo1': [
-        { user: 'nope_8x2m4', text: 'Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.' },
-        { user: 'nope_3q9r1', text: 'Peluk diam-diam dari jauh. Lo udah cukup berani.' }
+    // Komentar mock (untuk vibe)
+    const mockComments = {
+      sefrekuensi: [
+        { user: 'nope_a1b2c', text: 'Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.' },
+        { user: 'nope_x9y8z', text: 'Peluk diam-diam dari jauh. Lo udah cukup berani.' }
       ],
-      'nope_demo2': [
-        { user: 'nope_k9m2p', text: 'Bener banget. Mental health bukan gimmick.' }
-      ]
+      segelombang: [
+        { user: 'nope_m3n4p', text: 'Bener banget. Mental health bukan gimmick.' }
+      ],
+      solidaritas: []
     };
 
-    // Render
-    function renderFeed(feeds, tabName) {
+    function renderFeed(feeds, tabName, comments = []) {
       const container = document.getElementById('feedContent');
       if (feeds.length === 0) {
         container.innerHTML = `<div class="empty">Belum ada jejak ${tabName}.</div>`;
@@ -227,8 +207,8 @@
       }
 
       let html = '';
-      feeds.forEach(feed => {
-        const feedComments = comments[feed.user] || [];
+      feeds.forEach((feed, i) => {
+        const feedComments = comments.length ? comments : mockComments[tabName] || [];
         html += `
           <div class="post">
             <div class="post-text">“${feed.text}”</div>
@@ -263,20 +243,21 @@
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        const tabId = tab.dataset.tab;
-        if (tabId === 'sefrekuensi') {
-          renderFeed(mockFeeds, 'Sefrekuensi');
-        } else if (tabId === 'segelombang') {
-          renderFeed([mockFeeds[1]], 'Segelombang');
+        const key = tab.dataset.tab;
+        if (key === 'sefrekuensi') {
+          renderFeed(sefrekuensi, 'sefrekuensi');
+        } else if (key === 'segelombang') {
+          renderFeed(segelombang, 'segelombang');
         } else {
-          renderFeed([], 'Solidaritas');
+          renderFeed(solidaritas, 'solidaritas');
         }
       });
     });
 
     // Render default
-    renderFeed(mockFeeds, 'Sefrekuensi');
+    renderFeed(sefrekuensi, 'sefrekuensi');
   </script>
 </body>
 </html>
-Atau bikin technical brief final buat engineer? 🖤
+
+Mau deploy? Atau bikin technical brief final buat engineer? 🖤
