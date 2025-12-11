@@ -37,10 +37,6 @@
       color: var(--accent1);
       margin-bottom: 8px;
     }
-    .header p {
-      font-size: 13px;
-      color: var(--muted);
-    }
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -119,12 +115,17 @@
       opacity: 0.4;
       cursor: not-allowed;
     }
+    .instruction-note {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      margin: 12px 0;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-    <p>* Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.</p>
   </div>
 
   <div class="zones-grid">
@@ -164,9 +165,12 @@
       </div>
     </div>
 
-    <!-- Zona 4: Movement (terkunci tapi hashtag tetap muncul) -->
+    <!-- Zona 4: Movement (terkunci tapi hashtag muncul) -->
     <div class="zone">
-      <div class="zone-title movement"><i class="fas fa-rocket"></i> Movement <span style="font-size:10px;color:var(--muted);">(terkunci)</span></div>
+      <div class="zone-title movement">
+        <i class="fas fa-rocket"></i> Movement 
+        <span style="font-size:10px;color:var(--muted);">(terkunci)</span>
+      </div>
       <div class="hashtag-list" id="movement">
         <div class="hashtag-item locked" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
         <div class="hashtag-item locked" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
@@ -176,6 +180,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Instruksi dipindah ke bawah & diperkecil -->
+  <p class="instruction-note">
+    * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
+  </p>
 
   <div class="status">
     <div class="status-row">
@@ -192,7 +201,7 @@
     </div>
   </div>
 
-  <button class="btn" id="continueBtn" disabled>LANJUT KE LUAR</button>
+  <button class="btn" id="continueBtn" disabled>TEMUKAN FREKUENSIMU</button>
 
   <script>
     let selections = {
