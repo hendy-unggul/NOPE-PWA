@@ -44,6 +44,51 @@
       opacity: 0.7;
     }
 
+    /* === ARTEFAK TERBARU (PALING ATAS) === */
+    .artefak-current {
+      margin-bottom: 24px;
+    }
+    .artefak-img {
+      width: 100%;
+      height: 200px;
+      background: url('https://picsum.photos/seed/artefak1/400/200') center/cover no-repeat;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .artefak-notasi {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .artefak-img:hover .artefak-notasi {
+      opacity: 1;
+    }
+    .artefak-emoji {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 14px;
+      font-size: 24px;
+    }
+    .emoji-item {
+      cursor: default;
+    }
+    .emoji-item.has-reactions {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
     /* === RANT BOX USER === */
     .rant-box {
       background: var(--card);
@@ -76,7 +121,7 @@
       cursor: pointer;
     }
 
-    /* === JURNAL RANT USER === */
+    /* === FREKUENSI YANG LALU === */
     .section-title {
       font-size: 12px;
       color: var(--muted);
@@ -85,41 +130,6 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-    .jurnal-item {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 16px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .jurnal-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .jurnal-emoji {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      margin-top: 10px;
-      font-size: 24px;
-    }
-    .emoji-item {
-      cursor: default;
-    }
-    .emoji-item.has-reactions {
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    /* === RANT DARI SEFREKUENSI (HANYA TAMPIL DI INNER) === */
     .freq-rant {
       background: var(--card);
       border: 1px solid var(--border);
@@ -163,46 +173,37 @@
       transform: scale(1.1);
     }
 
-    /* === ARTEFAK === */
-    .artefak-current {
-      margin-bottom: 24px;
-    }
-    .artefak-img {
-      width: 100%;
-      height: 200px;
-      background: url('https://picsum.photos/seed/artefak1/400/200') center/cover no-repeat;
-      border-radius: 12px;
+    /* === JURNAL RANT USER === */
+    .jurnal-item {
+      background: var(--card);
       border: 1px solid var(--border);
-      position: relative;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
     }
-    .artefak-notasi {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      opacity: 0;
-      transition: opacity 0.2s;
+    .jurnal-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
     }
-    .artefak-img:hover .artefak-notasi {
-      opacity: 1;
-    }
-    .artefak-emoji {
+    .jurnal-emoji {
       display: flex;
       justify-content: center;
       gap: 18px;
-      margin-top: 14px;
+      margin-top: 10px;
       font-size: 24px;
     }
 
-    /* === ARSIP ARTEFAK === */
+    /* === ARSIP ARTEFAK (PALING BAWAH) === */
     .artefak-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
+      margin-top: 24px;
     }
     .artefak-thumb {
       height: 80px;
@@ -270,15 +271,26 @@
       <div class="nope-id" id="nopeId">...</div>
     </div>
 
+    <!-- 🖼️ ARTEFAK TERBARU — PALING ATAS -->
+    <div class="artefak-current">
+      <div class="artefak-img">
+        <div class="artefak-notasi">Kopi dingin, tak terminum</div>
+      </div>
+      <div class="artefak-emoji">
+        <div class="emoji-item">☕️</div>
+        <div class="emoji-item has-reactions" data-reactions='{"count":3,"users":["@nope_cosmic","@nope_void","@nope_73"]}'>💔</div>
+        <div class="emoji-item">🕯️</div>
+      </div>
+    </div>
+
     <!-- 📝 RANT BOX USER -->
     <div class="rant-box">
       <textarea class="rant-input" placeholder="Curahkan kegundahan hatimu..."></textarea>
       <button class="rant-btn">Rant</button>
     </div>
 
-    <!-- 👁️ RANT DARI SEFREKUENSI (MAX 2) -->
+    <!-- 👁️ FREKUENSI YANG LALU -->
     <div class="section-title">frekuensi yang lewat</div>
-
     <div class="freq-rant">
       Aku lelah jadi tempat curhat tapi tak pernah didengar.
       <div class="freq-meta">
@@ -292,7 +304,6 @@
         <span>✎</span>
       </div>
     </div>
-
     <div class="freq-rant">
       Setiap kali bilang "aku baik-baik saja", itu adalah kebohongan terbesar hari ini.
       <div class="freq-meta">
@@ -322,19 +333,7 @@
       </div>
     </div>
 
-    <!-- 🖼️ ARTEFAK TERBARU -->
-    <div class="artefak-current">
-      <div class="artefak-img">
-        <div class="artefak-notasi">Kopi dingin, tak terminum</div>
-      </div>
-      <div class="artefak-emoji">
-        <div class="emoji-item">☕️</div>
-        <div class="emoji-item has-reactions" data-reactions='{"count":3,"users":["@nope_cosmic","@nope_void","@nope_73"]}'>💔</div>
-        <div class="emoji-item">🕯️</div>
-      </div>
-    </div>
-
-    <!-- 📦 ARSIP ARTEFAK -->
+    <!-- 📦 ARSIP ARTEFAK — PALING BAWAH -->
     <div class="section-title">arsip artefak</div>
     <div class="artefak-grid">
       <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a1/100/100')"></div>
@@ -346,7 +345,7 @@
     </div>
   </div>
 
-  <!-- MODAL UNTUK LIHAT SIAPA YANG MERESPON -->
+  <!-- MODAL -->
   <div class="modal" id="reactionModal">
     <div class="modal-content">
       <div id="modalText">2 orang mendengarmu.</div>
@@ -360,8 +359,8 @@
 
   <script type="module">
     // 🔑 GANTI DENGAN DARI SUPABASE > SETTINGS > API
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
     import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
       .then(async ({ createClient }) => {
@@ -378,7 +377,7 @@
         document.getElementById('nopeId').textContent = profiles?.nope_username || 'nope_anon';
       });
 
-    // --- EMOJI JURNAL INTERACTION ---
+    // Emoji interaction + resonance simulation (sama seperti sebelumnya)
     const modal = document.getElementById('reactionModal');
     const modalText = document.getElementById('modalText');
     const usernameList = document.getElementById('usernameList');
@@ -407,7 +406,6 @@
       });
     });
 
-    // --- RESONANSI KE RANT SEFREKUENSI (SIMULASI) ---
     document.querySelectorAll('.resonance-actions span').forEach(btn => {
       btn.addEventListener('click', () => {
         const emoji = btn.textContent.trim();
@@ -421,7 +419,6 @@
         } else {
           alert("Resonansi diam-diam telah terkirim.");
         }
-        // Di versi production: kirim ke tabel `resonances`
       });
     });
   </script>
