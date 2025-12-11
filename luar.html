@@ -9,7 +9,7 @@
     body {
       background: #000000;
       color: #ffffff;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
@@ -184,7 +184,6 @@
   </div>
 
   <script>
-    // Mock data untuk MVP
     const mockFeeds = {
       sefrekuensi: [
         {
@@ -214,16 +213,16 @@
       }
 
       let html = '';
-      feeds.forEach(post => {
+      feeds.forEach((post, idx) => {
         html += `
           <div class="post">
             <div class="post-text">“${post.text}”</div>
             <div class="reactions">
-              <div class="reaction">
+              <div class="reaction" data-emoji="🫶">
                 <div class="reaction-emoji">🫶</div>
                 <div class="reaction-label">Gue ngerti<br>banget</div>
               </div>
-              <div class="reaction">
+              <div class="reaction" data-emoji="🤲">
                 <div class="reaction-emoji">🤲</div>
                 <div class="reaction-label">Peluk<br>kenceng</div>
               </div>
@@ -236,14 +235,38 @@
             `).join('')}
             ${tabName === 'sefrekuensi' ? `
             <div class="comment-input">
-              <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
-              <button class="comment-send">KIRIM</button>
+              <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." data-post="${idx}" />
+              <button class="comment-send" data-post="${idx}">KIRIM</button>
             </div>
             ` : ''}
           </div>
         `;
       });
       container.innerHTML = html;
+
+      // Aktifkan interaksi hanya di Sefrekuensi
+      if (tabName === 'sefrekuensi') {
+        // Emoji clickable
+        document.querySelectorAll('.reaction').forEach(el => {
+          el.addEventListener('click', () => {
+            alert(`Lo ngasih reaksi: ${el.dataset.emoji}`);
+            // Nanti simpan ke localStorage/backend
+          });
+        });
+
+        // Komentar clickable
+        document.querySelectorAll('.comment-send').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const input = btn.previousElementSibling;
+            const text = input.value.trim();
+            if (text) {
+              alert('Komentar lo dikirim.');
+              input.value = '';
+              // Nanti push ke comments array
+            }
+          });
+        });
+      }
     }
 
     document.querySelectorAll('.tab').forEach(tab => {
@@ -254,7 +277,6 @@
       });
     });
 
-    // Render default: Sefrekuensi
     renderFeed('sefrekuensi');
   </script>
 </body>
