@@ -4,210 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE — Luar</title>
-  <link rel="manifest" href="/manifest.json" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --muted: #777780;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #00f3ff;
+    }
     * {
-      margin: 0;
-      padding: 0;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
     }
-
     body {
-      background: #000;
-      color: #fff;
-      line-height: 1.5;
-      padding: 24px 20px 40px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.3;
     }
-
-    .logo {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 32px;
-      font-size: 14px;
-      color: #666;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .tabs::-webkit-scrollbar { display: none; }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .section-list > div {
-      font-size: 16px;
-      margin-bottom: 12px;
-      color: #aaa;
-    }
-
-    /* --- Feed --- */
-    .feed {
-      margin-top: 32px;
-    }
-
-    .post {
-      background: #0a0a0a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      border: 1px solid #1a1a1a;
-    }
-
-    /* Rant */
-    .rant-text {
-      font-size: 15px;
-      line-height: 1.5;
-      color: #fff;
-      margin-bottom: 12px;
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 20px;
-      font-size: 13px;
-      color: #888;
-    }
-    .post-actions span {
-      cursor: pointer;
-    }
-    .post-actions span:hover {
-      color: #ddd;
-    }
-
-    .comment-input {
-      width: 100%;
-      padding: 8px;
-      border-radius: 8px;
-      background: #151515;
-      border: 1px solid #222;
-      color: #ccc;
-      font-size: 13px;
-      margin-top: 12px;
-    }
-    .comment-input::placeholder {
-      color: #444;
-    }
-
-    /* Artefak */
-    .artefak-image-wrapper {
-      position: relative;
-      width: 100%;
-      padding-bottom: 80%; /* height = 80% of width */
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-
-    .artefak-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-size: cover;
-      background-position: center;
-      /* Real photo — worn-out shoes */
-      background-image: url('https://images.unsplash.com/photo-1605296866204-7d5d0c1d2f5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
-    }
-
-    .artefak-note {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 4px;
-      backdrop-filter: blur(4px);
-      max-width: 70%;
-    }
-
-    .emotion-meta {
-      font-size: 12px;
-      color: #4F86F7;
-      font-style: italic;
-      margin-top: 10px;
-      opacity: 0.8;
-    }
+    /* tambahkan style khusus luar.html di sini */
   </style>
 </head>
 <body>
-  <!-- Original luar.html content -->
-  <div class="logo">NOPE</div>
-
-  <div class="tabs">
-    <div>Sefrekuensi</div>
-    <div>Segelombang</div>
-    <div>✊ Solidaritas</div>
-  </div>
-
-  <div class="section-list">
-    <div class="section-title">Luar</div>
-    <div>Inspirasi</div>
-    <div>Rage</div>
-    <div>Inner</div>
-  </div>
-
-  <!-- Feed Preview (for layout review) -->
-  <div class="feed">
-    <!-- Rant 1 -->
-    <div class="post">
-      <div class="rant-text">“Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”</div>
-      <div class="post-actions">
-        <span>💬 Gue ngerti banget</span>
-        <span>👯‍♀️ Peluk kenceng</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 2 jam lalu • 3 reaksi</div>
-    </div>
-
-    <!-- Artefak -->
-    <div class="post">
-      <div class="artefak-image-wrapper">
-        <div class="artefak-image"></div>
-        <div class="artefak-note">Kado terakhir dari ayah</div>
-      </div>
-      <div class="post-actions">
-        <span>💙</span>
-        <span>🕊️</span>
-        <span>🕯️</span>
-      </div>
-      <div class="emotion-meta">— 18 hari lalu • 12 reaksi</div>
-    </div>
-
-    <!-- Rant 2 -->
-    <div class="post">
-      <div class="rant-text">“Aku gak mau dibilang kuat. Kadang aku cuma pengen diem aja.”</div>
-      <div class="post-actions">
-        <span>💤 Aku juga</span>
-        <span>🫂 Lo udah cukup</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 1 hari lalu • 14 reaksi</div>
-    </div>
-
-    <!-- Rant 3 -->
-    <div class="post">
-      <div class="rant-text">“Pernah ngerasa semua orang move on, tapi lo stuck di titik yang sama?”</div>
-      <div class="post-actions">
-        <span>🌀 Iya</span>
-        <span>🕊️ Lo gak sendirian</span>
-      </div>
-      <input type="text" class="comment-input" placeholder="Balas pelan-pelan..." />
-      <div class="emotion-meta">— 1 hari lalu • 9 reaksi</div>
-    </div>
-  </div>
+  <div>NOPE</div>
+  <div>Sefrekuensi</div>
+  <div>Segelombang</div>
+  <div>✊ Solidaritas</div>
+  <div>Luar</div>
+  <div>Inspirasi</div>
+  <div>Rage</div>
+  <div>Inner</div>
 </body>
 </html>
