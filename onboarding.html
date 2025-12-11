@@ -13,71 +13,77 @@
       --border: #1a1a25;
       --neon-blue: #00f3ff;
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      padding: 16px;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      width: 100%;
     }
     .header h1 {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       line-height: 1.2;
     }
     .header p {
-      font-size: 11px;
+      font-size: 10px;
       color: #666;
-      margin: 12px 0;
-      text-align: center;
+      margin: 8px 0;
     }
 
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
       width: 100%;
-      margin-bottom: 24px;
+      max-width: 390px; /* iPhone 13 width */
     }
 
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
+      border-radius: 8px;
+      padding: 10px;
+      height: 160px; /* tetapkan tinggi agar muat 2 baris */
+      display: flex;
+      flex-direction: column;
     }
 
     .zone-title {
       color: var(--neon-blue);
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 6px;
-      text-shadow: 0 0 6px rgba(0, 243, 255, 0.3);
+      margin-bottom: 4px;
+      text-shadow: 0 0 4px rgba(0, 243, 255, 0.3);
     }
 
     .hashtag-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 4px;
     }
 
     .hashtag-item {
       background: rgba(255,255,255,0.02);
       color: #aaa;
-      padding: 8px;
+      padding: 6px 8px;
       border-radius: 6px;
+      font-size: 11px;
       cursor: pointer;
       white-space: nowrap;
       overflow: hidden;
@@ -90,9 +96,9 @@
       border: 1px solid var(--neon-blue);
     }
 
-    /* LOCKED ZONE 4 */
+    /* LOCK ZONE 4 */
     .zone:nth-child(4) .hashtag-item {
-      opacity: 0.15;
+      opacity: 0.2;
       cursor: not-allowed;
       pointer-events: none;
     }
@@ -100,17 +106,18 @@
     .status {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px;
+      border-radius: 8px;
+      padding: 10px;
       margin: 16px 0;
       width: 100%;
-      font-size: 12px;
+      max-width: 390px;
+      font-size: 11px;
     }
 
     .status-row {
       display: flex;
       justify-content: space-between;
-      margin: 5px 0;
+      margin: 4px 0;
     }
 
     .status-value.complete { color: var(--neon-blue); }
@@ -118,13 +125,13 @@
 
     .btn {
       width: fit-content;
-      padding: 12px 24px;
+      padding: 10px 20px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       cursor: pointer;
       margin-left: auto;
     }
@@ -137,136 +144,81 @@
     <p>* Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.</p>
   </div>
 
-  <div class="zones-grid" id="zones-grid"></div>
+  <div class="zones-grid">
+    <div class="zone">
+      <div class="zone-title">#PopCulture</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item">#FilmEndingGaje</div>
+        <div class="hashtag-item">#BeliTiketJualGinjal</div>
+        <div class="hashtag-item">#InfluencerNgehek</div>
+        <div class="hashtag-item">#TikTokBikinGila</div>
+        <div class="hashtag-item">#SelebPuraPuraBahagia</div>
+      </div>
+    </div>
+    <div class="zone">
+      <div class="zone-title">#PersonalPain</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item">#GakBisaBilangTidak</div>
+        <div class="hashtag-item">#MauSendiriTapiTakutDibilangJutek</div>
+        <div class="hashtag-item">#DibilangAnakDurhakaKalauNggakNurut</div>
+        <div class="hashtag-item">#CemasTerusPasOrangTidur</div>
+        <div class="hashtag-item">#GakPunyaAlasanHidup</div>
+      </div>
+    </div>
+    <div class="zone">
+      <div class="zone-title">#SocialSickness</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item">#MentalHealthDijadiinTrend</div>
+        <div class="hashtag-item">#KerjaKerasDipujiTapiGajiNggakNaik</div>
+        <div class="hashtag-item">#NgomonginPrivilegeTapiPakeiPhone</div>
+        <div class="hashtag-item">#KapitalisNgegas</div>
+        <div class="hashtag-item">#LGBTQDijadiinKonten</div>
+      </div>
+    </div>
+    <div class="zone">
+      <div class="zone-title">#SayNOPE</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item">#LawanEksploitasiBuruh</div>
+        <div class="hashtag-item">#TolakDiskriminasiGender</div>
+        <div class="hashtag-item">#HentikanPenggusuranRakyat</div>
+        <div class="hashtag-item">#StopKekerasanSeksual</div>
+        <div class="hashtag-item">#BoikotPerusahaanRusakBumi</div>
+      </div>
+    </div>
+  </div>
 
-  <div class="status" id="status"></div>
+  <div class="status">
+    <div class="status-row"><span>#PopCulture</span><span class="status-value incomplete">belum dipilih</span></div>
+    <div class="status-row"><span>#PersonalPain</span><span class="status-value incomplete">belum dipilih</span></div>
+    <div class="status-row"><span>#SocialSickness</span><span class="status-value incomplete">belum dipilih</span></div>
+  </div>
 
-  <button class="btn" id="continue-btn" disabled>Lanjut</button>
+  <button class="btn" disabled>Lanjut</button>
 
   <script>
-    const categories = [
-      {
-        id: 'pop',
-        title: '#PopCulture',
-        hashtags: [
-          '#FilmEndingGaje',
-          '#BeliTiketJualGinjal',
-          '#InfluencerNgehek',
-          '#TikTokBikinGila',
-          '#SelebPuraPuraBahagia'
-        ]
-      },
-      {
-        id: 'personal',
-        title: '#PersonalPain',
-        hashtags: [
-          '#GakBisaBilangTidak',
-          '#MauSendiriTapiTakutDibilangJutek',
-          '#DibilangAnakDurhakaKalauNggakNurut',
-          '#CemasTerusPasOrangTidur',
-          '#GakPunyaAlasanHidup'
-        ]
-      },
-      {
-        id: 'social',
-        title: '#SocialSickness',
-        hashtags: [
-          '#MentalHealthDijadiinTrend',
-          '#KerjaKerasDipujiTapiGajiNggakNaik',
-          '#NgomonginPrivilegeTapiPakeiPhone',
-          '#KapitalisNgegas',
-          '#LGBTQDijadiinKonten'
-        ]
-      },
-      {
-        id: 'movement',
-        title: '#SayNOPE',
-        hashtags: [
-          '#LawanEksploitasiBuruh',
-          '#TolakDiskriminasiGender',
-          '#HentikanPenggusuranRakyat',
-          '#StopKekerasanSeksual',
-          '#BoikotPerusahaanRusakBumi'
-        ],
-        locked: true
-      }
-    ];
+    const zones = document.querySelectorAll('.zone:not(:nth-child(4))');
+    const statusRows = document.querySelectorAll('.status-row');
+    const btn = document.querySelector('.btn');
 
-    let selections = {};
-
-    function renderZones() {
-      const grid = document.getElementById('zones-grid');
-      grid.innerHTML = '';
-
-      categories.forEach(cat => {
-        const zone = document.createElement('div');
-        zone.className = 'zone';
-        if (cat.locked) zone.classList.add('locked');
-
-        const hashtagList = cat.hashtags.map(h => {
-          const el = `<div class="hashtag-item" data-value="${h}">${h}</div>`;
-          return el;
-        }).join('');
-
-        zone.innerHTML = `
-          <div class="zone-title">${cat.title}</div>
-          <div class="hashtag-list">${hashtagList}</div>
-        `;
-        grid.appendChild(zone);
-
-        if (!cat.locked) {
-          zone.querySelectorAll('.hashtag-item').forEach(el => {
-            el.addEventListener('click', () => {
-              const current = selections[cat.id];
-              const value = el.dataset.value;
-
-              if (current === value) {
-                delete selections[cat.id];
-                el.classList.remove('selected');
-              } else {
-                selections[cat.id] = value;
-                el.closest('.hashtag-list').querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-                el.classList.add('selected');
-              }
-              updateStatus();
-            });
-          });
-        }
+    zones.forEach((zone, idx) => {
+      zone.querySelectorAll('.hashtag-item').forEach(item => {
+        item.addEventListener('click', () => {
+          zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          statusRows[idx].querySelector('.status-value').className = 'status-value complete';
+          statusRows[idx].querySelector('.status-value').textContent = item.textContent;
+          checkBtn();
+        });
       });
+    });
+
+    function checkBtn() {
+      const allSelected = Array.from(statusRows).every(row =>
+        row.querySelector('.status-value').className.includes('complete')
+      );
+      btn.disabled = !allSelected;
+      if (allSelected) btn.textContent = 'Lanjut';
     }
-
-    function updateStatus() {
-      const statusEl = document.getElementById('status');
-      statusEl.innerHTML = '';
-
-      // Hanya hitung 3 zona aktif (kecuali movement)
-      const activeCategories = categories.filter(cat => !cat.locked);
-
-      let complete = 0;
-      activeCategories.forEach(cat => {
-        const sel = selections[cat.id];
-        const row = document.createElement('div');
-        row.className = 'status-row';
-        row.innerHTML = `
-          <span>${cat.title}</span>
-          <span class="status-value ${sel ? 'complete' : 'incomplete'}">${sel || 'belum dipilih'}</span>
-        `;
-        statusEl.appendChild(row);
-        if (sel) complete++;
-      });
-
-      const btn = document.getElementById('continue-btn');
-      btn.disabled = complete !== activeCategories.length;
-      if (complete === activeCategories.length) {
-        btn.onclick = () => {
-          localStorage.setItem('nope_selections', JSON.stringify(selections));
-          window.location.href = '/luar';
-        };
-      }
-    }
-
-    renderZones();
-    updateStatus();
   </script>
 </body>
 </html>
