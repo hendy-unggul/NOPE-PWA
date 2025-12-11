@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE — Feed</title>
+  <title>NOPE — Inner</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -44,7 +44,126 @@
       opacity: 0.7;
     }
 
-    /* ARTEFAK SAAT INI */
+    /* === RANT BOX USER === */
+    .rant-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .rant-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      resize: none;
+      height: 80px;
+      outline: none;
+      margin-bottom: 10px;
+    }
+    .rant-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--neon-blue);
+      color: black;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* === JURNAL RANT USER === */
+    .section-title {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 28px 0 12px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .jurnal-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .jurnal-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .jurnal-emoji {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 10px;
+      font-size: 24px;
+    }
+    .emoji-item {
+      cursor: default;
+    }
+    .emoji-item.has-reactions {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    /* === RANT DARI SEFREKUENSI (HANYA TAMPIL DI INNER) === */
+    .freq-rant {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+      position: relative;
+    }
+    .freq-rant::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: -6px;
+      width: 2px;
+      height: calc(100% - 16px);
+      background: var(--neon-blue);
+      border-radius: 2px;
+    }
+    .freq-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .resonance-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+      font-size: 22px;
+    }
+    .resonance-actions span {
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    .resonance-actions span:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    /* === ARTEFAK === */
     .artefak-current {
       margin-bottom: 24px;
     }
@@ -71,7 +190,6 @@
     .artefak-img:hover .artefak-notasi {
       opacity: 1;
     }
-
     .artefak-emoji {
       display: flex;
       justify-content: center;
@@ -79,69 +197,8 @@
       margin-top: 14px;
       font-size: 24px;
     }
-    .emoji-item {
-      cursor: pointer;
-      position: relative;
-    }
-    .emoji-item.has-reactions {
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
 
-    /* RANT SECTION */
-    .rant {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 20px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .rant-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    /* KOMENTAR (HANYA UNTUK SEFREKUENSI) */
-    .comment {
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-    }
-    .comment-author {
-      color: var(--neon-blue);
-      font-weight: 600;
-      font-size: 12px;
-    }
-    .comment-input {
-      width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    /* ARSIP ARTEFAK */
-    .section-title {
-      font-size: 12px;
-      color: var(--muted);
-      margin: 28px 0 12px;
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    /* === ARSIP ARTEFAK === */
     .artefak-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -155,7 +212,7 @@
       border: 1px solid var(--border);
     }
 
-    /* MODAL */
+    /* === MODAL === */
     .modal {
       position: fixed;
       top: 0;
@@ -213,7 +270,59 @@
       <div class="nope-id" id="nopeId">...</div>
     </div>
 
-    <!-- ARTEFAK TERBARU -->
+    <!-- 📝 RANT BOX USER -->
+    <div class="rant-box">
+      <textarea class="rant-input" placeholder="Curahkan kegundahan hatimu..."></textarea>
+      <button class="rant-btn">Rant</button>
+    </div>
+
+    <!-- 👁️ RANT DARI SEFREKUENSI (MAX 2) -->
+    <div class="section-title">frekuensi yang lewat</div>
+
+    <div class="freq-rant">
+      Aku lelah jadi tempat curhat tapi tak pernah didengar.
+      <div class="freq-meta">
+        <span>@nope_73</span>
+        <span>#GakBisaBilangTidak</span>
+      </div>
+      <div class="resonance-actions">
+        <span>☕️</span>
+        <span>💔</span>
+        <span>🕯️</span>
+        <span>✎</span>
+      </div>
+    </div>
+
+    <div class="freq-rant">
+      Setiap kali bilang "aku baik-baik saja", itu adalah kebohongan terbesar hari ini.
+      <div class="freq-meta">
+        <span>@nope_void</span>
+        <span>#MauSendiriTapiTakutDibilangJutek</span>
+      </div>
+      <div class="resonance-actions">
+        <span>☕️</span>
+        <span>💔</span>
+        <span>🕯️</span>
+        <span>✎</span>
+      </div>
+    </div>
+
+    <!-- 📖 JURNAL RANT USER -->
+    <div class="section-title">jurnalmu</div>
+    <div class="jurnal-item">
+      Aku capek jadi 'anak baik' yang selalu nurut.
+      <div class="jurnal-meta">
+        <span>3 hari lalu</span>
+        <span>#DibilangAnakDurhakaKalauNggakNurut</span>
+      </div>
+      <div class="jurnal-emoji">
+        <div class="emoji-item">☕️</div>
+        <div class="emoji-item has-reactions" data-reactions='{"count":2,"users":["@nope_73","@nope_cosmic"]}'>💔</div>
+        <div class="emoji-item">🕯️</div>
+      </div>
+    </div>
+
+    <!-- 🖼️ ARTEFAK TERBARU -->
     <div class="artefak-current">
       <div class="artefak-img">
         <div class="artefak-notasi">Kopi dingin, tak terminum</div>
@@ -225,35 +334,7 @@
       </div>
     </div>
 
-    <!-- RANT DARI SEFREKUENSI (DUMMY) -->
-    <div class="rant">
-      Aku lelah jadi tempat curhat tapi tak pernah didengar.
-      <div class="rant-meta">
-        <span>@nope_73</span>
-        <span>#GakBisaBilangTidak</span>
-      </div>
-      <!-- KOMENTAR HANYA UNTUK SEFREKUENSI -->
-      <div class="comment">
-        <span class="comment-author">@nope_cosmic</span><br>
-        Aku juga selalu bilang "iya" padahal ingin bilang "tidak".
-      </div>
-      <textarea class="comment-input" placeholder="Balas dengan jujur..."></textarea>
-    </div>
-
-    <div class="rant">
-      Setiap kali bilang "aku baik-baik saja", itu adalah kebohongan terbesar hari ini.
-      <div class="rant-meta">
-        <span>@nope_void</span>
-        <span>#MauSendiriTapiTakutDibilangJutek</span>
-      </div>
-      <div class="comment">
-        <span class="comment-author">@nope_73</span><br>
-        Aku pernah nangis 2 jam setelah bilang itu.
-      </div>
-      <textarea class="comment-input" placeholder="Balas dengan jujur..."></textarea>
-    </div>
-
-    <!-- ARSIP ARTEFAK -->
+    <!-- 📦 ARSIP ARTEFAK -->
     <div class="section-title">arsip artefak</div>
     <div class="artefak-grid">
       <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a1/100/100')"></div>
@@ -265,10 +346,10 @@
     </div>
   </div>
 
-  <!-- MODAL REAKSI -->
+  <!-- MODAL UNTUK LIHAT SIAPA YANG MERESPON -->
   <div class="modal" id="reactionModal">
     <div class="modal-content">
-      <div id="modalText">3 orang mendengarmu.</div>
+      <div id="modalText">2 orang mendengarmu.</div>
       <div class="modal-btns">
         <button class="modal-btn btn-show" id="showUsernames">Lihat siapa?</button>
         <button class="modal-btn btn-close" id="closeModal">Tutup</button>
@@ -282,10 +363,10 @@
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-    // --- INIT SUPABASE ---
     import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
       .then(async ({ createClient }) => {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         const {  { user } } = await supabase.auth.getUser();
         if (!user) return window.location.href = 'onboarding.html';
 
@@ -297,7 +378,7 @@
         document.getElementById('nopeId').textContent = profiles?.nope_username || 'nope_anon';
       });
 
-    // --- EMOJI INTERACTION ---
+    // --- EMOJI JURNAL INTERACTION ---
     const modal = document.getElementById('reactionModal');
     const modalText = document.getElementById('modalText');
     const usernameList = document.getElementById('usernameList');
@@ -323,6 +404,24 @@
         if (e.target === closeBtn || e.target === modal) {
           modal.classList.remove('show');
         }
+      });
+    });
+
+    // --- RESONANSI KE RANT SEFREKUENSI (SIMULASI) ---
+    document.querySelectorAll('.resonance-actions span').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const emoji = btn.textContent.trim();
+        if (emoji === '✎') {
+          const text = prompt("Tulis resonansimu (maks 60 karakter):");
+          if (text && text.length <= 60) {
+            alert("Resonansi diam-diam telah terkirim.");
+          } else if (text) {
+            alert("Maksimal 60 karakter.");
+          }
+        } else {
+          alert("Resonansi diam-diam telah terkirim.");
+        }
+        // Di versi production: kirim ke tabel `resonances`
       });
     });
   </script>
