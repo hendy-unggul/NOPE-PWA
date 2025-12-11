@@ -106,6 +106,12 @@
       color: #cccccc;
       margin-top: 2px;
     }
+    .comment-instruction {
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
     .comment-input {
       display: flex;
       gap: 8px;
@@ -171,14 +177,12 @@
   </div>
 
   <div class="container">
-    <div id="feedContent">
-      <!-- Feed akan diisi via JS -->
-    </div>
+    <div id="feedContent"></div>
   </div>
 
   <div class="nav">
     <div class="nav-item active">Luar</div>
-    <div class="nav-item">Notifikasi</div>
+    <div class="nav-item">Inspirasi</div>
     <div class="nav-item">Rage</div>
     <div class="nav-item">Inner</div>
   </div>
@@ -197,7 +201,7 @@
       segelombang: [
         {
           text: "Nggak tahan liat influencer pake isu mental health buat jualan skincare.",
-          comments: []
+          comments: [] // tidak ada komentar
         }
       ],
       solidaritas: []
@@ -213,31 +217,40 @@
       }
 
       let html = '';
-      feeds.forEach((post, idx) => {
+      feeds.forEach(post => {
         html += `
           <div class="post">
             <div class="post-text">“${post.text}”</div>
             <div class="reactions">
-              <div class="reaction" data-emoji="🫶">
-                <div class="reaction-emoji">🫶</div>
-                <div class="reaction-label">Gue ngerti<br>banget</div>
-              </div>
-              <div class="reaction" data-emoji="🤲">
-                <div class="reaction-emoji">🤲</div>
-                <div class="reaction-label">Peluk<br>kenceng</div>
-              </div>
+              ${tabName === 'segelombang' ? `
+                <div class="reaction"><div class="reaction-emoji">🫶</div><div class="reaction-label">Gue ngerti</div></div>
+                <div class="reaction"><div class="reaction-emoji">🤲</div><div class="reaction-label">Peluk</div></div>
+                <div class="reaction"><div class="reaction-emoji">👏</div><div class="reaction-label">Bangga</div></div>
+                <div class="reaction"><div class="reaction-emoji">😮‍💨</div><div class="reaction-label">Napas dulu</div></div>
+                <div class="reaction"><div class="reaction-emoji">💥</div><div class="reaction-label">Gue juga</div></div>
+              ` : `
+                <div class="reaction" data-emoji="🫶">
+                  <div class="reaction-emoji">🫶</div>
+                  <div class="reaction-label">Gue ngerti<br>banget</div>
+                </div>
+                <div class="reaction" data-emoji="🤲">
+                  <div class="reaction-emoji">🤲</div>
+                  <div class="reaction-label">Peluk<br>kenceng</div>
+                </div>
+              `}
             </div>
-            ${post.comments.map(c => `
-              <div class="comment">
-                <div class="comment-user">@${c.user}</div>
-                <div class="comment-text">${c.text}</div>
-              </div>
-            `).join('')}
             ${tabName === 'sefrekuensi' ? `
-            <div class="comment-input">
-              <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." data-post="${idx}" />
-              <button class="comment-send" data-post="${idx}">KIRIM</button>
-            </div>
+              ${post.comments.map(c => `
+                <div class="comment">
+                  <div class="comment-user">@${c.user}</div>
+                  <div class="comment-text">${c.text}</div>
+                </div>
+              `).join('')}
+              <div class="comment-instruction">Gunakan empatimu sebelum merespon...</div>
+              <div class="comment-input">
+                <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
+                <button class="comment-send">KIRIM</button>
+              </div>
             ` : ''}
           </div>
         `;
@@ -246,23 +259,17 @@
 
       // Aktifkan interaksi hanya di Sefrekuensi
       if (tabName === 'sefrekuensi') {
-        // Emoji clickable
         document.querySelectorAll('.reaction').forEach(el => {
           el.addEventListener('click', () => {
             alert(`Lo ngasih reaksi: ${el.dataset.emoji}`);
-            // Nanti simpan ke localStorage/backend
           });
         });
-
-        // Komentar clickable
         document.querySelectorAll('.comment-send').forEach(btn => {
           btn.addEventListener('click', () => {
             const input = btn.previousElementSibling;
             const text = input.value.trim();
             if (text) {
-              alert('Komentar lo dikirim.');
               input.value = '';
-              // Nanti push ke comments array
             }
           });
         });
