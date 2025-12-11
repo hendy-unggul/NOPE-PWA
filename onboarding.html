@@ -87,6 +87,7 @@
     .hashtag-item.locked {
       opacity: 0.2;
       cursor: not-allowed !important;
+      pointer-events: none;
     }
     .status {
       background: var(--card);
@@ -127,7 +128,7 @@
   </div>
 
   <div class="zones-grid">
-    <!-- Zona 1 -->
+    <!-- Zona 1: Pop Culture -->
     <div class="zone">
       <div class="zone-title pop-culture"><i class="fas fa-film"></i> Pop Culture</div>
       <div class="hashtag-list" id="popculture">
@@ -138,7 +139,8 @@
         <div class="hashtag-item" data-value="#GhostingTanpaAlasan">#GhostingTanpaAlasan</div>
       </div>
     </div>
-    <!-- Zona 2 -->
+
+    <!-- Zona 2: Personal Pain -->
     <div class="zone">
       <div class="zone-title personal-pain"><i class="fas fa-heart-broken"></i> Personal Pain</div>
       <div class="hashtag-list" id="personalpain">
@@ -149,7 +151,8 @@
         <div class="hashtag-item" data-value="#GakPunyaAlasanHidup">#GakPunyaAlasanHidup</div>
       </div>
     </div>
-    <!-- Zona 3 -->
+
+    <!-- Zona 3: Social Sickness -->
     <div class="zone">
       <div class="zone-title social-sickness"><i class="fas fa-virus"></i> Social Sickness</div>
       <div class="hashtag-list" id="socialsickness">
@@ -160,15 +163,16 @@
         <div class="hashtag-item" data-value="#LGBTQDijadiinKonten">#LGBTQDijadiinKonten</div>
       </div>
     </div>
-    <!-- Zona 4 -->
+
+    <!-- Zona 4: Movement (terkunci tapi hashtag tetap muncul) -->
     <div class="zone">
       <div class="zone-title movement"><i class="fas fa-rocket"></i> Movement <span style="font-size:10px;color:var(--muted);">(terkunci)</span></div>
       <div class="hashtag-list" id="movement">
-        <div class="hashtag-item locked">X</div>
-        <div class="hashtag-item locked">Y</div>
-        <div class="hashtag-item locked">Z</div>
-        <div class="hashtag-item locked">W</div>
-        <div class="hashtag-item locked">V</div>
+        <div class="hashtag-item locked" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
+        <div class="hashtag-item locked" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
+        <div class="hashtag-item locked" data-value="#HentikanPenggusuranRakyat">#HentikanPenggusuranRakyat</div>
+        <div class="hashtag-item locked" data-value="#StopKekerasanSeksual">#StopKekerasanSeksual</div>
+        <div class="hashtag-item locked" data-value="#BoikotPerusahaanRusakBumi">#BoikotPerusahaanRusakBumi</div>
       </div>
     </div>
   </div>
@@ -213,15 +217,12 @@
         if (!container) return;
 
         Array.from(container.children).forEach(item => {
-          // Hanya item non-locked
-          if (!item.classList.contains('locked')) {
-            item.classList.toggle('selected', item.textContent === selections[zone.key]);
-            item.onclick = () => {
-              selections[zone.key] = selections[zone.key] === item.textContent ? null : item.textContent;
-              renderZones();
-              updateStatus();
-            };
-          }
+          item.classList.toggle('selected', item.textContent === selections[zone.key]);
+          item.onclick = () => {
+            selections[zone.key] = selections[zone.key] === item.textContent ? null : item.textContent;
+            renderZones();
+            updateStatus();
+          };
         });
       });
     }
@@ -239,7 +240,6 @@
     }
 
     function handleContinue() {
-      // Generate @nope_username
       const nopeId = 'nope_' + Math.random().toString(36).substring(2, 8);
       localStorage.setItem('nope_anon_username', nopeId);
       localStorage.setItem('nope_onboarding_complete', 'true');
@@ -255,5 +255,4 @@
   </script>
 </body>
 </html>
-
-Mau lanjut ke `inner.html` sekarang?
+Mau lanjut ke `luar.html` berikutnya? 🖤
