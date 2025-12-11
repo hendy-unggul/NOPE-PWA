@@ -201,10 +201,16 @@
       segelombang: [
         {
           text: "Nggak tahan liat influencer pake isu mental health buat jualan skincare.",
-          comments: [] // tidak ada komentar
+          comments: []
         }
       ],
-      solidaritas: []
+      solidaritas: [],
+      inspirasi: [
+        {
+          title: "Resensi oleh komunitas NOPE",
+          content: "@nope_7x3n8 tentang Buku ‘Dunia Tanpa Cermin’\n“Buku ini nggak ngajarin lo jadi orang baik. Tapi ngajarin lo berani jujur sama rasa jahat lo sendiri.”"
+        }
+      ]
     };
 
     function renderFeed(tabName) {
@@ -218,50 +224,59 @@
 
       let html = '';
       feeds.forEach(post => {
-        html += `
-          <div class="post">
-            <div class="post-text">“${post.text}”</div>
-            <div class="reactions">
-              ${tabName === 'segelombang' ? `
-                <div class="reaction"><div class="reaction-emoji">🫶</div><div class="reaction-label">Gue ngerti</div></div>
-                <div class="reaction"><div class="reaction-emoji">🤲</div><div class="reaction-label">Peluk</div></div>
-                <div class="reaction"><div class="reaction-emoji">👏</div><div class="reaction-label">Bangga</div></div>
-                <div class="reaction"><div class="reaction-emoji">😮‍💨</div><div class="reaction-label">Napas dulu</div></div>
-                <div class="reaction"><div class="reaction-emoji">💥</div><div class="reaction-label">Gue juga</div></div>
-              ` : `
-                <div class="reaction" data-emoji="🫶">
-                  <div class="reaction-emoji">🫶</div>
-                  <div class="reaction-label">Gue ngerti<br>banget</div>
-                </div>
-                <div class="reaction" data-emoji="🤲">
-                  <div class="reaction-emoji">🤲</div>
-                  <div class="reaction-label">Peluk<br>kenceng</div>
-                </div>
-              `}
+        if (tabName === 'inspirasi') {
+          html += `
+            <div class="post" style="border-left: 3px solid #0f62fe; padding-left: 12px;">
+              <div class="post-text">${post.content.replace(/\n/g, '<br>')}</div>
             </div>
-            ${tabName === 'sefrekuensi' ? `
-              ${post.comments.map(c => `
-                <div class="comment">
-                  <div class="comment-user">@${c.user}</div>
-                  <div class="comment-text">${c.text}</div>
-                </div>
-              `).join('')}
-              <div class="comment-instruction">Gunakan empatimu sebelum merespon...</div>
-              <div class="comment-input">
-                <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
-                <button class="comment-send">KIRIM</button>
+          `;
+        } else {
+          html += `
+            <div class="post">
+              <div class="post-text">“${post.text}”</div>
+              <div class="reactions">
+                ${tabName === 'segelombang' ? `
+                  <div class="reaction"><div class="reaction-emoji">🫶</div><div class="reaction-label">Gue ngerti</div></div>
+                  <div class="reaction"><div class="reaction-emoji">🤲</div><div class="reaction-label">Peluk</div></div>
+                  <div class="reaction"><div class="reaction-emoji">👏</div><div class="reaction-label">Bangga</div></div>
+                  <div class="reaction"><div class="reaction-emoji">😮‍💨</div><div class="reaction-label">Napas dulu</div></div>
+                  <div class="reaction"><div class="reaction-emoji">💥</div><div class="reaction-label">Gue juga</div></div>
+                ` : `
+                  <div class="reaction" data-emoji="🫶">
+                    <div class="reaction-emoji">🫶</div>
+                    <div class="reaction-label">Gue ngerti<br>banget</div>
+                  </div>
+                  <div class="reaction" data-emoji="🤲">
+                    <div class="reaction-emoji">🤲</div>
+                    <div class="reaction-label">Peluk<br>kenceng</div>
+                  </div>
+                `}
               </div>
-            ` : ''}
-          </div>
-        `;
+              ${tabName === 'sefrekuensi' ? `
+                ${post.comments.map(c => `
+                  <div class="comment">
+                    <div class="comment-user">@${c.user}</div>
+                    <div class="comment-text">${c.text}</div>
+                  </div>
+                `).join('')}
+                <div class="comment-instruction">Gunakan empatimu sebelum merespon...</div>
+                <div class="comment-input">
+                  <input type="text" class="comment-field" placeholder="Balas pelan-pelan..." />
+                  <button class="comment-send">KIRIM</button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
       });
       container.innerHTML = html;
 
-      // Aktifkan interaksi hanya di Sefrekuensi
       if (tabName === 'sefrekuensi') {
         document.querySelectorAll('.reaction').forEach(el => {
           el.addEventListener('click', () => {
-            alert(`Lo ngasih reaksi: ${el.dataset.emoji}`);
+            const emoji = el.dataset.emoji;
+            // Mock: simpan ke localStorage nanti
+            console.log('Reaksi:', emoji);
           });
         });
         document.querySelectorAll('.comment-send').forEach(btn => {
@@ -270,6 +285,7 @@
             const text = input.value.trim();
             if (text) {
               input.value = '';
+              alert('Komentar dikirim.');
             }
           });
         });
@@ -280,7 +296,12 @@
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        renderFeed(tab.dataset.tab);
+        const tabName = tab.dataset.tab;
+        if (tabName === 'inspirasi') {
+          renderFeed('inspirasi');
+        } else {
+          renderFeed(tabName);
+        }
       });
     });
 
