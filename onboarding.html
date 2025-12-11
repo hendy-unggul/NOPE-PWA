@@ -13,9 +13,7 @@
       --border: #1a1a25;
       --neon-blue: #00f3ff;
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       background: var(--bg);
       color: var(--text);
@@ -140,14 +138,24 @@
     </div>
 
     <div class="zones-grid" id="zones-grid"></div>
-
     <div class="status" id="status"></div>
-
     <button class="btn" id="continue-btn" disabled>Lanjut</button>
   </div>
 
   <script>
     const categories = [
+      {
+        id: 'pop',
+        title: '#PopCulture',
+        desc: 'Influencer fake, konten cringe, ending film gaje, harga tiket bikin pingsan',
+        hashtags: [
+          '#FilmEndingGaje',
+          '#BeliTiketJualGinjal',
+          '#InfluencerNgehek',
+          '#TikTokBikinGila',
+          '#SelebPuraPuraBahagia'
+        ]
+      },
       {
         id: 'personal',
         title: '#PersonalPain',
@@ -182,18 +190,6 @@
           '#HentikanPenggusuranRakyat',
           '#StopKekerasanSeksual',
           '#BoikotPerusahaanRusakBumi'
-        ]
-      },
-      {
-        id: 'inner',
-        title: '#Inner',
-        desc: 'Ruang sunyi sebelum suara muncul',
-        hashtags: [
-          '#AkuDiSini',
-          '#GakSendiri',
-          '#LoCukup',
-          '#DiamBukanKosong',
-          '#SendiriTapiUtuh'
         ]
       }
     ];
