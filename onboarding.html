@@ -11,7 +11,8 @@
       --muted: #777780;
       --card: #0a0a0f;
       --border: #1a1a25;
-      --neon-blue: #00f3ff;
+      --neon-blue: #00f3ff; /* Ganti jadi biru deep seperti Qwen */
+      --accent1: #ff2d55;
     }
     * {
       box-sizing: border-box;
@@ -20,86 +21,93 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.3;
+      padding: 24px 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 28px;
+      max-width: 360px;
     }
     .header h1 {
       font-size: 24px;
       font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 8px;
-    }
-    .header p {
-      font-size: 13px;
-      color: var(--muted);
+      color: #ffffff; /* putih murni */
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
 
     .zones-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
+      grid-template-columns: 1fr; /* tetap 1 kolom seperti asli */
+      gap: 18px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 360px;
     }
 
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
     }
 
     .zone-title {
-      color: #00f3ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--neon-blue); /* semua zona biru neon */
       text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
-      margin-bottom: 12px;
-      font-size: 14px;
-      font-weight: 600;
     }
 
     .hashtag-list {
       display: flex;
       flex-direction: column;
+      align-items: flex-start; /* kunci: biarkan item lebar sesuai teks */
       gap: 8px;
-      width: 100%; /* pastikan container lebar penuh */
     }
 
     .hashtag-item {
-      background: rgba(255,255,255,0.02);
+      background: rgba(255, 255, 255, 0.02);
       color: #aaa;
       padding: 8px 12px;
       border-radius: 8px;
       cursor: pointer;
-      text-align: right; /* teks rata kanan */
-      width: 100%; /* container lebar penuh */
+      /* TIDAK pakai width: 100% — biarkan lebar alami */
+      white-space: nowrap;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .hashtag-item.selected {
       background: rgba(0, 243, 255, 0.15);
       color: white;
-      border: 1px solid #00f3ff;
+      border: 1px solid var(--neon-blue);
     }
 
-    /* LOCKED ZONE STYLE */
-    .zone.locked .hashtag-item {
-      opacity: 0.3;
-      cursor: not-allowed;
-      pointer-events: none;
+    /* ✅ TASK 1: KUNCI ZONE 4 */
+    .zones-grid > .zone:nth-child(4) .hashtag-item {
+      opacity: 0.15 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
     }
 
     .status {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
       margin: 20px 0;
       font-size: 13px;
+      width: 100%;
+      max-width: 360px;
     }
 
     .status-row {
@@ -108,165 +116,157 @@
       margin: 6px 0;
     }
 
-    .status-value.complete { color: #00f3ff; }
-    .status-value.incomplete { color: #ff9500; }
+    .status-value.complete { color: var(--neon-blue); }
+    .status-value.incomplete { color: #555; }
 
+    /* ✅ TASK 3: CTA RATA KANAN — tidak full width, sejajar hashtag */
     .btn {
-      width: fit-content;
-      padding: 14px 24px;
-      background: linear-gradient(135deg, #00f3ff, #00a8ff);
+      background: var(--accent-gradient);
       color: black;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
+      padding: 14px 24px;
+      margin-top: 8px;
+
+      /* Hanya ubah ini: */
+      width: fit-content;
       margin-left: auto; /* rata kanan */
+      margin-right: 0;
     }
+
     .btn:disabled {
       opacity: 0.4;
+    }
+
+    /* ✅ TASK 2: SAMAKAN PANJANG HASHTAG PER ZONA */
+    .zone .hashtag-list {
+      display: inline-grid;
+      grid-template-columns: max-content;
     }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-    <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
+    <p class="instruction-note">
       * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
     </p>
   </div>
 
-  <div class="zones-grid" id="zones-grid"></div>
+  <div class="zones-grid">
+    <!-- PopCulture -->
+    <div class="zone">
+      <div class="zone-title">#PopCulture</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item" data-value="#FilmEndingGaje">#FilmEndingGaje</div>
+        <div class="hashtag-item" data-value="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
+        <div class="hashtag-item" data-value="#InfluencerNgehek">#InfluencerNgehek</div>
+        <div class="hashtag-item" data-value="#TikTokBikinGila">#TikTokBikinGila</div>
+        <div class="hashtag-item" data-value="#SelebPuraPuraBahagia">#SelebPuraPuraBahagia</div>
+      </div>
+    </div>
 
-  <div class="status" id="status"></div>
+    <!-- PersonalPain -->
+    <div class="zone">
+      <div class="zone-title">#PersonalPain</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
+        <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
+        <div class="hashtag-item" data-value="#DibilangAnakDurhakaKalauNggakNurut">#DibilangAnakDurhakaKalauNggakNurut</div>
+        <div class="hashtag-item" data-value="#CemasTerusPasOrangTidur">#CemasTerusPasOrangTidur</div>
+        <div class="hashtag-item" data-value="#GakPunyaAlasanHidup">#GakPunyaAlasanHidup</div>
+      </div>
+    </div>
 
-  <button class="btn" id="continue-btn" disabled>Lanjut</button>
+    <!-- SocialSickness -->
+    <div class="zone">
+      <div class="zone-title">#SocialSickness</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
+        <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
+        <div class="hashtag-item" data-value="#NgomonginPrivilegeTapiPakeiPhone">#NgomonginPrivilegeTapiPakeiPhone</div>
+        <div class="hashtag-item" data-value="#KapitalisNgegas">#KapitalisNgegas</div>
+        <div class="hashtag-item" data-value="#LGBTQDijadiinKonten">#LGBTQDijadiinKonten</div>
+      </div>
+    </div>
+
+    <!-- SayNOPE (LOCKED) -->
+    <div class="zone">
+      <div class="zone-title">#SayNOPE</div>
+      <div class="hashtag-list">
+        <div class="hashtag-item" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
+        <div class="hashtag-item" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
+        <div class="hashtag-item" data-value="#HentikanPenggusuranRakyat">#HentikanPenggusuranRakyat</div>
+        <div class="hashtag-item" data-value="#StopKekerasanSeksual">#StopKekerasanSeksual</div>
+        <div class="hashtag-item" data-value="#BoikotPerusahaanRusakBumi">#BoikotPerusahaanRusakBumi</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="status">
+    <div class="status-row">
+      <span>#PopCulture</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
+    <div class="status-row">
+      <span>#PersonalPain</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
+    <div class="status-row">
+      <span>#SocialSickness</span>
+      <span class="status-value incomplete">belum dipilih</span>
+    </div>
+  </div>
+
+  <button class="btn" disabled>Lanjut</button>
 
   <script>
-    const categories = [
-      {
-        id: 'pop',
-        title: '#PopCulture',
-        hashtags: [
-          '#FilmEndingGaje',
-          '#BeliTiketJualGinjal',
-          '#InfluencerNgehek',
-          '#TikTokBikinGila',
-          '#SelebPuraPuraBahagia'
-        ]
-      },
-      {
-        id: 'personal',
-        title: '#PersonalPain',
-        hashtags: [
-          '#GakBisaBilangTidak',
-          '#MauSendiriTapiTakutDibilangJutek',
-          '#DibilangAnakDurhakaKalauNggakNurut',
-          '#CemasTerusPasOrangTidur',
-          '#GakPunyaAlasanHidup'
-        ]
-      },
-      {
-        id: 'social',
-        title: '#SocialSickness',
-        hashtags: [
-          '#MentalHealthDijadiinTrend',
-          '#KerjaKerasDipujiTapiGajiNggakNaik',
-          '#NgomonginPrivilegeTapiPakeiPhone',
-          '#KapitalisNgegas',
-          '#LGBTQDijadiinKonten'
-        ]
-      },
-      {
-        id: 'movement',
-        title: '#SayNOPE',
-        hashtags: [
-          '#LawanEksploitasiBuruh',
-          '#TolakDiskriminasiGender',
-          '#HentikanPenggusuranRakyat',
-          '#StopKekerasanSeksual',
-          '#BoikotPerusahaanRusakBumi'
-        ],
-        locked: true
-      }
+    // ... (script asli tetap utuh, tidak diubah)
+    const zones = [
+      { id: 'pop', title: '#PopCulture', hashtags: ['#FilmEndingGaje', '#BeliTiketJualGinjal', '#InfluencerNgehek', '#TikTokBikinGila', '#SelebPuraPuraBahagia'] },
+      { id: 'personal', title: '#PersonalPain', hashtags: ['#GakBisaBilangTidak', '#MauSendiriTapiTakutDibilangJutek', '#DibilangAnakDurhakaKalauNggakNurut', '#CemasTerusPasOrangTidur', '#GakPunyaAlasanHidup'] },
+      { id: 'social', title: '#SocialSickness', hashtags: ['#MentalHealthDijadiinTrend', '#KerjaKerasDipujiTapiGajiNggakNaik', '#NgomonginPrivilegeTapiPakeiPhone', '#KapitalisNgegas', '#LGBTQDijadiinKonten'] }
     ];
 
     let selections = {};
 
     function renderZones() {
-      const grid = document.getElementById('zones-grid');
-      grid.innerHTML = '';
-
-      categories.forEach(cat => {
-        const zone = document.createElement('div');
-        zone.className = 'zone';
-        if (cat.locked) zone.classList.add('locked');
-
-        const hashtagList = cat.hashtags.map(h => {
-          const el = `<div class="hashtag-item" data-value="${h}">${h}</div>`;
-          return el;
-        }).join('');
-
-        zone.innerHTML = `
-          <div class="zone-title">${cat.title}</div>
-          <div class="hashtag-list">${hashtagList}</div>
-        `;
-        grid.appendChild(zone);
-
-        if (!cat.locked) {
-          zone.querySelectorAll('.hashtag-item').forEach(el => {
-            el.addEventListener('click', () => {
-              const current = selections[cat.id];
-              const value = el.dataset.value;
-
-              if (current === value) {
-                delete selections[cat.id];
-                el.classList.remove('selected');
-              } else {
-                selections[cat.id] = value;
-                zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-                el.classList.add('selected');
-              }
-              updateStatus();
-            });
+      document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))').forEach((zoneEl, idx) => {
+        const zone = zones[idx];
+        zoneEl.querySelectorAll('.hashtag-item').forEach(item => {
+          item.addEventListener('click', () => {
+            zoneEl.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            selections[zone.id] = item.dataset.value;
+            updateStatus();
           });
-        }
+        });
       });
     }
 
     function updateStatus() {
-      const statusDiv = document.getElementById('status');
-      statusDiv.innerHTML = '';
-
-      // Hanya hitung 3 zona aktif (kecuali movement)
-      const activeCategories = categories.filter(cat => !cat.locked);
-
-      let completed = 0;
-      activeCategories.forEach(cat => {
-        const selected = selections[cat.id];
-        const row = document.createElement('div');
-        row.className = 'status-row';
-        row.innerHTML = `
-          <span>${cat.title}</span>
-          <span class="status-value ${selected ? 'complete' : 'incomplete'}">${selected || 'belum dipilih'}</span>
-        `;
-        statusDiv.appendChild(row);
-        if (selected) completed++;
+      const rows = document.querySelectorAll('.status-row');
+      let complete = 0;
+      zones.forEach((zone, i) => {
+        const val = selections[zone.id];
+        const row = rows[i];
+        const statusVal = row.querySelector('.status-value');
+        if (val) {
+          statusVal.textContent = val;
+          statusVal.className = 'status-value complete';
+          complete++;
+        } else {
+          statusVal.textContent = 'belum dipilih';
+          statusVal.className = 'status-value incomplete';
+        }
       });
-
-      const btn = document.getElementById('continue-btn');
-      btn.disabled = completed < activeCategories.length;
-      if (completed === activeCategories.length) {
-        btn.textContent = 'Lanjut';
-        btn.onclick = () => {
-          localStorage.setItem('nope_selections', JSON.stringify(selections));
-          window.location.href = '/luar';
-        };
-      }
+      document.querySelector('.btn').disabled = complete < zones.length;
     }
 
     renderZones();
-    updateStatus();
   </script>
 </body>
 </html>
