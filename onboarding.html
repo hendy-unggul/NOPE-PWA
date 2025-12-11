@@ -8,45 +8,58 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0f;
+      --bg: #000000;
       --text: #ffffff;
       --muted: #777780;
-      --card: #16161d;
-      --border: #22222d;
-      --accent1: #ff2d55;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #00f3ff;
+      --accent-gradient: linear-gradient(135deg, #00f3ff, #00a8ff);
     }
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.3;
+      padding: 24px 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 28px;
+      max-width: 360px;
     }
     .header h1 {
       font-size: 24px;
       font-weight: 800;
-      color: var(--accent1);
-      margin-bottom: 8px;
+      color: #ffffff; /* putih murni */
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .instruction-note {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
     }
     .zones-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 20px;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 360px;
     }
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
     }
     .zone-title {
@@ -56,70 +69,71 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: var(--muted);
+      color: var(--neon-blue); /* semua zona biru neon */
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
     }
-    .pop-culture { color: #2db34d; }
-    .personal-pain { color: #ff9500; }
-    .social-sickness { color: var(--accent1); }
-    .movement { color: #5ac8fa; opacity: 0.5; }
     .hashtag-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
     .hashtag-item {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.02);
+      color: #aaa;
       padding: 8px;
-      border-radius: 6px;
+      border-radius: 8px;
       text-align: center;
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .hashtag-item:hover {
+      background: rgba(0, 243, 255, 0.05);
     }
     .hashtag-item.selected {
-      background: rgba(255, 45, 85, 0.15);
-      border: 1px solid var(--accent1);
+      background: rgba(0, 243, 255, 0.15);
+      color: white;
+      border: 1px solid var(--neon-blue);
     }
     .hashtag-item.locked {
-      opacity: 0.2;
+      opacity: 0.15;
       cursor: not-allowed !important;
       pointer-events: none;
     }
     .status {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 16px;
       margin: 20px 0;
       font-size: 13px;
+      width: 100%;
+      max-width: 360px;
     }
     .status-row {
       display: flex;
       justify-content: space-between;
       margin: 6px 0;
     }
-    .status-value.complete { color: #2db34d; }
-    .status-value.incomplete { color: #ff9500; }
+    .status-value.complete { color: var(--neon-blue); }
+    .status-value.incomplete { color: #555; }
     .btn {
       width: 100%;
+      max-width: 360px;
       padding: 14px;
-      background: linear-gradient(135deg, var(--accent1), #ff9500);
-      color: white;
+      background: var(--accent-gradient);
+      color: black;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
+      margin-top: 8px;
     }
     .btn:disabled {
       opacity: 0.4;
       cursor: not-allowed;
-    }
-    .instruction-note {
-      font-size: 11px;
-      color: #666;
-      text-align: center;
-      margin: 12px 0;
     }
   </style>
 </head>
@@ -131,7 +145,7 @@
   <div class="zones-grid">
     <!-- Zona 1: Pop Culture -->
     <div class="zone">
-      <div class="zone-title pop-culture"><i class="fas fa-film"></i> Pop Culture</div>
+      <div class="zone-title"><i class="fas fa-film"></i> Pop Culture</div>
       <div class="hashtag-list" id="popculture">
         <div class="hashtag-item" data-value="#FilmBioskopMahal">#FilmBioskopMahal</div>
         <div class="hashtag-item" data-value="#NgaretTanpaRasaBersalah">#NgaretTanpaRasaBersalah</div>
@@ -143,7 +157,7 @@
 
     <!-- Zona 2: Personal Pain -->
     <div class="zone">
-      <div class="zone-title personal-pain"><i class="fas fa-heart-broken"></i> Personal Pain</div>
+      <div class="zone-title"><i class="fas fa-heart-broken"></i> Personal Pain</div>
       <div class="hashtag-list" id="personalpain">
         <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
         <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
@@ -155,7 +169,7 @@
 
     <!-- Zona 3: Social Sickness -->
     <div class="zone">
-      <div class="zone-title social-sickness"><i class="fas fa-virus"></i> Social Sickness</div>
+      <div class="zone-title"><i class="fas fa-virus"></i> Social Sickness</div>
       <div class="hashtag-list" id="socialsickness">
         <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
         <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
@@ -167,9 +181,8 @@
 
     <!-- Zona 4: Movement (terkunci tapi hashtag muncul) -->
     <div class="zone">
-      <div class="zone-title movement">
-        <i class="fas fa-rocket"></i> Movement 
-        <span style="font-size:10px;color:var(--muted);">(terkunci)</span>
+      <div class="zone-title">
+        <i class="fas fa-rocket"></i> Movement <span style="font-size:10px;color:var(--muted);">(terkunci)</span>
       </div>
       <div class="hashtag-list" id="movement">
         <div class="hashtag-item locked" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
@@ -181,7 +194,6 @@
     </div>
   </div>
 
-  <!-- Instruksi dipindah ke bawah & diperkecil -->
   <p class="instruction-note">
     * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
   </p>
