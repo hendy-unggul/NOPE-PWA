@@ -11,143 +11,142 @@
       --muted: #777780;
       --card: #0a0a0f;
       --border: #1a1a25;
-      --neon-blue: #00f3ff;
+      --neon-blue: #00f3ff; /* biru deep seperti Qwen */
+      --accent1: #ff2d55;
     }
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+      font-family: 'Inter', sans-serif;
       padding: 20px;
       max-width: 500px;
       margin: 0 auto;
-      line-height: 1.4;
-    }
-
-    .onboarding-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      line-height: 1.3;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .header h1 {
       font-size: 24px;
       font-weight: 800;
+      color: #ffffff;
       margin-bottom: 8px;
-      line-height: 1.2;
     }
     .header p {
-      font-size: 11px;
-      color: #666;
-      margin: 12px 0;
-      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
     }
 
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      width: 100%;
-      margin-bottom: 24px;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px;
+      padding: 16px;
     }
 
     .zone-title {
-      color: var(--neon-blue);
-      font-size: 13px;
+      color: #00f3ff;
+      text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+      margin-bottom: 12px;
+      font-size: 14px;
       font-weight: 600;
-      margin-bottom: 6px;
-      text-shadow: 0 0 6px rgba(0, 243, 255, 0.3);
-    }
-
-    .zone-desc {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 10px;
     }
 
     .hashtag-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      align-items: flex-end; /* rata kanan */
+      gap: 8px;
     }
 
     .hashtag-item {
       background: rgba(255,255,255,0.02);
       color: #aaa;
-      padding: 8px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 12px;
+      width: fit-content; /* lebar sesuai teks */
     }
 
     .hashtag-item.selected {
       background: rgba(0, 243, 255, 0.15);
       color: white;
-      border: 1px solid var(--neon-blue);
+      border: 1px solid #00f3ff;
+    }
+
+    /* LOCKED ZONE STYLE */
+    .zone.locked .hashtag-item {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     .status {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 14px;
-      margin: 16px 0;
-      width: 100%;
-      font-size: 12px;
+      padding: 16px;
+      margin: 20px 0;
+      font-size: 13px;
     }
 
     .status-row {
       display: flex;
       justify-content: space-between;
-      margin: 5px 0;
+      margin: 6px 0;
     }
 
-    .status-value.complete { color: var(--neon-blue); }
+    .status-value.complete { color: #00f3ff; }
     .status-value.incomplete { color: #ff9500; }
 
     .btn {
-      width: 100%;
-      padding: 12px;
+      width: fit-content; /* tidak full width */
+      padding: 14px 24px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 16px;
       cursor: pointer;
+      margin-left: auto; /* rata kanan */
     }
-    .btn:disabled { opacity: 0.4; }
+    .btn:disabled {
+      opacity: 0.4;
+    }
   </style>
 </head>
 <body>
-  <div class="onboarding-container">
-    <div class="header">
-      <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
-      <p>* Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.</p>
-    </div>
-
-    <div class="zones-grid" id="zones-grid"></div>
-    <div class="status" id="status"></div>
-    <button class="btn" id="continue-btn" disabled>Lanjut</button>
+  <div class="header">
+    <h1>Jangan pilih yang kau suka.<br>Pilih yang kau benci.</h1>
+    <p style="font-size:11px;color:#666;text-align:center;margin:12px 0;">
+      * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
+    </p>
   </div>
+
+  <div class="zones-grid" id="zones-grid"></div>
+
+  <div class="status" id="status"></div>
+
+  <button class="btn" id="continue-btn" disabled>Lanjut</button>
 
   <script>
     const categories = [
       {
         id: 'pop',
         title: '#PopCulture',
-        desc: 'Influencer fake, konten cringe, ending film gaje, harga tiket bikin pingsan',
         hashtags: [
           '#FilmEndingGaje',
           '#BeliTiketJualGinjal',
@@ -159,7 +158,6 @@
       {
         id: 'personal',
         title: '#PersonalPain',
-        desc: 'Yang lo sembunyiin, tapi beneran nyakitin',
         hashtags: [
           '#GakBisaBilangTidak',
           '#MauSendiriTapiTakutDibilangJutek',
@@ -171,7 +169,6 @@
       {
         id: 'social',
         title: '#SocialSickness',
-        desc: 'Yang bikin lo ngerasa sistem ini salah',
         hashtags: [
           '#MentalHealthDijadiinTrend',
           '#KerjaKerasDipujiTapiGajiNggakNaik',
@@ -183,14 +180,14 @@
       {
         id: 'movement',
         title: '#SayNOPE',
-        desc: 'Yang lo berani lawan, meski sendirian',
         hashtags: [
           '#LawanEksploitasiBuruh',
           '#TolakDiskriminasiGender',
           '#HentikanPenggusuranRakyat',
           '#StopKekerasanSeksual',
           '#BoikotPerusahaanRusakBumi'
-        ]
+        ],
+        locked: true
       }
     ];
 
@@ -203,55 +200,64 @@
       categories.forEach(cat => {
         const zone = document.createElement('div');
         zone.className = 'zone';
+        if (cat.locked) zone.classList.add('locked');
+
+        const hashtagList = cat.hashtags.map(h => {
+          const el = `<div class="hashtag-item" data-value="${h}">${h}</div>`;
+          return el;
+        }).join('');
+
         zone.innerHTML = `
           <div class="zone-title">${cat.title}</div>
-          <div class="zone-desc">${cat.desc}</div>
-          <div class="hashtag-list" data-category="${cat.id}">
-            ${cat.hashtags.map(h => `<div class="hashtag-item" data-value="${h}">${h}</div>`).join('')}
-          </div>
+          <div class="hashtag-list">${hashtagList}</div>
         `;
         grid.appendChild(zone);
-      });
 
-      document.querySelectorAll('.hashtag-item').forEach(el => {
-        el.addEventListener('click', () => {
-          const cat = el.closest('.hashtag-list').dataset.category;
-          const val = el.dataset.value;
-          const current = selections[cat];
+        if (!cat.locked) {
+          zone.querySelectorAll('.hashtag-item').forEach(el => {
+            el.addEventListener('click', () => {
+              const current = selections[cat.id];
+              const value = el.dataset.value;
 
-          if (current === val) {
-            delete selections[cat];
-            el.classList.remove('selected');
-          } else {
-            selections[cat] = val;
-            el.closest('.hashtag-list').querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-            el.classList.add('selected');
-          }
-          updateStatus();
-        });
+              if (current === value) {
+                delete selections[cat.id];
+                el.classList.remove('selected');
+              } else {
+                selections[cat.id] = value;
+                zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
+                el.classList.add('selected');
+              }
+              updateStatus();
+            });
+          });
+        }
       });
     }
 
     function updateStatus() {
-      const statusEl = document.getElementById('status');
-      statusEl.innerHTML = '';
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = '';
 
-      let complete = 0;
-      categories.forEach(cat => {
-        const sel = selections[cat.id];
+      // Hanya hitung 3 zona aktif (kecuali movement)
+      const activeCategories = categories.filter(cat => !cat.locked);
+
+      let completed = 0;
+      activeCategories.forEach(cat => {
+        const selected = selections[cat.id];
         const row = document.createElement('div');
         row.className = 'status-row';
         row.innerHTML = `
           <span>${cat.title}</span>
-          <span class="status-value ${sel ? 'complete' : 'incomplete'}">${sel || 'belum dipilih'}</span>
+          <span class="status-value ${selected ? 'complete' : 'incomplete'}">${selected || 'belum dipilih'}</span>
         `;
-        statusEl.appendChild(row);
-        if (sel) complete++;
+        statusDiv.appendChild(row);
+        if (selected) completed++;
       });
 
       const btn = document.getElementById('continue-btn');
-      btn.disabled = complete !== categories.length;
-      if (complete === categories.length) {
+      btn.disabled = completed < activeCategories.length;
+      if (completed === activeCategories.length) {
+        btn.textContent = 'Lanjut';
         btn.onclick = () => {
           localStorage.setItem('nope_selections', JSON.stringify(selections));
           window.location.href = '/luar';
