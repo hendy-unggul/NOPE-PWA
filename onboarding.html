@@ -4,65 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE • Masuk</title>
-
-  <!-- PWA & Favicon -->
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <meta name="theme-color" content="#001f4d" />
-
-  <!-- Minimal style — vibe NOPE -->
   <style>
-    :root {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
-      font-size: 13px;
-      color: white;
-      background: black;
-    }
-    body {
-      margin: 0;
-      padding: 24px 20px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 28px;
-    }
-    .text-center {
-      text-align: center;
-      line-height: 1.6;
-      opacity: 0.85;
-    }
-    input {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #001f4d;
-      color: white;
-      font: inherit;
-      padding: 6px 2px;
-      width: 100%;
-      max-width: 280px;
-      outline: none;
-    }
-    input::placeholder {
-      color: #001f4d;
-      opacity: 0.7;
-    }
-    .pulse {
-      background: #001f4d;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      font: inherit;
-      font-weight: 600;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-top: 8px;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 31, 77, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(0, 31, 77, 0); }
-    }
+    :root { font-family: monospace; font-size: 13px; color: white; background: black; }
+    body { margin: 0; padding: 24px 20px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; gap: 28px; }
+    .text-center { text-align: center; line-height: 1.6; opacity: 0.85; }
+    input { background: transparent; border: none; border-bottom: 1px solid #001f4d; color: white; font: inherit; padding: 6px 2px; width: 100%; max-width: 280px; outline: none; }
+    input::placeholder { color: #001f4d; opacity: 0.7; }
+    .pulse { background: #001f4d; color: white; border: none; padding: 10px 24px; font: inherit; font-weight: 600; border-radius: 30px; cursor: pointer; margin-top: 8px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,31,77,0.4); } 70% { box-shadow: 0 0 0 10px rgba(0,31,77,0); } }
   </style>
 </head>
 <body>
@@ -70,48 +22,35 @@
     <div>masukkan emailmu</div>
     <div>jika berani</div>
   </div>
-
-  <form id="login-form" style="display: flex; flex-direction: column; align-items: center;">
-    <input
-      type="email"
-      id="email"
-      placeholder="contoh@email.com"
-      required
-    />
+  <form id="login-form" style="display:flex;flex-direction:column;align-items:center;">
+    <input type="email" id="email" placeholder="contoh@email.com" required />
     <button type="submit" class="pulse">masukke frekuensimu</button>
   </form>
 
   <script type="module">
     const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8'; // GANTI DENGAN KEY ASLI
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
-    const { createClient } = await import('https://unpkg.com/@supabase/supabase-js@2');
+    const supabaseModule = await import('https://unpkg.com/@supabase/supabase-js@2');
+    const createClient = supabaseModule.default;
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = e.target.email.value.trim().toLowerCase();
-
       try {
         const { error } = await supabase.auth.signInWithOtp({
           email,
-          options: {
-            emailRedirectTo: window.location.origin + '/inner.html'
-          }
+          options: { emailRedirectTo: window.location.origin + '/inner.html' }
         });
-
         if (error) throw error;
-
-        // Redirect manual ke inner.html setelah OTP dikirim
         window.location.href = 'inner.html';
       } catch (err) {
-        console.error('Login error:', err.message);
-        alert('Gagal mengirim email. Coba lagi.');
+        alert('Gagal kirim email. Coba lagi.');
       }
     });
   </script>
 
-  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
