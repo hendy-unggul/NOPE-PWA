@@ -1,12 +1,22 @@
 {
+  "version": 2,
   "routes": [
-    { "src": "/$", "dest": "/index.html" },
-    { "src": "/register.html", "dest": "/register.html" },
-    { "src": "/onboarding.html", "dest": "/onboarding.html" },
-    { "src": "/inner.html", "dest": "/inner.html" },
-    { "src": "/luar.html", "dest": "/luar.html" },
-    { "src": "/manifest.json", "dest": "/manifest.json" },
-    { "src": "/sw.js", "dest": "/sw.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    {
+      "src": "/$",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/onboarding.html",
+      "dest": "/onboarding.html"
+    },
+    {
+      "src": "/inner.html",
+      "dest": "/inner.html"
+    },
+    {
+      "src": "/(.*)",
+      "status": 404,
+      "dest": "/404.html"
+    }
   ]
 }
