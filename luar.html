@@ -98,7 +98,7 @@
       margin-bottom: var(--spacing-xs);
     }
 
-    /* RESONANCE TRIGGER (ikon kecil) */
+    /* RESONANCE TRIGGER */
     .resonance-trigger {
       position: absolute;
       bottom: 8px;
@@ -120,7 +120,7 @@
       background: rgba(255,255,255,0.1);
     }
 
-    /* RESONANCE PANEL (sembunyi secara default) */
+    /* RESONANCE PANEL */
     .resonance-panel {
       display: none;
       margin-top: var(--spacing-xs);
@@ -219,13 +219,21 @@
       right: 0;
       background: var(--bg);
       border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-around;
       padding: 6px 0;
+    }
+    .nav-container {
+      max-width: 360px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 16px;
+      box-sizing: border-box;
     }
     .nav-item {
       font-size: 11px;
       color: var(--muted);
+      white-space: nowrap;
+      text-align: center;
     }
     .nav-item.active {
       color: var(--neon-blue);
@@ -249,10 +257,12 @@
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item active">Luar</div>
-    <div class="nav-item">Resensi</div>
-    <div class="nav-item">Rage</div>
-    <div class="nav-item">Inner</div>
+    <div class="nav-container">
+      <div class="nav-item active">Luar</div>
+      <div class="nav-item">Resensi</div>
+      <div class="nav-item">Rage</div>
+      <div class="nav-item">Inner</div>
+    </div>
   </div>
 
   <script>
@@ -260,7 +270,8 @@
       frekuensi: [
         { type: 'rant', text: "Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’", user: "@nope_73", hashtag: "#MauSendiriTapiTakutDibilangJutek" },
         { type: 'artefak', image: "https://picsum.photos/seed/jam/400/200", caption: "Waktu yang tak kembali" },
-        { type: 'rant', text: "Aku takut jadi egois kalau bilang ‘tidak’.", user: "@nope_void", hashtag: "#GakBisaBilangTidak" }
+        { type: 'rant', text: "Aku takut jadi egois kalau bilang ‘tidak’.", user: "@nope_void", hashtag: "#GakBisaBilangTidak" },
+        { type: 'artefak', image: "https://picsum.photos/seed/kopi/400/200", caption: "Kopi dingin, tak terminum" }
       ],
       segelombang: [
         { type: 'rant', text: "Kerja keras dipuji, tapi gaji nggak naik.", user: "@nope_cosmic", hashtag: "#KerjaKerasDipujiTapiGajiNggakNaik" }
