@@ -62,23 +62,24 @@
       font-size: 13px;
       font-weight: 600;
       white-space: nowrap;
+      color: var(--muted);
+      cursor: pointer;
     }
     .tab.active {
       background: var(--accent);
       color: #000;
     }
-    .tab.inactive {
-      color: var(--muted);
-    }
 
-    /* RANT CARD */
-    .rant-card {
+    /* FEED ITEM */
+    .feed-item {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 20px;
     }
+
+    /* RANT */
     .rant-text {
       font-size: 14px;
       line-height: 1.5;
@@ -88,6 +89,32 @@
       font-size: 11px;
       color: var(--muted);
       margin-bottom: 12px;
+    }
+
+    /* ARTEFAK */
+    .artefak-img {
+      width: 100%;
+      height: 180px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .artefak-notasi {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .artefak-img:hover .artefak-notasi {
+      opacity: 1;
     }
 
     /* REACTIONS */
@@ -125,7 +152,7 @@
       background: rgba(255,255,255,0.03);
       border-radius: 12px;
       padding: 10px;
-      margin-bottom: 8px;
+      margin: 12px 0 8px;
       font-size: 13px;
     }
     .comment-author {
@@ -192,12 +219,11 @@
     </div>
 
     <div class="tabs">
-      <div class="tab active">Frekuensi yang lewat</div>
-      <div class="tab inactive">Segelombang</div>
-      <div class="tab inactive">✊ Solidaritas</div>
+      <div class="tab active" data-tab="frekuensi">Frekuensi yang lewat</div>
+      <div class="tab" data-tab="segelombang">Segelombang</div>
+      <div class="tab" data-tab="solidaritas">✊ Solidaritas</div>
     </div>
 
-    <!-- Feed will be rendered by JS -->
     <div id="feed"></div>
   </div>
 
@@ -209,105 +235,112 @@
   </div>
 
   <script>
-    // Dummy  rant + artefak
-    const feedItems = [
-      {
-        type: 'rant',
-        text: "Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’",
-        user: "@nope_73",
-        hashtag: "#MauSendiriTapiTakutDibilangJutek"
-      },
-      {
-        type: 'artefak',
-        image: "https://picsum.photos/seed/jam/400/200",
-        caption: "Waktu yang tak kembali"
-      },
-      {
-        type: 'rant',
-        text: "Aku takut jadi egois kalau bilang ‘tidak’.",
-        user: "@nope_void",
-        hashtag: "#GakBisaBilangTidak"
-      },
-      {
-        type: 'artefak',
-        image: "https://picsum.photos/seed/kopi/400/200",
-        caption: "Kopi dingin, tak terminum"
-      },
-      {
-        type: 'rant',
-        text: "Setiap kali bilang 'aku baik-baik saja', itu adalah kebohongan terbesar hari ini.",
-        user: "@nope_73",
-        hashtag: "#MauSendiriTapiTakutDibilangJutek"
-      }
-    ];
+    // Konten per tab
+    const tabContent = {
+      frekuensi: [
+        { type: 'rant', text: "Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’", user: "@nope_73", hashtag: "#MauSendiriTapiTakutDibilangJutek" },
+        { type: 'artefak', image: "https://picsum.photos/seed/jam/400/200", caption: "Waktu yang tak kembali" },
+        { type: 'rant', text: "Aku takut jadi egois kalau bilang ‘tidak’.", user: "@nope_void", hashtag: "#GakBisaBilangTidak" },
+        { type: 'artefak', image: "https://picsum.photos/seed/kopi/400/200", caption: "Kopi dingin, tak terminum" },
+        { type: 'rant', text: "Setiap kali bilang 'aku baik-baik saja', itu adalah kebohongan terbesar hari ini.", user: "@nope_73", hashtag: "#MauSendiriTapiTakutDibilangJutek" }
+      ],
+      segelombang: [
+        { type: 'rant', text: "Kerja keras dipuji, tapi gaji nggak naik.", user: "@nope_cosmic", hashtag: "#KerjaKerasDipujiTapiGajiNggakNaik" },
+        { type: 'rant', text: "Film itu ending-nya gaje banget.", user: "@nope_echo", hashtag: "#FilmEndingGaje" }
+      ],
+      solidaritas: [
+        { type: 'rant', text: "Lawan eksploitasi buruh!", user: "@nope_fight", hashtag: "#SayNOPE" },
+        { type: 'rant', text: "Hentikan penggusuran rakyat.", user: "@nope_justice", hashtag: "#SayNOPE" }
+      ]
+    };
 
-    // Shuffle
-    feedItems.sort(() => Math.random() - 0.5);
+    // Shuffle hanya untuk tab frekuensi
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
 
-    const feedEl = document.getElementById('feed');
-    feedItems.forEach(item => {
-      if (item.type === 'rant') {
-        feedEl.innerHTML += `
-          <div class="feed-item">
-            <div class="rant-text">“${item.text}”</div>
-            <div class="rant-meta">${item.user} • ${item.hashtag}</div>
-            <div class="reactions">
-              <button class="reaction-btn">
-                <div class="reaction-emoji">☕️</div>
-                <div class="reaction-text">Aku juga begitu.</div>
-              </button>
-              <button class="reaction-btn">
-                <div class="reaction-emoji">💔</div>
-                <div class="reaction-text">Peluk.</div>
-              </button>
-              <button class="reaction-btn">
-                <div class="reaction-emoji">✨</div>
-                <div class="reaction-text">Bangga.</div>
-              </button>
-            </div>
-            <div class="comment">
-              <div class="comment-author">@nope_8x2m4</div>
-              <div class="comment-text">Gue juga ngerasain ini tiap Lebaran.</div>
-            </div>
-            <textarea class="comment-input" placeholder="Balas pelan-pelan..."></textarea>
-            <button class="send-btn">KIRIM</button>
-          </div>
-        `;
-      } else if (item.type === 'artefak') {
-        feedEl.innerHTML += `
-          <div class="feed-item">
-            <div class="artefak-img" style="background-image: url('${item.image}')">
-              <div class="artefak-notasi">${item.caption}</div>
-            </div>
-            <div class="reactions">
-              <button class="reaction-btn">
-                <div class="reaction-emoji">☕️</div>
-                <div class="reaction-text">Aku juga begitu.</div>
-              </button>
-              <button class="reaction-btn">
-                <div class="reaction-emoji">💔</div>
-                <div class="reaction-text">Peluk.</div>
-              </button>
-              <button class="reaction-btn">
-                <div class="reaction-emoji">✨</div>
-                <div class="reaction-text">Bangga.</div>
-              </button>
-            </div>
-          </div>
-        `;
+    function renderFeed(tab) {
+      const feedEl = document.getElementById('feed');
+      let items = tabContent[tab] || [];
+      if (tab === 'frekuensi') {
+        items = shuffle(items);
       }
+      feedEl.innerHTML = '';
+      items.forEach(item => {
+        if (item.type === 'rant') {
+          feedEl.innerHTML += `
+            <div class="feed-item">
+              <div class="rant-text">“${item.text}”</div>
+              <div class="rant-meta">${item.user} • ${item.hashtag}</div>
+              <div class="reactions">
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">☕️</div>
+                  <div class="reaction-text">Aku juga begitu.</div>
+                </button>
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">💔</div>
+                  <div class="reaction-text">Peluk.</div>
+                </button>
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">✨</div>
+                  <div class="reaction-text">Bangga.</div>
+                </button>
+              </div>
+              <div class="comment">
+                <div class="comment-author">@nope_8x2m4</div>
+                <div class="comment-text">Gue juga ngerasain ini tiap Lebaran.</div>
+              </div>
+              <textarea class="comment-input" placeholder="Balas pelan-pelan..."></textarea>
+              <button class="send-btn">KIRIM</button>
+            </div>
+          `;
+        } else if (item.type === 'artefak') {
+          feedEl.innerHTML += `
+            <div class="feed-item">
+              <div class="artefak-img" style="background-image: url('${item.image}')">
+                <div class="artefak-notasi">${item.caption}</div>
+              </div>
+              <div class="reactions">
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">☕️</div>
+                  <div class="reaction-text">Aku juga begitu.</div>
+                </button>
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">💔</div>
+                  <div class="reaction-text">Peluk.</div>
+                </button>
+                <button class="reaction-btn">
+                  <div class="reaction-emoji">✨</div>
+                  <div class="reaction-text">Bangga.</div>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const tabName = tab.dataset.tab;
+        renderFeed(tabName);
+      });
     });
+
+    // Render awal
+    renderFeed('frekuensi');
 
     // Simulasi interaksi
-    document.querySelectorAll('.reaction-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.reaction-btn')) {
         alert("Resonansi diam-diam telah terkirim.");
-      });
-    });
-    document.querySelectorAll('.send-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      }
+      if (e.target.closest('.send-btn')) {
         alert("Komentar telah terkirim — hanya terlihat di sini.");
-      });
+      }
     });
   </script>
 </body>
