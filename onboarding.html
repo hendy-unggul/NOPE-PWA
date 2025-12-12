@@ -13,42 +13,47 @@
       --card: #0a0a0f;
       --border: #1a1a25;
       --neon-blue: #00f3ff;
+      --spacing-xs: 8px;
+      --spacing-sm: 10px;
+      --spacing-md: 12px;
     }
     * { box-sizing: border-box; }
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      padding: 20px 16px;
+      padding: var(--spacing-md) 16px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      font-size: 14px;
+      line-height: 1.35;
     }
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: var(--spacing-md);
       max-width: 360px;
     }
     .header h1 {
       font-weight: 800;
-      font-size: 26px;
-      line-height: 1.15;
+      font-size: 20px;
+      line-height: 1.2;
       margin: 0;
       letter-spacing: -0.4px;
     }
     .header .line1 { color: #ffffff; }
     .header .line2 {
       color: var(--neon-blue);
-      text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+      text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
       margin-top: 3px;
       display: block;
     }
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: var(--spacing-md);
       width: 100%;
       max-width: 360px;
     }
@@ -56,7 +61,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 12px;
+      padding: var(--spacing-sm);
     }
     .zone-title {
       display: flex;
@@ -100,17 +105,17 @@
     }
     .instruction-note {
       font-size: 11px;
-      color: #666;
+      color: var(--muted);
       text-align: center;
-      margin: 12px 0 10px;
+      margin: var(--spacing-sm) 0;
       max-width: 360px;
     }
     .status {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 12px;
-      margin: 12px 0;
+      padding: var(--spacing-sm);
+      margin: var(--spacing-sm) 0;
       font-size: 12px;
       width: 100%;
       max-width: 360px;
@@ -125,13 +130,13 @@
     .btn {
       width: 100%;
       max-width: 360px;
-      padding: 13px;
+      padding: 12px;
       background: linear-gradient(135deg, #00f3ff, #00a8ff);
       color: black;
       border: none;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
       opacity: 0.4;
       transition: opacity 0.2s, transform 0.2s;
