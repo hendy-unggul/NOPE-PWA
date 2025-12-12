@@ -17,7 +17,6 @@
       --spacing-xs: 8px;
       --spacing-sm: 10px;
       --spacing-md: 12px;
-      --spacing-lg: 14px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -83,6 +82,7 @@
       border-radius: 12px;
       padding: var(--spacing-sm);
       margin-bottom: var(--spacing-md);
+      position: relative;
     }
 
     /* RANT */
@@ -96,6 +96,93 @@
       font-size: 11px;
       color: var(--muted);
       margin-bottom: var(--spacing-xs);
+    }
+
+    /* RESONANCE TRIGGER (ikon kecil) */
+    .resonance-trigger {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(255,255,255,0.05);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .resonance-trigger:hover {
+      opacity: 1;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* RESONANCE PANEL (sembunyi secara default) */
+    .resonance-panel {
+      display: none;
+      margin-top: var(--spacing-xs);
+      padding-top: var(--spacing-xs);
+      border-top: 1px solid var(--border);
+    }
+    .resonance-panel.active {
+      display: block;
+    }
+
+    /* REACTIONS */
+    .reactions {
+      display: flex;
+      gap: 16px;
+      margin-bottom: var(--spacing-xs);
+    }
+    .reaction-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.15s;
+    }
+    .reaction-btn:hover {
+      transform: scale(1.03);
+    }
+    .reaction-emoji {
+      font-size: 20px;
+    }
+    .reaction-text {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.2;
+      margin-top: 3px;
+    }
+
+    /* COMMENT INPUT */
+    .comment-input {
+      width: 100%;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      margin-top: var(--spacing-xs);
+      outline: none;
+    }
+    .send-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 16px;
+      padding: 5px 14px;
+      font-weight: 700;
+      font-size: 12px;
+      margin-top: 6px;
+      cursor: pointer;
     }
 
     /* ARTEFAK */
@@ -122,79 +209,6 @@
     }
     .artefak-img:hover .artefak-notasi {
       opacity: 1;
-    }
-
-    /* REACTIONS */
-    .reactions {
-      display: flex;
-      gap: 16px;
-      margin-top: var(--spacing-xs);
-    }
-    .reaction-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.15s;
-    }
-    .reaction-btn:hover {
-      transform: scale(1.03);
-    }
-    .reaction-emoji {
-      font-size: 20px;
-      line-height: 1;
-    }
-    .reaction-text {
-      font-size: 10px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.2;
-      margin-top: 3px;
-    }
-
-    /* COMMENTS */
-    .comment {
-      background: rgba(255,255,255,0.02);
-      border-radius: 10px;
-      padding: 8px;
-      margin: var(--spacing-xs) 0;
-      font-size: 13px;
-    }
-    .comment-author {
-      color: var(--accent);
-      font-weight: 600;
-      font-size: 12px;
-    }
-    .comment-text {
-      margin-top: 3px;
-      color: var(--text);
-    }
-
-    /* COMMENT INPUT */
-    .comment-input {
-      width: 100%;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      margin-top: var(--spacing-xs);
-      outline: none;
-    }
-    .send-btn {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      padding: 5px 14px;
-      font-weight: 700;
-      font-size: 12px;
-      margin-top: 6px;
-      cursor: pointer;
     }
 
     /* BOTTOM NAV */
@@ -246,17 +260,13 @@
       frekuensi: [
         { type: 'rant', text: "Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’", user: "@nope_73", hashtag: "#MauSendiriTapiTakutDibilangJutek" },
         { type: 'artefak', image: "https://picsum.photos/seed/jam/400/200", caption: "Waktu yang tak kembali" },
-        { type: 'rant', text: "Aku takut jadi egois kalau bilang ‘tidak’.", user: "@nope_void", hashtag: "#GakBisaBilangTidak" },
-        { type: 'artefak', image: "https://picsum.photos/seed/kopi/400/200", caption: "Kopi dingin, tak terminum" },
-        { type: 'rant', text: "Setiap kali bilang 'aku baik-baik saja', itu adalah kebohongan terbesar hari ini.", user: "@nope_73", hashtag: "#MauSendiriTapiTakutDibilangJutek" }
+        { type: 'rant', text: "Aku takut jadi egois kalau bilang ‘tidak’.", user: "@nope_void", hashtag: "#GakBisaBilangTidak" }
       ],
       segelombang: [
-        { type: 'rant', text: "Kerja keras dipuji, tapi gaji nggak naik.", user: "@nope_cosmic", hashtag: "#KerjaKerasDipujiTapiGajiNggakNaik" },
-        { type: 'rant', text: "Film itu ending-nya gaje banget.", user: "@nope_echo", hashtag: "#FilmEndingGaje" }
+        { type: 'rant', text: "Kerja keras dipuji, tapi gaji nggak naik.", user: "@nope_cosmic", hashtag: "#KerjaKerasDipujiTapiGajiNggakNaik" }
       ],
       solidaritas: [
-        { type: 'rant', text: "Lawan eksploitasi buruh!", user: "@nope_fight", hashtag: "#SayNOPE" },
-        { type: 'rant', text: "Hentikan penggusuran rakyat.", user: "@nope_justice", hashtag: "#SayNOPE" }
+        { type: 'rant', text: "Lawan eksploitasi buruh!", user: "@nope_fight", hashtag: "#SayNOPE" }
       ]
     };
 
@@ -269,32 +279,33 @@
       let items = tabContent[tab] || [];
       if (tab === 'frekuensi') items = shuffle(items);
       feedEl.innerHTML = '';
-      items.forEach(item => {
+
+      items.forEach((item, idx) => {
         if (item.type === 'rant') {
+          const rantId = `rant-${Date.now()}-${idx}`;
           feedEl.innerHTML += `
             <div class="feed-item">
               <div class="rant-text">“${item.text}”</div>
               <div class="rant-meta">${item.user} • ${item.hashtag}</div>
-              <div class="reactions">
-                <button class="reaction-btn">
-                  <div class="reaction-emoji">☕️</div>
-                  <div class="reaction-text">Aku juga begitu.</div>
-                </button>
-                <button class="reaction-btn">
-                  <div class="reaction-emoji">💔</div>
-                  <div class="reaction-text">Peluk.</div>
-                </button>
-                <button class="reaction-btn">
-                  <div class="reaction-emoji">✨</div>
-                  <div class="reaction-text">Bangga.</div>
-                </button>
+              <div class="resonance-trigger" onclick="toggleResonance('${rantId}')">🫧</div>
+              <div id="${rantId}" class="resonance-panel">
+                <div class="reactions">
+                  <button class="reaction-btn" onclick="resonate(this)">
+                    <div class="reaction-emoji">☕️</div>
+                    <div class="reaction-text">Aku juga begitu.</div>
+                  </button>
+                  <button class="reaction-btn" onclick="resonate(this)">
+                    <div class="reaction-emoji">💔</div>
+                    <div class="reaction-text">Peluk.</div>
+                  </button>
+                  <button class="reaction-btn" onclick="resonate(this)">
+                    <div class="reaction-emoji">✨</div>
+                    <div class="reaction-text">Bangga.</div>
+                  </button>
+                </div>
+                <textarea class="comment-input" placeholder="Balas pelan-pelan..."></textarea>
+                <button class="send-btn" onclick="sendComment(this)">KIRIM</button>
               </div>
-              <div class="comment">
-                <div class="comment-author">@nope_8x2m4</div>
-                <div class="comment-text">Gue juga ngerasain ini tiap Lebaran.</div>
-              </div>
-              <textarea class="comment-input" placeholder="Balas pelan-pelan..."></textarea>
-              <button class="send-btn">KIRIM</button>
             </div>
           `;
         } else if (item.type === 'artefak') {
@@ -303,16 +314,16 @@
               <div class="artefak-img" style="background-image: url('${item.image}')">
                 <div class="artefak-notasi">${item.caption}</div>
               </div>
-              <div class="reactions">
-                <button class="reaction-btn">
+              <div class="reactions" style="margin-top:8px;">
+                <button class="reaction-btn" onclick="resonate(this)">
                   <div class="reaction-emoji">☕️</div>
                   <div class="reaction-text">Aku juga begitu.</div>
                 </button>
-                <button class="reaction-btn">
+                <button class="reaction-btn" onclick="resonate(this)">
                   <div class="reaction-emoji">💔</div>
                   <div class="reaction-text">Peluk.</div>
                 </button>
-                <button class="reaction-btn">
+                <button class="reaction-btn" onclick="resonate(this)">
                   <div class="reaction-emoji">✨</div>
                   <div class="reaction-text">Bangga.</div>
                 </button>
@@ -323,6 +334,19 @@
       });
     }
 
+    window.toggleResonance = function(id) {
+      const panel = document.getElementById(id);
+      panel.classList.toggle('active');
+    };
+
+    window.resonate = function(btn) {
+      alert("Resonansi diam-diam telah terkirim.");
+    };
+
+    window.sendComment = function(btn) {
+      alert("Komentar telah terkirim — hanya terlihat di sini.");
+    };
+
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -332,11 +356,6 @@
     });
 
     renderFeed('frekuensi');
-
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.reaction-btn')) alert("Resonansi diam-diam telah terkirim.");
-      if (e.target.closest('.send-btn')) alert("Komentar telah terkirim — hanya terlihat di sini.");
-    });
   </script>
 </body>
 </html>
