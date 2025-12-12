@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOPE — Artefak</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --muted: #777780;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #0020d0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 20px 16px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+      margin: 0;
+    }
+    .instruction {
+      font-size: 13px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* UPLOAD AREA */
+    .upload-area {
+      background: var(--card);
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 32px 16px;
+      text-align: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    .upload-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      opacity: 0.6;
+    }
+    .upload-text {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* CUSTOM NOTATION */
+    .notation-input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      margin-bottom: 20px;
+      outline: none;
+    }
+    .notation-hint {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    /* EMPTY ARTEFAK OPTION */
+    .empty-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .empty-option input {
+      accent-color: var(--neon-blue);
+    }
+    .empty-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* CTA */
+    .btn {
+      width: 100%;
+      max-width: 360px;
+      padding: 12px;
+      background: var(--neon-blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    /* PREVIEW (opsional, untuk UX) */
+    .preview {
+      margin-top: 24px;
+      display: none;
+    }
+    .preview-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+    .preview-notasi {
+      font-size: 12px;
+      color: white;
+      background: rgba(0,0,0,0.7);
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .preview-timestamp {
+      font-size: 10px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Waktu terhenti di sini.</h1>
+    </div>
+
+    <div class="instruction">
+      Tunjukkan satu benda yang tahu rahasia hatimu.<br>
+      Tidak boleh: wajah, tubuh, orang, atau logo komersial.
+    </div>
+
+    <div class="upload-area" id="uploadArea">
+      <div class="upload-icon">📷</div>
+      <div class="upload-text">Klik untuk upload foto benda</div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <input type="text" class="notation-input" id="notationInput" placeholder="Contoh: Kado terakhir dari Ayah...">
+
+    <div class="notation-hint">
+      • Maksimal 4 kata sebelum "..."<br>
+      • Tanggal akan ditambahkan otomatis sebagai kenangan
+    </div>
+
+    <div class="empty-option">
+      <input type="checkbox" id="emptyArtefak">
+      <label class="empty-label" for="emptyArtefak">Aku belum menemukan benda. Tampilkan kosong.</label>
+    </div>
+
+    <button class="btn" id="submitBtn">Simpan jejak ini</button>
+
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <script>
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const notationInput = document.getElementById('notationInput');
+    const emptyCheckbox = document.getElementById('emptyArtefak');
+    const submitBtn = document.getElementById('submitBtn');
+    const preview = document.getElementById('preview');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', updatePreview);
+    notationInput.addEventListener('input', updatePreview);
+    emptyCheckbox.addEventListener('change', updatePreview);
+
+    function updatePreview() {
+      const isEmpty = emptyCheckbox.checked;
+      const notation = notationInput.value.trim();
+      const hasFile = fileInput.files.length > 0;
+      preview.style.display = (hasFile || isEmpty) && notation ? 'block' : 'none';
+
+      if (!preview.style.display) return;
+
+      let imgSrc = 'https://via.placeholder.com/400x200/0a0a0f/1a1a25?text=Artifak+Kosong';
+      if (!isEmpty && hasFile) {
+        imgSrc = URL.createObjectURL(fileInput.files[0]);
+      }
+
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+      const fullNotation = `${notation}... -${dateStr}`;
+
+      preview.innerHTML = `
+        <img src="${imgSrc}" class="preview-img">
+        <div>
+          <span class="preview-notasi">${notation}...</span>
+          <span class="preview-timestamp"> -${dateStr}</span>
+        </div>
+      `;
+    }
+
+    submitBtn.addEventListener('click', () => {
+      const notation = notationInput.value.trim();
+      if (!notation) {
+        alert("Tambahkan notasi (maks 4 kata).");
+        return;
+      }
+
+      const now = new Date();
+      const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+      const fullNotation = `${notation}... -${dateStr}`;
+
+      // Simpan ke localStorage (atau kirim ke Supabase nanti)
+      localStorage.setItem('nope_artefak30', JSON.stringify({
+        notation: fullNotation,
+        uploadedAt: now.toISOString(),
+        isEmpty: emptyCheckbox.checked
+      }));
+
+      alert("Jejakmu telah disimpan.\nFrekuensimu tetap utuh — atau ubah 3 hashtag jika kau berani.");
+      window.location.href = 'inner.html';
+    });
+  </script>
+</body>
+</html>
