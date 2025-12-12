@@ -1,162 +1,153 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <link rel="manifest" href="/manifest.json">
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-<meta name="theme-color" content="#001f4d">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE — Artefak</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>NOPE • Artefak</title>
+
+  <!-- PWA & Favicon -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <meta name="theme-color" content="#001f4d" />
+
   <style>
     :root {
-      --bg: #000;
-      --text: #fff;
-      --muted: #777780;
-      --card: #0a0a0f;
-      --border: #1a1a25;
-      --neon-blue: #0020d0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+      font-size: 12px;
+      color: white;
+      background: black;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      margin: 0;
       padding: 20px 16px;
       min-height: 100vh;
+      line-height: 1.5;
+      opacity: 0.9;
     }
-    .container {
-      max-width: 360px;
-      margin: 0 auto;
+    .preview {
+      border: 1px dashed #001f4d;
+      height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 16px 0;
+      position: relative;
+      background: #000;
     }
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
+    .preview img {
+      max-width: 100%;
+      max-height: 160px;
+      object-fit: contain;
     }
-    .header h1 {
-      font-weight: 800;
-      font-size: 20px;
-      letter-spacing: -0.4px;
-      margin: 0;
-    }
-    .instruction {
-      font-size: 13px;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
-    .upload-area {
-      background: var(--card);
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      padding: 32px 16px;
-      text-align: center;
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-    .upload-icon { font-size: 28px; margin-bottom: 12px; opacity: 0.6; }
-    .notation-input {
+    input, textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #001f4d;
+      color: white;
+      font: inherit;
       width: 100%;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      margin-bottom: 20px;
+      padding: 6px 2px;
       outline: none;
     }
-    .notation-hint {
+    textarea {
+      resize: none;
+      min-height: 40px;
       font-size: 11px;
-      color: var(--muted);
-      text-align: center;
-      margin-bottom: 24px;
     }
-    .empty-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    .empty-option input { accent-color: var(--neon-blue); }
-    .empty-label { font-size: 13px; color: var(--muted); }
     .btn {
-      width: 100%;
-      max-width: 360px;
-      padding: 12px;
-      background: var(--neon-blue);
+      background: #001f4d;
       color: white;
       border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 15px;
+      padding: 8px 16px;
+      font: inherit;
+      font-size: 12px;
+      border-radius: 20px;
       cursor: pointer;
+      margin-top: 12px;
+    }
+    .note {
+      opacity: 0.6;
+      margin-top: 20px;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Cukup lama kita bersama.</h1>
-    </div>
+  <div>unggah artefak benda<br><small>(bukan wajah manusia)</small></div>
 
-    <div class="instruction">
-      Tunjukkan satu benda yang tahu rahasia hatimu.<br>
-      Tidak boleh: wajah, tubuh, orang, atau logo komersial.
-    </div>
+  <input type="file" id="file" accept="image/*" style="display:none" />
+  <div class="preview" id="preview" onclick="document.getElementById('file').click()">
+    + pilih gambar
+  </div>
 
-    <div class="upload-area" id="uploadArea">
-      <div class="upload-icon">📷</div>
-      <div class="upload-text">Klik untuk upload foto benda</div>
-    </div>
+  <textarea
+    id="notasi"
+    placeholder="opsional: maks 4 kata, contoh: 'Kado terakhir dari Ayah -25-12-2025'"
+    maxlength="60"
+  ></textarea>
 
-    <input type="file" id="fileInput" accept="image/*" style="display:none;">
-    <input type="text" class="notation-input" id="notationInput" placeholder="Contoh: Kado terakhir dari Ayah">
+  <button class="btn" onclick="saveArtefak()">simpan artefak</button>
 
-    <div class="notation-hint">
-      • Maksimal 4 kata <br>
-    
-    </div>
-
-    <div class="empty-option">
-      <input type="checkbox" id="emptyArtefak">
-      <label class="empty-label" for="emptyArtefak">Aku belum menemukan benda. Tampilkan kosong.</label>
-    </div>
-
-    <button class="btn" id="submitBtn">Simpan jejak ini</button>
+  <div class="note">
+    • setelah ini, kamu hanya bisa kembali jika mengunggah ulang tiap 30 hari<br>
+    • waktu tidak dihitung angka — hanya perasaan: <em>lama kita bersama</em>
   </div>
 
   <script>
-    const uploadArea = document.getElementById('uploadArea');
-    const fileInput = document.getElementById('fileInput');
-    const notationInput = document.getElementById('notationInput');
-    const emptyCheckbox = document.getElementById('emptyArtefak');
-    const submitBtn = document.getElementById('submitBtn');
+    let selectedFile = null;
+    const fileInput = document.getElementById('file');
+    const preview = document.getElementById('preview');
 
-    uploadArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files[0]) {
+        selectedFile = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          preview.innerHTML = `<img src="${ev.target.result}" alt="artefak preview">`;
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    });
 
-    submitBtn.addEventListener('click', () => {
-      const notation = notationInput.value.trim();
-      if (!notation) {
-        alert("Tambahkan notasi (maks 4 kata).");
+    async function saveArtefak() {
+      if (!selectedFile) {
+        alert('Pilih gambar dulu.');
         return;
       }
 
-      const now = new Date();
-      const dateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-      const fullNotation = `${notation}... -${dateStr}`;
+      const notasi = document.getElementById('notasi').value.trim().substring(0, 60);
 
-      // Simpan status artefak
-      const urlParams = new URLSearchParams(window.location.search);
-      const cycle = urlParams.get('cycle') || '1';
-      localStorage.setItem(`nope_artefak_cycle_${cycle}`, 'true');
-      localStorage.setItem(`nope_artefak_notation_${cycle}`, fullNotation);
+      // Simpan ke localStorage sebagai artefak pengguna
+      const artefak = {
+        timestamp: new Date().toISOString(),
+        notasi,
+        description: 'lama kita bersama',
+        hashtags: ['#...', '#...', '#...']
+      };
 
-      alert("Jejakmu telah disimpan.\nFrekuensimu tetap utuh — atau ubah 3 hashtag jika kau berani.");
+      localStorage.setItem('nope_artefak', JSON.stringify(artefak));
+
+      // Simpan juga ke feed publik (dummy, untuk luar.html)
+      const publicList = JSON.parse(localStorage.getItem('nope_public_artefak') || '[]');
+      if (publicList.length < 10) {
+        publicList.push({...artefak, user_id: 'anon-' + Math.random().toString(36).substr(2, 9)});
+        localStorage.setItem('nope_public_artefak', JSON.stringify(publicList));
+      }
+
+      alert('Artefak disimpan. Kembali ke ruang inner.');
       window.location.href = 'inner.html';
-    });
+    }
+  </script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('✅ SW registered'))
+          .catch(err => console.warn('⚠️ SW failed:', err));
+      });
+    }
   </script>
 </body>
 </html>
