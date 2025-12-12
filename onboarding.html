@@ -12,7 +12,7 @@
       --muted: #777780;
       --card: #0a0a0f;
       --border: #1a1a25;
-      --neon-blue: #00f3ff;
+      --neon-blue: #0020d0; /* ✅ DIPERBARUI */
       --spacing-xs: 8px;
       --spacing-sm: 10px;
       --spacing-md: 12px;
@@ -45,7 +45,7 @@
     .header .line1 { color: #ffffff; }
     .header .line2 {
       color: var(--neon-blue);
-      text-shadow: 0 0 6px rgba(0, 243, 255, 0.4);
+      text-shadow: 0 0 8px rgba(0, 32, 208, 0.5); /* ✅ Disesuaikan */
       margin-top: 3px;
       display: block;
     }
@@ -68,7 +68,7 @@
       align-items: center;
       gap: 6px;
       color: var(--neon-blue);
-      text-shadow: 0 0 6px rgba(0, 243, 255, 0.3);
+      text-shadow: 0 0 6px rgba(0, 32, 208, 0.4); /* ✅ Disesuaikan */
       font-weight: 600;
       margin-bottom: 8px;
       font-size: 13px;
@@ -92,7 +92,7 @@
       background: rgba(255, 255, 255, 0.05);
     }
     .hashtag-item.selected {
-      background: rgba(0, 243, 255, 0.15);
+      background: rgba(0, 32, 208, 0.15); /* ✅ Disesuaikan */
       color: white;
       border: 1px solid var(--neon-blue);
       transform: scale(1.015);
@@ -131,8 +131,8 @@
       width: 100%;
       max-width: 360px;
       padding: 12px;
-      background: linear-gradient(135deg, #00f3ff, #00a8ff);
-      color: black;
+      background: linear-gradient(135deg, var(--neon-blue), #0010a0);
+      color: white;
       border: none;
       border-radius: 12px;
       font-weight: 700;
@@ -143,12 +143,19 @@
     }
     .btn:enabled {
       opacity: 1;
+      animation: subtlePulse 2.5s infinite ease-in-out;
     }
     .btn:enabled:hover {
       transform: scale(1.02);
     }
     .btn:enabled:active {
       transform: scale(0.99);
+    }
+
+    /* ✅ PULSE ANIMATION UNTUK CTA */
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
     }
   </style>
 </head>
