@@ -4,10 +4,13 @@ const urlsToCache = [
   '/index.html',
   '/onboarding.html',
   '/inner.html',
-  '/luar.html', // <-- ganti jadi "luar" karena di repo kamu pakai ini
+  '/luar.html',
   '/register.html',
   '/artefak-upload.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/favicon.ico',
+  '/NOPE 192.png',
+  '/NOPE 512.png'
 ];
 
 self.addEventListener('install', (event) => {
