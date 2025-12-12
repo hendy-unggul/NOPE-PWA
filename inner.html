@@ -256,6 +256,24 @@
   </style>
 </head>
 <body>
+  <script>
+  // Cek siklus artefak
+  const joinDateStr = localStorage.getItem('nope_joinDate');
+  if (joinDateStr) {
+    const joinDate = new Date(joinDateStr);
+    const now = new Date();
+    const diffInDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+    const cycle = Math.floor(diffInDays / 30); // 0, 1, 2, ...
+
+    // Cek apakah artefak untuk siklus ini sudah diupload
+    const uploaded = localStorage.getItem(`nope_artefak_cycle_${cycle}`) === 'true';
+
+    // Siklus 0 = onboarding, jadi mulai dari cycle >= 1
+    if (cycle >= 1 && !uploaded) {
+      window.location.href = `artefak-upload.html?cycle=${cycle}`;
+    }
+  }
+</script>
   <div class="container">
     <div class="header">
       <h1>frekuensimu sedang bergetar</h1>
