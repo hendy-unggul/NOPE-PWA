@@ -3,292 +3,123 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE — Onboarding</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>NOPE • Masuk</title>
+
+  <!-- PWA & Favicon -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <meta name="theme-color" content="#001f4d" />
+
+  <!-- Minimal style — vibe NOPE -->
   <style>
     :root {
-      --bg: #000;
-      --text: #fff;
-      --muted: #777780;
-      --card: #0a0a0f;
-      --border: #1a1a25;
-      --neon-blue: #0020d0; /* ✅ DIPERBARUI */
-      --spacing-xs: 8px;
-      --spacing-sm: 10px;
-      --spacing-md: 12px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+      font-size: 13px;
+      color: white;
+      background: black;
     }
-    * { box-sizing: border-box; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      padding: var(--spacing-md) 16px;
+      margin: 0;
+      padding: 24px 20px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      font-size: 14px;
-      line-height: 1.35;
+      justify-content: center;
+      gap: 28px;
     }
-    .header {
+    .text-center {
       text-align: center;
-      margin-bottom: var(--spacing-md);
-      max-width: 360px;
+      line-height: 1.6;
+      opacity: 0.85;
     }
-    .header h1 {
-      font-weight: 800;
-      font-size: 20px;
-      line-height: 1.2;
-      margin: 0;
-      letter-spacing: -0.4px;
-    }
-    .header .line1 { color: #ffffff; }
-    .header .line2 {
-      color: var(--neon-blue);
-      text-shadow: 0 0 8px rgba(0, 32, 208, 0.5); /* ✅ Disesuaikan */
-      margin-top: 3px;
-      display: block;
-    }
-    .zones-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-      max-width: 360px;
-    }
-    .zone {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: var(--spacing-sm);
-    }
-    .zone-title {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--neon-blue);
-      text-shadow: 0 0 6px rgba(0, 32, 208, 0.4); /* ✅ Disesuaikan */
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-    .hashtag-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .hashtag-item {
-      background: rgba(255, 255, 255, 0.02);
-      color: #aaa;
-      padding: 6px 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 400;
-      font-size: 13px;
-      transition: all 0.2s ease;
-    }
-    .hashtag-item:hover:not(.locked) {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    .hashtag-item.selected {
-      background: rgba(0, 32, 208, 0.15); /* ✅ Disesuaikan */
+    input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #001f4d;
       color: white;
-      border: 1px solid var(--neon-blue);
-      transform: scale(1.015);
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .hashtag-item.locked {
-      opacity: 0.15;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    .instruction-note {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: center;
-      margin: var(--spacing-sm) 0;
-      max-width: 360px;
-    }
-    .status {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: var(--spacing-sm);
-      margin: var(--spacing-sm) 0;
-      font-size: 12px;
+      font: inherit;
+      padding: 6px 2px;
       width: 100%;
-      max-width: 360px;
+      max-width: 280px;
+      outline: none;
     }
-    .status-row {
-      display: flex;
-      justify-content: space-between;
-      margin: 5px 0;
+    input::placeholder {
+      color: #001f4d;
+      opacity: 0.7;
     }
-    .status-value.complete { color: var(--neon-blue); }
-    .status-value.incomplete { color: #ff9500; }
-    .btn {
-      width: 100%;
-      max-width: 360px;
-      padding: 12px;
-      background: linear-gradient(135deg, var(--neon-blue), #0010a0);
+    .pulse {
+      background: #001f4d;
       color: white;
       border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 15px;
+      padding: 10px 24px;
+      font: inherit;
+      font-weight: 600;
+      border-radius: 30px;
       cursor: pointer;
-      opacity: 0.4;
-      transition: opacity 0.2s, transform 0.2s;
+      margin-top: 8px;
+      animation: pulse 2s infinite;
     }
-    .btn:enabled {
-      opacity: 1;
-      animation: subtlePulse 2.5s infinite ease-in-out;
-    }
-    .btn:enabled:hover {
-      transform: scale(1.02);
-    }
-    .btn:enabled:active {
-      transform: scale(0.99);
-    }
-
-    /* ✅ PULSE ANIMATION UNTUK CTA */
-    @keyframes subtlePulse {
-      0%, 100% { opacity: 0.9; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.02); }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 31, 77, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(0, 31, 77, 0); }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>
-      <span class="line1">Jangan pilih yang kau suka.</span><br>
-      <span class="line2">Pilih yang kau benci.</span>
-    </h1>
+  <div class="text-center">
+    <div>masukkan emailmu</div>
+    <div>jika berani</div>
   </div>
 
-  <div class="zones-grid">
-    <div class="zone">
-      <div class="zone-title">#PopCulture</div>
-      <div class="hashtag-list">
-        <div class="hashtag-item" data-value="#FilmEndingGaje">#FilmEndingGaje</div>
-        <div class="hashtag-item" data-value="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
-        <div class="hashtag-item" data-value="#InfluencerNgehek">#InfluencerNgehek</div>
-        <div class="hashtag-item" data-value="#TikTokBikinGila">#TikTokBikinGila</div>
-        <div class="hashtag-item" data-value="#SelebPuraPuraBahagia">#SelebPuraPuraBahagia</div>
-      </div>
-    </div>
-    <div class="zone">
-      <div class="zone-title">#PersonalPain</div>
-      <div class="hashtag-list">
-        <div class="hashtag-item" data-value="#GakBisaBilangTidak">#GakBisaBilangTidak</div>
-        <div class="hashtag-item" data-value="#MauSendiriTapiTakutDibilangJutek">#MauSendiriTapiTakutDibilangJutek</div>
-        <div class="hashtag-item" data-value="#DibilangAnakDurhakaKalauNggakNurut">#DibilangAnakDurhakaKalauNggakNurut</div>
-        <div class="hashtag-item" data-value="#CemasTerusPasOrangTidur">#CemasTerusPasOrangTidur</div>
-        <div class="hashtag-item" data-value="#GakPunyaAlasanHidup">#GakPunyaAlasanHidup</div>
-      </div>
-    </div>
-    <div class="zone">
-      <div class="zone-title">#SocialSickness</div>
-      <div class="hashtag-list">
-        <div class="hashtag-item" data-value="#MentalHealthDijadiinTrend">#MentalHealthDijadiinTrend</div>
-        <div class="hashtag-item" data-value="#KerjaKerasDipujiTapiGajiNggakNaik">#KerjaKerasDipujiTapiGajiNggakNaik</div>
-        <div class="hashtag-item" data-value="#NgomonginPrivilegeTapiPakeiPhone">#NgomonginPrivilegeTapiPakeiPhone</div>
-        <div class="hashtag-item" data-value="#KapitalisNgegas">#KapitalisNgegas</div>
-        <div class="hashtag-item" data-value="#LGBTQDijadiinKonten">#LGBTQDijadiinKonten</div>
-      </div>
-    </div>
-    <div class="zone">
-      <div class="zone-title">#SayNOPE</div>
-      <div class="hashtag-list">
-        <div class="hashtag-item locked" data-value="#LawanEksploitasiBuruh">#LawanEksploitasiBuruh</div>
-        <div class="hashtag-item locked" data-value="#TolakDiskriminasiGender">#TolakDiskriminasiGender</div>
-        <div class="hashtag-item locked" data-value="#HentikanPenggusuranRakyat">#HentikanPenggusuranRakyat</div>
-        <div class="hashtag-item locked" data-value="#StopKekerasanSeksual">#StopKekerasanSeksual</div>
-        <div class="hashtag-item locked" data-value="#BoikotPerusahaanRusakBumi">#BoikotPerusahaanRusakBumi</div>
-      </div>
-    </div>
-  </div>
-
-  <p class="instruction-note">
-    * Pilih 1 hashtag dari tiap zona — ini yang menentukan siapa yang bisa mendengarmu.
-  </p>
-
-  <div class="status">
-    <div class="status-row">
-      <span>#PopCulture</span>
-      <span class="status-value incomplete">belum dipilih</span>
-    </div>
-    <div class="status-row">
-      <span>#PersonalPain</span>
-      <span class="status-value incomplete">belum dipilih</span>
-    </div>
-    <div class="status-row">
-      <span>#SocialSickness</span>
-      <span class="status-value incomplete">belum dipilih</span>
-    </div>
-  </div>
-
-  <button class="btn" disabled>Masuk ke frekuensimu</button>
+  <form id="login-form" style="display: flex; flex-direction: column; align-items: center;">
+    <input
+      type="email"
+      id="email"
+      placeholder="contoh@email.com"
+      required
+    />
+    <button type="submit" class="pulse">masukke frekuensimu</button>
+  </form>
 
   <script type="module">
-    const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
+    const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8'; // GANTI DENGAN KEY ASLI
 
-    import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
-      .then(async ({ createClient }) => {
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { createClient } = await import('https://unpkg.com/@supabase/supabase-js@2');
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const zones = document.querySelectorAll('.zones-grid > .zone:not(:nth-child(4))');
-        const statusRows = document.querySelectorAll('.status-row');
-        const btn = document.querySelector('.btn');
-        let userSelections = {};
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = e.target.email.value.trim().toLowerCase();
 
-        zones.forEach((zone, idx) => {
-          zone.querySelectorAll('.hashtag-item').forEach(item => {
-            item.addEventListener('click', () => {
-              zone.querySelectorAll('.hashtag-item').forEach(i => i.classList.remove('selected'));
-              item.classList.add('selected');
-
-              const zoneName = zone.querySelector('.zone-title').textContent;
-              userSelections[zoneName] = item.dataset.value;
-              localStorage.setItem('nope_selections', JSON.stringify(userSelections));
-
-              const statusVal = statusRows[idx].querySelector('.status-value');
-              statusVal.textContent = item.dataset.value;
-              statusVal.className = 'status-value complete';
-              checkBtn();
-            });
-          });
-        });
-
-        function checkBtn() {
-          const allComplete = Array.from(statusRows).every(row =>
-            row.querySelector('.status-value').className.includes('complete')
-          );
-          btn.disabled = !allComplete;
-          if (allComplete) {
-            btn.textContent = 'Masuk ke frekuensimu';
-          }
-        }
-
-        btn.addEventListener('click', async () => {
-          if (btn.disabled) return;
-          const email = prompt("Masukkan emailmu jika berani:");
-          if (!email || !email.includes('@')) return alert("Email valid diperlukan.");
-          try {
-            const { error } = await supabase.auth.signInWithOtp({ email });
-            if (error) throw error;
-            alert("Cek emailmu — klik link ajaib untuk masuk ke frekuensimu.");
-            localStorage.setItem('nope_pending_email', email);
-          } catch (err) {
-            alert("Gagal mengirim akses. Coba lagi.");
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: window.location.origin + '/inner.html'
           }
         });
+
+        if (error) throw error;
+
+        // Redirect manual ke inner.html setelah OTP dikirim
+        window.location.href = 'inner.html';
+      } catch (err) {
+        console.error('Login error:', err.message);
+        alert('Gagal mengirim email. Coba lagi.');
+      }
+    });
+  </script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('✅ SW registered'))
+          .catch(err => console.warn('⚠️ SW failed:', err));
       });
-    // Simpan waktu join
-localStorage.setItem('nope_joinDate', new Date().toISOString());
-localStorage.setItem('nope_artefak_cycle_0', 'true'); // cycle 0 = sudah lewat onboarding
+    }
   </script>
 </body>
 </html>
