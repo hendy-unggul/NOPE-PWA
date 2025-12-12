@@ -3,391 +3,179 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE — Inner</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>NOPE • Inner</title>
+
+  <!-- PWA & Favicon -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <meta name="theme-color" content="#001f4d" />
+
+  <!-- Minimal style — vibe NOPE -->
   <style>
     :root {
-      --bg: #000;
-      --text: #fff;
-      --muted: #777780;
-      --card: #0a0a0f;
-      --border: #1a1a25;
-      --neon-blue: #0020d0;
-      --accent: #ff2d55;
-      --spacing-xs: 8px;
-      --spacing-sm: 10px;
-      --spacing-md: 12px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      padding: var(--spacing-md) 16px;
-      min-height: 100vh;
-      padding-bottom: 56px;
-      font-size: 14px;
-      line-height: 1.35;
-    }
-    .container {
-      max-width: 360px;
-      margin: 0 auto;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: var(--spacing-md);
-    }
-    .header h1 {
-      font-weight: 800;
-      font-size: 20px;
-      letter-spacing: -0.4px;
-      margin: 0;
-    }
-    .nope-id {
-      font-size: 11px;
-      color: var(--neon-blue);
-      margin-top: 4px;
-      opacity: 0.7;
-    }
-
-    /* ARTEFAK TERBARU */
-    .artefak-current { margin-bottom: var(--spacing-md); }
-    .artefak-img {
-      width: 100%;
-      height: 160px;
-      background: url('https://picsum.photos/seed/artefak1/400/200') center/cover no-repeat;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      position: relative;
-    }
-    .artefak-notasi {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(0,0,0,0.7);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+      font-size: 12px;
       color: white;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 11px;
-      opacity: 0;
-      transition: opacity 0.2s;
+      background: black;
     }
-    .artefak-img:hover .artefak-notasi { opacity: 1; }
-
-    /* RANT BOX */
-    .rant-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: var(--spacing-sm);
-      margin-bottom: var(--spacing-md);
+    body {
+      margin: 0;
+      padding: 20px 16px;
+      min-height: 100vh;
+      line-height: 1.5;
+      opacity: 0.9;
     }
-    .rant-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 14px;
-      resize: none;
-      height: 72px;
-      outline: none;
-      margin-bottom: var(--spacing-xs);
-    }
-    .rant-btn {
-      width: 100%;
-      padding: 8px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    /* SECTION TITLE */
-    .section-title {
-      font-size: 11px;
-      color: var(--muted);
-      margin: var(--spacing-md) 0 var(--spacing-xs);
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    /* JURNAL RANT */
-    .jurnal-item {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: var(--spacing-sm);
-      margin-bottom: var(--spacing-md);
-      font-size: 14px;
-      line-height: 1.35;
-    }
-    .jurnal-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin: var(--spacing-xs) 0;
-    }
-
-    /* ARTEFAK GRID */
-    .artefak-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: var(--spacing-md);
-    }
-    .artefak-thumb {
-      height: 72px;
-      background-size: cover;
-      background-position: center;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-    }
-
-    /* REACTIONS */
-    .reactions {
-      display: flex;
-      gap: 16px;
-      margin-top: var(--spacing-xs);
-    }
-    .reaction-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
+    .artefak {
+      position: relative;
+      border: 1px solid #001f4d;
+      margin: 24px 0;
+      padding: 16px;
+      min-height: 180px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: transform 0.15s;
-    }
-    .reaction-btn:hover {
-      transform: scale(1.03);
-    }
-    .reaction-emoji {
-      font-size: 20px;
-    }
-    .reaction-text {
-      font-size: 10px;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.2;
-      margin-top: 3px;
-    }
-
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      padding: 6px 0;
-    }
-    .nav-container {
-      max-width: 360px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      padding: 0 16px;
-      box-sizing: border-box;
-    }
-    .nav-item {
-      font-size: 11px;
-      color: var(--muted);
-      white-space: nowrap;
-      text-align: center;
-    }
-    .nav-item.active {
-      color: var(--neon-blue);
-    }
-
-    /* MODAL */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      align-items: center;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
+      align-items: center;
     }
-    .modal.show {
-      opacity: 1;
-      pointer-events: all;
+    .timestamp {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 9px;
+      color: rgba(255,255,255,0.2);
     }
-    .modal-content {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      max-width: 300px;
-      text-align: center;
-      font-size: 14px;
+    .notasi {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 10px;
+      max-width: 100px;
+      text-align: right;
     }
-    .modal-btns {
-      margin-top: 12px;
+    .hashtag-container {
+      margin: 12px 0;
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
-    .modal-btn {
-      flex: 1;
-      padding: 6px;
-      border-radius: 12px;
-      border: none;
-      font-weight: 600;
-      font-size: 12px;
+    .hashtag {
+      background: transparent;
+      border: 1px solid #001f4d;
+      color: #4fc3f7; /* biru neon soft */
+      padding: 2px 6px;
+      font: inherit;
+      font-size: 11px;
       cursor: pointer;
     }
-    .btn-show { background: var(--neon-blue); color: black; }
-    .btn-close { background: #333; color: white; }
-    .usernames {
-      margin-top: 10px;
+    .btn {
+      background: #001f4d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font: inherit;
       font-size: 12px;
-      color: var(--neon-blue);
+      border-radius: 20px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .empty {
+      text-align: center;
+      opacity: 0.5;
+      padding: 30px 0;
     }
   </style>
 </head>
 <body>
-  <script>
-  // Cek siklus artefak
-  const joinDateStr = localStorage.getItem('nope_joinDate');
-  if (joinDateStr) {
-    const joinDate = new Date(joinDateStr);
-    const now = new Date();
-    const diffInDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
-    const cycle = Math.floor(diffInDays / 30); // 0, 1, 2, ...
-
-    // Cek apakah artefak untuk siklus ini sudah diupload
-    const uploaded = localStorage.getItem(`nope_artefak_cycle_${cycle}`) === 'true';
-
-    // Siklus 0 = onboarding, jadi mulai dari cycle >= 1
-    if (cycle >= 1 && !uploaded) {
-      window.location.href = `artefak-upload.html?cycle=${cycle}`;
-    }
-  }
-</script>
-  <div class="container">
-    <div class="header">
-      <h1>frekuensimu sedang bergetar</h1>
-      <div class="nope-id" id="nopeId">...</div>
-    </div>
-
-    <!-- ARTEFAK TERBARU -->
-    <div class="artefak-current">
-      <div class="artefak-img">
-        <div class="artefak-notasi">Kopi dingin, tak terminum</div>
-      </div>
-      <div class="reactions">
-        <div class="reaction-btn">
-          <div class="reaction-emoji">☕️</div>
-          <div class="reaction-text">Aku juga begitu.</div>
-        </div>
-        <div class="reaction-btn" onclick="showReactions(this)" data-reactions='{"count":2,"users":["@nope_73","@nope_cosmic"]}'>
-          <div class="reaction-emoji">💔</div>
-          <div class="reaction-text">Peluk.</div>
-        </div>
-        <div class="reaction-btn" onclick="showReactions(this)" data-reactions='{"count":1,"users":["@nope_void"]}'>
-          <div class="reaction-emoji">✨</div>
-          <div class="reaction-text">Bangga.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RANT BOX -->
-    <div class="rant-box">
-      <textarea class="rant-input" placeholder="Curahkan kegundahan hatimu..."></textarea>
-      <button class="rant-btn">Rant</button>
-    </div>
-
-    <!-- JURNAL RANT -->
-    <div class="section-title">jurnalmu</div>
-    <div class="jurnal-item">
-      Aku capek jadi 'anak baik' yang selalu nurut.
-      <div class="jurnal-meta">#DibilangAnakDurhakaKalauNggakNurut • 3 hari lalu</div>
-      <div class="reactions">
-        <div class="reaction-btn">
-          <div class="reaction-emoji">☕️</div>
-          <div class="reaction-text">Aku juga begitu.</div>
-        </div>
-        <div class="reaction-btn" onclick="showReactions(this)" data-reactions='{"count":2,"users":["@nope_73","@nope_cosmic"]}'>
-          <div class="reaction-emoji">💔</div>
-          <div class="reaction-text">Peluk.</div>
-        </div>
-        <div class="reaction-btn" onclick="showReactions(this)" data-reactions='{"count":1,"users":["@nope_void"]}'>
-          <div class="reaction-emoji">✨</div>
-          <div class="reaction-text">Bangga.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ARSIP ARTEFAK -->
-    <div class="section-title">arsip artefak</div>
-    <div class="artefak-grid">
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a1/100/100')"></div>
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a2/100/100')"></div>
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a3/100/100')"></div>
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a4/100/100')"></div>
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a5/100/100')"></div>
-      <div class="artefak-thumb" style="background-image: url('https://picsum.photos/seed/a6/100/100')"></div>
-    </div>
-  </div>
-
-  <!-- MODAL -->
-  <div class="modal" id="reactionModal">
-    <div class="modal-content">
-      <div id="modalText">2 orang mendengarmu.</div>
-      <div class="modal-btns">
-        <button class="modal-btn btn-show" id="showUsernames">Lihat siapa?</button>
-        <button class="modal-btn btn-close" id="closeModal">Tutup</button>
-      </div>
-      <div class="usernames" id="usernameList" style="display:none;"></div>
-    </div>
+  <div id="content">
+    <div class="empty">...</div>
   </div>
 
   <script type="module">
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8'; // GANTI DENGAN KEY ASLI
 
-    import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
-      .then(async ({ createClient }) => {
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const {  { user } } = await supabase.auth.getUser();
-        if (!user) return window.location.href = 'onboarding.html';
-        const {  { profiles } } = await supabase
-          .from('profiles')
-          .select('nope_username')
-          .eq('id', user.id)
-          .single();
-        document.getElementById('nopeId').textContent = profiles?.nope_username || 'nope_anon';
+    const { createClient } = await import('https://unpkg.com/@supabase/supabase-js@2');
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Cek apakah user sudah login
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      window.location.href = 'onboarding.html';
+    }
+
+    // Simulasi: ambil artefak dari localStorage (pengganti sementara database)
+    // Di masa depan: ganti dengan query ke Supabase storage/table
+    let artefak = JSON.parse(localStorage.getItem('nope_artefak') || 'null');
+    const joinDate = new Date(user.created_at || user.last_sign_in_at);
+    const now = new Date();
+    const daysSinceJoin = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+
+    // Jika belum upload dalam 30 hari pertama → wajib upload
+    const mustUpload = daysSinceJoin >= 30 && (!artefak || !artefak.timestamp);
+
+    if (mustUpload) {
+      // Redirect ke upload
+      window.location.href = 'artefak-upload.html';
+    }
+
+    // Tampilkan artefak
+    const content = document.getElementById('content');
+    if (artefak) {
+      const div = document.createElement('div');
+      div.className = 'artefak';
+      
+      div.innerHTML = `
+        <div class="timestamp">${new Date(artefak.timestamp).toLocaleDateString('id-ID')}...</div>
+        ${artefak.notasi ? `<div class="notasi">${artefak.notasi}</div>` : ''}
+        <div style="opacity:0.7;">${artefak.description || ''}</div>
+      `;
+      content.innerHTML = '';
+      content.appendChild(div);
+
+      // Hashtag (opsional, editable)
+      const hashtags = artefak.hashtags || ['#...', '#...', '#...'];
+      const tagContainer = document.createElement('div');
+      tagContainer.className = 'hashtag-container';
+      hashtags.forEach(tag => {
+        const btn = document.createElement('button');
+        btn.className = 'hashtag';
+        btn.textContent = tag;
+        btn.onclick = () => {
+          const newTag = prompt('Ganti hashtag (maks 3):', tag);
+          if (newTag && newTag.trim()) {
+            artefak.hashtags = artefak.hashtags.map(t => t === tag ? newTag.trim() : t);
+            localStorage.setItem('nope_artefak', JSON.stringify(artefak));
+            location.reload();
+          }
+        };
+        tagContainer.appendChild(btn);
       });
+      content.appendChild(tagContainer);
 
-    window.showReactions = function(el) {
-      const data = JSON.parse(el.dataset.reactions);
-      document.getElementById('modalText').textContent = `${data.count} orang mendengarmu.`;
-      document.getElementById('usernameList').innerHTML = data.users.join('<br>');
-      document.getElementById('usernameList').style.display = 'none';
-      document.getElementById('reactionModal').classList.add('show');
-    };
+      // Tombol upload ulang
+      const uploadBtn = document.createElement('button');
+      uploadBtn.className = 'btn';
+      uploadBtn.textContent = 'ganti artefak';
+      uploadBtn.onclick = () => window.location.href = 'artefak-upload.html';
+      content.appendChild(uploadBtn);
+    } else {
+      content.innerHTML = `
+        <div class="empty">
+          kamu belum punya jejak.<br>
+          <button class="btn" onclick="location.href='artefak-upload.html'">buat artefak</button>
+        </div>
+      `;
+    }
+  </script>
 
-    document.getElementById('showUsernames').addEventListener('click', () => {
-      document.getElementById('usernameList').style.display = 'block';
-    });
-    document.getElementById('closeModal').addEventListener('click', () => {
-      document.getElementById('reactionModal').classList.remove('show');
-    });
-    document.getElementById('reactionModal').addEventListener('click', (e) => {
-      if (e.target === document.getElementById('reactionModal')) {
-        document.getElementById('reactionModal').classList.remove('show');
-      }
-    });
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log('✅ SW registered'))
+          .catch(err => console.warn('⚠️ SW failed:', err));
+      });
+    }
   </script>
 </body>
 </html>
