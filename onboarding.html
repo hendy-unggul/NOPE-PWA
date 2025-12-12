@@ -14,9 +14,7 @@
       --border: #1a1a25;
       --neon-blue: #00f3ff;
     }
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       background: var(--bg);
       color: var(--text);
@@ -27,13 +25,11 @@
       flex-direction: column;
       align-items: center;
     }
-
     .header {
       text-align: center;
       margin-bottom: 20px;
       max-width: 360px;
     }
-
     .header h1 {
       font-weight: 800;
       font-size: 26px;
@@ -41,7 +37,6 @@
       margin: 0;
       letter-spacing: -0.4px;
     }
-
     .header .line1 { color: #ffffff; }
     .header .line2 {
       color: var(--neon-blue);
@@ -49,7 +44,6 @@
       margin-top: 3px;
       display: block;
     }
-
     .zones-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -58,14 +52,12 @@
       width: 100%;
       max-width: 360px;
     }
-
     .zone {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px;
     }
-
     .zone-title {
       display: flex;
       align-items: center;
@@ -76,13 +68,11 @@
       margin-bottom: 8px;
       font-size: 13px;
     }
-
     .hashtag-list {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
-
     .hashtag-item {
       background: rgba(255, 255, 255, 0.02);
       color: #aaa;
@@ -93,11 +83,9 @@
       font-size: 13px;
       transition: all 0.2s ease;
     }
-
     .hashtag-item:hover:not(.locked) {
       background: rgba(255, 255, 255, 0.05);
     }
-
     .hashtag-item.selected {
       background: rgba(0, 243, 255, 0.15);
       color: white;
@@ -105,13 +93,11 @@
       transform: scale(1.015);
       transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
     .hashtag-item.locked {
       opacity: 0.15;
       cursor: not-allowed;
       pointer-events: none;
     }
-
     .instruction-note {
       font-size: 11px;
       color: #666;
@@ -119,7 +105,6 @@
       margin: 12px 0 10px;
       max-width: 360px;
     }
-
     .status {
       background: var(--card);
       border: 1px solid var(--border);
@@ -130,16 +115,13 @@
       width: 100%;
       max-width: 360px;
     }
-
     .status-row {
       display: flex;
       justify-content: space-between;
       margin: 5px 0;
     }
-
     .status-value.complete { color: var(--neon-blue); }
     .status-value.incomplete { color: #ff9500; }
-
     .btn {
       width: 100%;
       max-width: 360px;
@@ -154,15 +136,12 @@
       opacity: 0.4;
       transition: opacity 0.2s, transform 0.2s;
     }
-
     .btn:enabled {
       opacity: 1;
     }
-
     .btn:enabled:hover {
       transform: scale(1.02);
     }
-
     .btn:enabled:active {
       transform: scale(0.99);
     }
@@ -177,7 +156,6 @@
   </div>
 
   <div class="zones-grid">
-    <!-- PopCulture -->
     <div class="zone">
       <div class="zone-title">#PopCulture</div>
       <div class="hashtag-list">
@@ -188,8 +166,6 @@
         <div class="hashtag-item" data-value="#SelebPuraPuraBahagia">#SelebPuraPuraBahagia</div>
       </div>
     </div>
-
-    <!-- PersonalPain -->
     <div class="zone">
       <div class="zone-title">#PersonalPain</div>
       <div class="hashtag-list">
@@ -200,8 +176,6 @@
         <div class="hashtag-item" data-value="#GakPunyaAlasanHidup">#GakPunyaAlasanHidup</div>
       </div>
     </div>
-
-    <!-- SocialSickness -->
     <div class="zone">
       <div class="zone-title">#SocialSickness</div>
       <div class="hashtag-list">
@@ -212,8 +186,6 @@
         <div class="hashtag-item" data-value="#LGBTQDijadiinKonten">#LGBTQDijadiinKonten</div>
       </div>
     </div>
-
-    <!-- SayNOPE (LOCKED) -->
     <div class="zone">
       <div class="zone-title">#SayNOPE</div>
       <div class="hashtag-list">
@@ -248,9 +220,7 @@
   <button class="btn" disabled>Masuk ke frekuensimu</button>
 
   <script type="module">
-    // 🔑 GANTI DENGAN DATA DARI SUPABASE > SETTINGS > API
-    const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co
-Anon Key';
+    const SUPABASE_URL = 'https://iiznshiqpibtoqtttrtm.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
     import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm')
@@ -275,7 +245,6 @@ Anon Key';
               const statusVal = statusRows[idx].querySelector('.status-value');
               statusVal.textContent = item.dataset.value;
               statusVal.className = 'status-value complete';
-
               checkBtn();
             });
           });
@@ -293,25 +262,14 @@ Anon Key';
 
         btn.addEventListener('click', async () => {
           if (btn.disabled) return;
-
           const email = prompt("Masukkan emailmu jika berani:");
-          if (!email || !email.includes('@')) {
-            alert("Email valid diperlukan.");
-            return;
-          }
-
+          if (!email || !email.includes('@')) return alert("Email valid diperlukan.");
           try {
             const { error } = await supabase.auth.signInWithOtp({ email });
             if (error) throw error;
-
             alert("Cek emailmu — klik link ajaib untuk masuk ke frekuensimu.");
-            // Data akan disimpan setelah user klik magic link & redirect ke inner.html
-            // (Penyimpanan dilakukan di inner.html — lebih aman setelah auth selesai)
-
-            // Simpan sementara di localStorage untuk diproses nanti
             localStorage.setItem('nope_pending_email', email);
           } catch (err) {
-            console.error(err);
             alert("Gagal mengirim akses. Coba lagi.");
           }
         });
