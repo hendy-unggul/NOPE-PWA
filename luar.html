@@ -1,79 +1,88 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Luar</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <meta name="theme-color" content="#001f4d" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon-192.png">
+  <meta name="theme-color" content="#0b2a4d">
+  <title>Outer • NOPE</title>
   <style>
-    :root { font-family: monospace; font-size: 12px; color: white; background: black; }
-    body { margin: 0; padding: 20px 16px; min-height: 100vh; line-height: 1.5; opacity: 0.9; }
-    .artefak { position: relative; border: 1px solid #001f4d; margin: 24px 0; padding: 16px; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .timestamp { position: absolute; top: 6px; left: 6px; font-size: 9px; color: rgba(255,255,255,0.2); }
-    .notasi { position: absolute; top: 6px; right: 6px; font-size: 10px; max-width: 100px; text-align: right; }
-    .emoji-btn { background: transparent; border: none; font-size: 18px; cursor: pointer; margin-top: 8px; animation: float 3s infinite ease-in-out; }
-    @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
-    .empty { text-align: center; opacity: 0.5; padding: 30px 0; }
-    .header { text-align: center; opacity: 0.7; margin-bottom: 24px; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .artefak {
+      background: #0b0b0b;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .timestamp {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 10px;
+      opacity: 0.4;
+    }
+    .notation {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 11px;
+      opacity: 0.9;
+    }
+    .emoji {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 12px;
+      animation: float 3s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
   </style>
 </head>
 <body>
-  <div class="header">sefrekuensi</div>
-  <div id="feed"><div class="empty">belum ada jejak dari frekuensi lain...</div></div>
+  <div class="header">frekuensi luar</div>
 
-  <script type="module">
-    const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
+  <div class="artefak">
+    <div class="timestamp">10-12-2025...</div>
+    <div class="notation">Kado terakhir dari Ayah</div>
+    <div style="margin-top: 24px; text-align: center; color: #555;">[ foto benda ]</div>
+    <div class="emoji">🤍</div>
+  </div>
 
-    const supabaseModule = await import('https://unpkg.com/@supabase/supabase-js@2');
-    const createClient = supabaseModule.default;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) window.location.href = 'onbracoarding.html';
-
-    const publicArtefak = JSON.parse(localStorage.getItem('nope_public_artefak') || '[]');
-    const shuffled = [...publicArtefak].sort(() => 0.5 - Math.random());
-    const sample = shuffled.slice(0, 3);
-
-    const feed = document.getElementById('feed');
-    if (sample.length > 0) {
-      feed.innerHTML = '';
-      sample.forEach((art, idx) => {
-        const div = document.createElement('div');
-        div.className = 'artefak';
-        div.innerHTML = `
-          <div class="timestamp">${new Date(art.timestamp).toLocaleDateString('id-ID')}...</div>
-          ${art.notasi ? `<div class="notasi">${art.notasi}</div>` : ''}
-          <div style="opacity:0.7;">${art.description || ''}</div>
-          <button class="emoji-btn" onclick="handleEmoji(this, ${idx})">💫</button>
-        `;
-        feed.appendChild(div);
-      });
-    }
-
-    window.handleEmoji = (btn, idx) => {
-      const emoji = ['💫', '🌙', '🌊', '🔥', '🌱'][Math.floor(Math.random() * 5)];
-      btn.textContent = emoji;
-      setTimeout(() => {
-        const count = Math.floor(Math.random() * 5) + 1;
-        if (confirm(`Ada ${count} respons. Ingin tahu siapa?`)) {
-          alert('... mungkin seseorang yang juga sedang merenung.');
-        }
-      }, 800);
-    };
-  </script>
+  <div class="artefak">
+    <div class="timestamp">08-12-2025...</div>
+    <div class="notation">Bangga pada Peluk</div>
+    <div style="margin-top: 24px; text-align: center; color: #555;">[ kanvas abu-abu ]</div>
+    <div class="emoji">🌀</div>
+  </div>
 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => console.log('✅ SW registered'))
-          .catch(err => console.warn('⚠️ SW failed:', err));
+        navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
   </script>
 </body>
 </html>
