@@ -3,90 +3,252 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Luar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>NOPE — Luar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
-    .nope-tab { @apply px-4 py-2 text-sm font-medium rounded-full; }
-    .nope-tab.active { background: #ff2d55; color: #000; }
-    .nope-tab.inactive { color: #888; }
-    .reaction-btn { 
-      @apply flex flex-col items-center justify-center w-16 h-16 bg-transparent border-none cursor-pointer transition-transform;
+    :root {
+      --bg: #000;
+      --text: #fff;
+      --muted: #777780;
+      --card: #0a0a0f;
+      --border: #1a1a25;
+      --neon-blue: #00f3ff;
+      --accent: #ff2d55;
     }
-    .reaction-btn:hover { transform: scale(1.05); }
-    .reaction-text { @apply text-[10px] mt-1 text-center leading-tight; }
-    .comment-item { @apply bg-[#222] rounded-xl p-3 mb-2; }
-    .comment-username { @apply text-[#ff2d55] text-xs font-bold; }
-    .comment-text { @apply text-xs mt-1; }
-    .comment-box { @apply w-full bg-[#111] rounded-xl p-3 mt-3 text-sm; }
-    .send-btn { @apply mt-2 bg-[#ff2d55] text-black px-4 py-1.5 rounded-full text-sm font-bold; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 20px 16px;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    .container {
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: var(--accent);
+      color: #000;
+    }
+    .tab.inactive {
+      color: var(--muted);
+    }
+
+    /* RANT CARD */
+    .rant-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .rant-text {
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .rant-meta {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* REACTIONS */
+    .reactions {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+    .reaction-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+    .reaction-btn:hover {
+      transform: scale(1.05);
+    }
+    .reaction-emoji {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .reaction-text {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.2;
+      margin-top: 4px;
+    }
+
+    /* COMMENTS */
+    .comment {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .comment-author {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .comment-text {
+      margin-top: 4px;
+      color: var(--text);
+    }
+
+    /* COMMENT INPUT */
+    .comment-input {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      margin-top: 12px;
+      outline: none;
+    }
+    .send-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+    }
+    .nav-item {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .nav-item.active {
+      color: var(--neon-blue);
+    }
   </style>
 </head>
-<body class="min-h-screen bg-black text-white p-4">
-  <div class="max-w-md mx-auto">
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>NOPE</h1>
+      <div class="status-dot"></div>
+    </div>
 
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-xl font-bold">NOPE</h1>
-      <div class="flex space-x-2">
-        <div class="w-2 h-2 rounded-full bg-red-500"></div>
+    <div class="tabs">
+      <div class="tab active">Frekuensi yang lewat</div>
+      <div class="tab inactive">Segelombang</div>
+      <div class="tab inactive">✊ Solidaritas</div>
+    </div>
+
+    <div class="rant-card">
+      <div class="rant-text">
+        “Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”
       </div>
-    </div>
+      <div class="rant-meta">@nope_73 • #MauSendiriTapiTakutDibilangJutek</div>
 
-    <!-- Tab Navigation -->
-    <div class="flex space-x-2 mb-6 overflow-x-auto no-scrollbar">
-      <div class="nope-tab active">Sefrekuensi</div>
-      <div class="nope-tab inactive">Segelombang</div>
-      <div class="nope-tab inactive">✊ Solidaritas</div>
-    </div>
-
-    <!-- Feed: Sefrekuensi with Comments -->
-    <div class="bg-[#111] rounded-2xl p-4">
-      <p class="text-sm mb-3">“Gue capek pura-pura okay pas orang tua bilang ‘kapan nikah?’”</p>
-      
-      <!-- Reactions -->
-      <div class="flex space-x-4 mt-4">
+      <div class="reactions">
         <button class="reaction-btn">
-          <span>🫶</span>
-          <span class="reaction-text">Gue ngerti banget</span>
+          <div class="reaction-emoji">☕️</div>
+          <div class="reaction-text">Aku juga begitu.</div>
         </button>
         <button class="reaction-btn">
-          <span>🤲</span>
-          <span class="reaction-text">Peluk kenceng,<br>gak perlu jawab</span>
+          <div class="reaction-emoji">💔</div>
+          <div class="reaction-text">Peluk.</div>
+        </button>
+        <button class="reaction-btn">
+          <div class="reaction-emoji">✨</div>
+          <div class="reaction-text">Bangga.</div>
         </button>
       </div>
 
-      <!-- Comments with @nope_username -->
-      <div class="mt-4 space-y-2">
-        <div class="comment-item">
-          <div class="comment-username">@nope_8x2m4</div>
-          <div class="comment-text">Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.</div>
-        </div>
-        <div class="comment-item">
-          <div class="comment-username">@nope_3q9r1</div>
-          <div class="comment-text">Peluk diam-diam dari jauh. Lo udah cukup berani.</div>
-        </div>
+      <div class="comment">
+        <div class="comment-author">@nope_8x2m4</div>
+        <div class="comment-text">Gue juga ngerasain ini tiap Lebaran. Capek jawab, tapi gak enak marah.</div>
+      </div>
+      <div class="comment">
+        <div class="comment-author">@nope_3q9r1</div>
+        <div class="comment-text">Peluk diam-diam dari jauh. Lo udah cukup berani.</div>
       </div>
 
-      <!-- Comment Input -->
-      <div class="comment-box">
-        <textarea placeholder="Balas pelan-pelan..." class="w-full bg-transparent border-none focus:outline-none text-white placeholder:text-gray-500 text-sm" rows="2"></textarea>
-        <button class="send-btn">KIRIM</button>
-      </div>
-    </div>
-
-    <!-- Bottom Nav -->
-    <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800">
-      <div class="flex justify-around py-2">
-        <div class="text-gray-400 text-xs">Luar</div>
-        <div class="text-gray-600 text-xs">Notifikasi</div>
-        <div class="text-gray-600 text-xs">Rage</div>
-        <div class="text-gray-600 text-xs">Inner</div>
-      </div>
+      <textarea class="comment-input" placeholder="Balas pelan-pelan..."></textarea>
+      <button class="send-btn">KIRIM</button>
     </div>
   </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">Luar</div>
+    <div class="nav-item">Resensi</div>
+    <div class="nav-item">Rage</div>
+    <div class="nav-item">Inner</div>
+  </div>
+
+  <script>
+    // Simulasi: tidak ada logika Supabase dulu (MVP)
+    document.querySelectorAll('.reaction-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert("Resonansi diam-diam telah terkirim.");
+      });
+    });
+    document.querySelector('.send-btn').addEventListener('click', () => {
+      alert("Komentar telah terkirim — hanya terlihat di sini.");
+    });
+  </script>
 </body>
 </html>
