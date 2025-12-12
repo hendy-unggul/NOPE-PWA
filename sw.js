@@ -4,13 +4,12 @@ const urlsToCache = [
   '/index.html',
   '/onboarding.html',
   '/inner.html',
-  '/outer.html',
-  '/styles.css',
-  '/logo-nope.svg',
+  '/luar.html', // <-- ganti jadi "luar" karena di repo kamu pakai ini
+  '/register.html',
+  '/artefak-upload.html',
   '/manifest.json'
 ];
 
-// Install: Cache semua file penting
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -18,13 +17,9 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch: Coba ambil dari cache dulu, kalau nggak ada baru ke network
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
-      .then((response) => {
-        // Return response dari cache, atau fetch dari network
-        return response || fetch(event.request);
-      })
+      .then((response) => response || fetch(event.request))
   );
 });
