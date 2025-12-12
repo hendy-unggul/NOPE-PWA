@@ -1,99 +1,93 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NOPE • Inner</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <meta name="theme-color" content="#001f4d" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon-192.png">
+  <meta name="theme-color" content="#0b2a4d">
+  <title>Inner • NOPE</title>
   <style>
-    :root { font-family: monospace; font-size: 12px; color: white; background: black; }
-    body { margin: 0; padding: 20px 16px; min-height: 100vh; line-height: 1.5; opacity: 0.9; }
-    .artefak { position: relative; border: 1px solid #001f4d; margin: 24px 0; padding: 16px; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .timestamp { position: absolute; top: 6px; left: 6px; font-size: 9px; color: rgba(255,255,255,0.2); }
-    .notasi { position: absolute; top: 6px; right: 6px; font-size: 10px; max-width: 100px; text-align: right; }
-    .hashtag-container { margin: 12px 0; display: flex; gap: 8px; flex-wrap: wrap; }
-    .hashtag { background: transparent; border: 1px solid #001f4d; color: #4fc3f7; padding: 2px 6px; font: inherit; font-size: 11px; cursor: pointer; }
-    .btn { background: #001f4d; color: white; border: none; padding: 8px 16px; font: inherit; font-size: 12px; border-radius: 20px; cursor: pointer; margin-top: 8px; }
-    .empty { text-align: center; opacity: 0.5; padding: 30px 0; }
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .title {
+      font-weight: 600;
+      font-size: 18px;
+    }
+    .artefak {
+      background: #0b0b0b;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .timestamp {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 10px;
+      opacity: 0.4;
+    }
+    .notation {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      font-size: 11px;
+      opacity: 0.9;
+    }
+    .action {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .btn {
+      color: #0b2a4d;
+      background: transparent;
+      border: 1px solid #0b2a4d;
+      padding: 8px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div id="content"><div class="empty">...</div></div>
+  <div class="header">
+    <div class="title">inner</div>
+    <div>• • •</div>
+  </div>
 
-  <script type="module">
-    const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
+  <div class="artefak">
+    <div class="timestamp">13-12-2025...</div>
+    <div class="notation">I am alive</div>
+    <div style="margin-top: 24px; text-align: center; color: #555;">[ kanvas hitam ]</div>
+  </div>
 
-    const supabaseModule = await import('https://unpkg.com/@supabase/supabase-js@2');
-    const createClient = supabaseModule.default;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) window.location.href = 'onboarding.html';
-
-    let artefak = JSON.parse(localStorage.getItem('nope_artefak') || 'null');
-    const joinDate = new Date(user.created_at || user.last_sign_in_at);
-    const now = new Date();
-    const daysSinceJoin = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
-    const mustUpload = daysSinceJoin >= 30 && (!artefak || !artefak.timestamp);
-    if (mustUpload) window.location.href = 'artefak-upload.html';
-
-    const content = document.getElementById('content');
-    if (artefak) {
-      const div = document.createElement('div');
-      div.className = 'artefak';
-      div.innerHTML = `
-        <div class="timestamp">${new Date(artefak.timestamp).toLocaleDateString('id-ID')}...</div>
-        ${artefak.notasi ? `<div class="notasi">${artefak.notasi}</div>` : ''}
-        <div style="opacity:0.7;">${artefak.description || ''}</div>
-      `;
-      content.innerHTML = '';
-      content.appendChild(div);
-
-      const hashtags = artefak.hashtags || ['#...', '#...', '#...'];
-      const tagContainer = document.createElement('div');
-      tagContainer.className = 'hashtag-container';
-      hashtags.forEach(tag => {
-        const btn = document.createElement('button');
-        btn.className = 'hashtag';
-        btn.textContent = tag;
-        btn.onclick = () => {
-          const newTag = prompt('Ganti hashtag (maks 3):', tag);
-          if (newTag && newTag.trim()) {
-            artefak.hashtags = artefak.hashtags.map(t => t === tag ? newTag.trim() : t);
-            localStorage.setItem('nope_artefak', JSON.stringify(artefak));
-            location.reload();
-          }
-        };
-        tagContainer.appendChild(btn);
-      });
-      content.appendChild(tagContainer);
-
-      const uploadBtn = document.createElement('button');
-      uploadBtn.className = 'btn';
-      uploadBtn.textContent = 'ganti artefak';
-      uploadBtn.onclick = () => window.location.href = 'artefak-upload.html';
-      content.appendChild(uploadBtn);
-    } else {
-      content.innerHTML = `
-        <div class="empty">
-          kamu belum punya jejak.<br>
-          <button class="btn" onclick="location.href='artefak-upload.html'">buat artefak</button>
-        </div>
-      `;
-    }
-  </script>
+  <div class="action">
+    <button class="btn" onclick="window.location.href='/outer.html'">lihat frekuensi luar</button>
+  </div>
 
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => console.log('✅ SW registered'))
-          .catch(err => console.warn('⚠️ SW failed:', err));
+        navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
   </script>
 </body>
 </html>
