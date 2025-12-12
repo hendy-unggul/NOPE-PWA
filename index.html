@@ -4,58 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NOPE</title>
-
-  <!-- PWA Manifest & Theme -->
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <meta name="theme-color" content="#001f4d" />
-
-  <!-- Minimal style untuk loading screen (opsional tapi bagus) -->
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      opacity: 0.6;
+      margin: 0; padding: 0;
+      background: #000; color: #fff;
+      font-family: monospace;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh; opacity: 0.6;
     }
   </style>
 </head>
-<body>
-  <!-- Loading vibe -->
-  ...
+<body>...</body>
+<script type="module">
+  const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8';
 
-  <!-- Auth + Redirect Logic -->
-  <script type="module">
-    const SUPABASE_URL = 'https://iiznshiqpibtqqttrtm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlpem5zaGlxcGlidG9xdHR0cnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0NzgzMzEsImV4cCI6MjA4MTA1NDMzMX0.FcSy1Q0UkK46uG2B7W-QwdYjoBx0gCoVE44U1Npxrs8'; // ganti dengan key asli
+  const supabaseModule = await import('https://unpkg.com/@supabase/supabase-js@2');
+  const createClient = supabaseModule.default;
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    try {
-      const { createClient } = await import('https://unpkg.com/@supabase/supabase-js@2');
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-      const { data: { user } } = await supabase.auth.getUser();
-      window.location.href = user ? 'inner.html' : 'onboarding.html';
-    } catch (err) {
-      console.error('Auth or redirect error:', err.message || err);
-      window.location.href = 'onboarding.html';
-    }
-  </script>
-
-  <!-- Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => console.log('✅ SW registered'))
-          .catch(err => console.warn('⚠️ SW failed:', err));
-      });
-    }
-  </script>
-</body>
+  const { data: { user } } = await supabase.auth.getUser();
+  window.location.href = user ? 'inner.html' : 'onboarding.html';
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('✅ SW registered'))
+        .catch(err => console.warn('⚠️ SW failed:', err));
+    });
+  }
+</script>
 </html>
