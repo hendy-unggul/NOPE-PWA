@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#0b2a4d">
   <title>Jalan • NOPE</title>
   <style>
     :root {
@@ -23,64 +23,409 @@
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      padding-top: var(--safe-top);
-      padding-bottom: 72px;
+      font-size: 16px;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
-      line-height: 1.45;
+      padding: 16px 12px;
+      padding-bottom: calc(68px + var(--safe-bottom));
+      overflow-y: scroll;
+      height: 100vh;
     }
 
+    .container {
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    /* Header */
     .header {
       text-align: center;
-      padding: 16px 0 20px;
-      color: #0b2a4d;
+      margin-bottom: 20px;
+    }
+
+    .header-title {
+      font-size: 20px;
       font-weight: 600;
-      font-size: 15px;
+      margin: 0;
     }
 
-    .feed {
-      padding: 0 16px;
-    }
-
-    .artifact {
-      padding: 16px 0;
-      border-bottom: 1px solid #111;
-    }
-
-    .artifact:last-child {
-      border-bottom: none;
-    }
-
-    .content {
+    .header-subtitle {
       font-size: 14px;
-      color: #fff;
-      margin-bottom: 10px;
-      white-space: pre-line;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 8px 0 0;
     }
 
-    .meta {
+    /* Jalan Item */
+    .jalan-item {
+      background: #0a0a0a;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .jalan-item:hover {
+      background: #111;
+    }
+
+    .jalan-image {
+      width: 100%;
+      aspect-ratio: 1 / 0.8;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      filter: contrast(1.1) brightness(0.92);
+    }
+
+    .jalan-stamp {
+      position: absolute;
+      top: 8px;
+      left: 12px;
       font-size: 12px;
-      color: #666;
+      color: rgba(255, 255, 255, 0.6);
+      z-index: 10;
+      max-width: 85%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+    }
+
+    .jalan-notasi {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-right: 4px;
+      display: inline;
+    }
+
+    .jalan-date {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      display: inline;
+    }
+
+    .jalan-rant {
+      margin-top: 12px;
+      font-size: 16px;
+      line-height: 1.5;
+      white-space: pre-line;
+      color: #ddd;
+    }
+
+    /* Modal Titik Waktu */
+    .time-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
 
-    .vibe {
-      color: #0b2a4d;
+    .time-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .time-content {
+      background: #0a0a0a;
+      padding: 24px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .time-title {
+      font-size: 18px;
       font-weight: 600;
+      margin-bottom: 16px;
     }
 
-    .pulse-emoji {
-      display: inline-block;
-      animation: pulse 3s infinite;
+    .time-input {
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
     }
 
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 1; }
+    .time-btns {
+      display: flex;
+      gap: 10px;
     }
 
+    .time-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .time-btn.cancel {
+      background: #222;
+      color: #aaa;
+    }
+
+    .time-btn.confirm {
+      background: #0b2a4d;
+      color: white;
+    }
+
+    .time-btn.confirm:hover {
+      background: #1e4b8f;
+    }
+
+    /* Feedback toast */
+    #feedbackToast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 42, 77, 0.92);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 24px;
+      font-size: 13px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      font-weight: 500;
+      letter-spacing: -0.1px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-title">Jalan</div>
+      <div class="header-subtitle">Melangkah tanpa tujuan. Hanya menyusuri jejakmu.</div>
+    </div>
+
+    <div id="jalanList">
+      <!-- Diisi oleh JS -->
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="/jejak" class="nav-item">Jejak</a>
+    <a href="/dunia" class="nav-item">Dunia</a>
+    <a href="/jalan" class="nav-item active">Jalan</a>
+  </nav>
+
+  <!-- Modal Titik Waktu -->
+  <div id="timeModal" class="time-modal">
+    <div class="time-content">
+      <div class="time-title">Pilih titik waktu</div>
+      <input type="text" id="timeInput" class="time-input" placeholder="Contoh: 10 Mei 2025">
+      <div class="time-btns">
+        <button class="time-btn cancel" onclick="closeTimeModal()">Batal</button>
+        <button class="time-btn confirm" onclick="jumpToTime()">Lanjut</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="feedbackToast"></div>
+
+  <script>
+    // ==== DATA DUMMY ====
+    const savedArtefacts = JSON.parse(localStorage.getItem('nopeArtefacts') || '[]');
+    let currentNotasiUrl = '';
+    let currentArtefactUrl = '';
+
+    // ==== UI Feedback ====
+    function showFeedback(text) {
+      const el = document.getElementById('feedbackToast');
+      el.textContent = text;
+      el.style.opacity = '1';
+      setTimeout(() => {
+        el.style.opacity = '0';
+      }, 2000);
+    }
+
+    // ==== Render Jalan ====
+    function renderJalan() {
+      const container = document.getElementById('jalanList');
+      container.innerHTML = '';
+
+      // Urutkan dari terbaru ke terlama
+      const sorted = [...savedArtefacts].reverse();
+
+      sorted.forEach((art, index) => {
+        const div = document.createElement('div');
+        div.className = 'jalan-item';
+        div.onclick = () => openDetailModal(art);
+
+        const dateStr = new Date(art.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+
+        const notasiPart = art.notasi ? `<span class="jalan-notasi">${art.notasi}</span>` : '';
+        const stampHTML = art.notasi ? 
+          `<div class="jalan-stamp">${notasiPart} <span class="jalan-date">${dateStr}</span></div>` :
+          `<div class="jalan-stamp"><span class="jalan-date">${dateStr}</span></div>`;
+
+        const rantText = getRantForDate(art.date) || '';
+
+        div.innerHTML = `
+          ${stampHTML}
+          <img class="jalan-image" src="${art.url}" alt="Artefak">
+          ${rantText ? `<div class="jalan-rant">${rantText}</div>` : ''}
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // ==== Cari rant berdasarkan tanggal ====
+    function getRantForDate(dateStr) {
+      const sampleRants = [
+        { 
+          text: "hari ini aku bilang 'ga apa-apa' padahal hati retak...",
+          date: "2025-05-10T10:00:00Z"
+        },
+        { 
+          text: "diamku bukan kosong. di dalam, aku sedang menulis puisi...",
+          date: "2025-03-05T10:00:00Z"
+        },
+        { 
+          text: "aku memilih sunyi, bukan karena tak punya suara...",
+          date: "2025-02-15T10:00:00Z"
+        }
+      ];
+
+      const targetDate = new Date(dateStr).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      for (let i = 0; i < sampleRants.length; i++) {
+        const rantDate = new Date(sampleRants[i].date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        if (rantDate === targetDate) {
+          return sampleRants[i].text;
+        }
+      }
+      return '';
+    }
+
+    // ==== MODAL DETAIL ====
+    function openDetailModal(artefact) {
+      // Di Jalan, detail hanya tampilkan info — tidak interaktif
+      showFeedback(`Jejak ini dari ${new Date(artefact.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`);
+    }
+
+    // ==== TIME MODAL ====
+    function openTimeModal() {
+      document.getElementById('timeModal').classList.add('show');
+    }
+
+    function closeTimeModal() {
+      document.getElementById('timeModal').classList.remove('show');
+    }
+
+    function jumpToTime() {
+      const input = document.getElementById('timeInput').value.trim();
+      if (!input) {
+        showFeedback('Masukkan tanggal.');
+        return;
+      }
+
+      // Cari artefak dengan tanggal yang cocok
+      const targetDate = new Date(input).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+
+      const found = savedArtefacts.find(art => {
+        const artDate = new Date(art.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        return artDate === targetDate;
+      });
+
+      if (found) {
+        showFeedback(`Berada di titik: ${targetDate}`);
+        // Scroll ke item itu
+        const items = document.querySelectorAll('.jalan-item');
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const dateStr = item.querySelector('.jalan-date')?.textContent;
+          if (dateStr === targetDate) {
+            item.scrollIntoView({ behavior: 'smooth' });
+            break;
+          }
+        }
+      } else {
+        showFeedback('Tidak ditemukan.');
+      }
+
+      closeTimeModal();
+    }
+
+    // ==== Init ====
+    if (!localStorage.getItem('nopeOnboarded')) {
+      window.location.href = '/index.html';
+    }
+
+    renderJalan();
+
+    // Tutup modal dengan ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTimeModal();
+      }
+    });
+
+    // Tap di tengah layar → buka time modal
+    document.body.addEventListener('click', (e) => {
+      const rect = document.body.getBoundingClientRect();
+      const centerY = rect.height / 2;
+      const clickY = e.clientY;
+      if (Math.abs(clickY - centerY) < 100) {
+        openTimeModal();
+      }
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(console.warn);
+      });
+    }
+  </script>
+
+  <!-- Bottom Navigation -->
+  <style>
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -95,8 +440,8 @@
     .nav-item {
       flex: 1;
       text-align: center;
-      padding: 12px 0;
-      font-size: 13px;
+      padding: 10px 0;
+      font-size: 12px;
       color: #666;
       text-decoration: none;
     }
@@ -106,84 +451,5 @@
       font-weight: 600;
     }
   </style>
-</head>
-<body>
-  <div class="header">Jalan</div>
-
-  <div class="feed" id="feed">
-    <!-- Feed jejak anonim acak -->
-  </div>
-
-  <nav class="bottom-nav">
-    <a href="/jejak" class="nav-item">Jejak</a>
-    <a href="/dunia" class="nav-item">Dunia</a>
-    <a href="/jalan" class="nav-item active">Jalan</a>
-  </nav>
-
-  <script>
-    // Simulasi feed jejak anonim (di produksi: dari cache atau API anonim)
-    function loadPublicArtifacts() {
-      const container = document.getElementById('feed');
-      container.innerHTML = '';
-
-      const artifacts = [
-        {
-          content: "aku diam bukan karena tak punya suara, tapi karena suaraku hanya untuk yang mau mendengar.",
-          vibe: "diam",
-          time: "5 menit lalu",
-          responses: 9
-        },
-        {
-          content: "hari ini aku pura-pura kuat. padahal aku hanya ingin dipeluk tanpa ditanya.",
-          vibe: "peluk",
-          time: "22 menit lalu",
-          responses: 14
-        },
-        {
-          content: "kadang aku iri sama orang yang bisa bilang 'ga suka' tanpa merasa bersalah.",
-          vibe: "sunyi",
-          time: "1 jam lalu",
-          responses: 6
-        },
-        {
-          content: "aku bangga aku masih bisa tersenyum, meski hatiku sedang hujan deras.",
-          vibe: "bangga",
-          time: "3 jam lalu",
-          responses: 11
-        }
-      ];
-
-      artifacts.forEach(art => {
-        const div = document.createElement('div');
-        div.className = 'artifact';
-        div.innerHTML = `
-          <div class="content">${art.content}</div>
-          <div class="meta">
-            <span class="vibe">${art.vibe}</span>
-            •
-            <span>${art.time}</span>
-            •
-            <span class="responses">
-              <span class="pulse-emoji">🖤</span> ${art.responses}
-            </span>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    // Redirect ke index jika belum onboard
-    if (!localStorage.getItem('nopeOnboarded')) {
-      window.location.href = '/index.html';
-    }
-
-    loadPublicArtifacts();
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(console.warn);
-      });
-    }
-  </script>
 </body>
 </html>
