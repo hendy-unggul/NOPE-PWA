@@ -46,8 +46,8 @@
       letter-spacing: -0.2px;
     }
 
-    /* ONBOARDING JEJAK PERTAMA */
-    .onboarding-welcome {
+    /* ONBOARDING: hanya muncul sebelum artefak pertama */
+    .onboarding-first {
       text-align: center;
       padding: 20px 12px;
       background: rgba(11, 42, 77, 0.15);
@@ -65,13 +65,6 @@
       }
     }
 
-    .onboarding-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #fff;
-    }
-
     .onboarding-text {
       font-size: 15px;
       color: rgba(255, 255, 255, 0.8);
@@ -79,17 +72,44 @@
       margin-bottom: 16px;
     }
 
-    .onboarding-reminder {
-      font-size: 13px;
-      color: rgba(11, 42, 77, 0.9);
-      background: rgba(255, 255, 255, 0.1);
-      padding: 8px 12px;
-      border-radius: 10px;
-      display: inline-block;
-      margin-top: 8px;
+    /* WHITE CANVAS — artefak placeholder */
+    .white-canvas {
+      width: 100%;
+      aspect-ratio: 1 / 0.8;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    /* 1. Artefak — fokus utama */
+    .white-canvas:hover {
+      background: #111;
+      transform: scale(1.02);
+    }
+
+    .canvas-icon {
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .canvas-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      text-align: center;
+      padding: 0 20px;
+      line-height: 1.4;
+    }
+
+    /* 1. Artefak — fokus utama (jika sudah upload) */
     .artefact-header {
       width: 100%;
       aspect-ratio: 1 / 0.8;
@@ -379,25 +399,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       letter-spacing: -0.1px;
-    }
-
-    /* TIMER 30 HARI — BARU */
-    .cooldown-timer {
-      text-align: center;
-      padding: 14px;
-      background: rgba(11, 42, 77, 0.1);
-      border-radius: 12px;
-      margin: 12px 0;
-      font-size: 13px;
-      color: rgba(11, 42, 77, 0.8);
-      display: none;
-    }
-
-    .timer-days {
-      font-size: 18px;
-      font-weight: 700;
-      color: #0b2a4d;
-      margin: 0 4px;
     }
 
     /* MODAL DETAIL ARTEFAK */
@@ -777,35 +778,11 @@
       letter-spacing: -0.1px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
-
-    /* Tooltip upload */
-    #uploadTooltip {
-      position: fixed;
-      bottom: 120px;
-      right: 20px;
-      background: rgba(11, 42, 77, 0.95);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 12px;
-      z-index: 150;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      max-width: 200px;
-      text-align: center;
-    }
-
-    #uploadTooltip.show {
-      opacity: 1;
-    }
   </style>
 </head>
 <body>
   <div class="container" id="mainContainer">
-    <!-- ONBOARDING JEJAK PERTAMA (akan diisi oleh JS jika belum upload) -->
-    <!-- Sisa konten akan diisi oleh JS -->
-
+    <!-- Akan diisi oleh JS -->
   </div>
 
   <!-- Bottom Navigation -->
@@ -851,9 +828,6 @@
 
   <!-- TOOLTIP RESPONDERS -->
   <div id="emojiTooltip" class="emoji-tooltip"></div>
-
-  <!-- TOOLTIP UPLOAD -->
-  <div id="uploadTooltip"></div>
 
   <!-- MODAL RITUAL UPLOAD -->
   <div id="ritualModal" class="ritual-modal">
@@ -905,17 +879,6 @@
     let currentArtefactUrl = '';
     let tempArtefactUrl = '';
 
-    // Jika belum pernah upload, beri artefak pertama otomatis
-    if (savedArtefacts.length === 0) {
-      const firstArtefact = {
-        url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format",
-        date: new Date().toISOString(),
-        notasi: "jejak pertamaku"
-      };
-      savedArtefacts.push(firstArtefact);
-      localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
-    }
-
     // ==== UI Feedback ====
     function showFeedback(text) {
       const el = document.getElementById('feedbackToast');
@@ -926,69 +889,8 @@
       }, 2000);
     }
 
-    // ==== HITUNG SISA HARI ====
-    function getDaysUntilNextUpload() {
-      if (savedArtefacts.length === 0) return 0;
-      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
-      const now = new Date();
-      const diffTime = now - lastUpload;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      return Math.max(0, 30 - diffDays);
-    }
-
-    // ==== Render Timer ====
-    function renderTimerIfNeeded() {
-      const daysLeft = getDaysUntilNextUpload();
-      if (daysLeft > 0) {
-        const timerHTML = `
-          <div class="cooldown-timer">
-            Jejak berikutnya bisa disimpan dalam <span class="timer-days">${daysLeft}</span> hari lagi.
-          </div>
-        `;
-        document.getElementById('mainContainer').insertAdjacentHTML('beforeend', timerHTML);
-      }
-    }
-
-    // ==== Tooltip Upload ====
-    function showUploadTooltip() {
-      const daysLeft = getDaysUntilNextUpload();
-      if (daysLeft > 0) {
-        const tooltip = document.getElementById('uploadTooltip');
-        tooltip.textContent = `Jejak berikutnya bisa disimpan dalam ${daysLeft} hari lagi.`;
-        tooltip.classList.add('show');
-        setTimeout(() => {
-          tooltip.classList.remove('show');
-        }, 3000);
-      }
-    }
-
-    // ==== Render Onboarding (jika baru pertama kali) ====
-    function renderOnboardingIfNeeded() {
-      const isFirstTime = !localStorage.getItem('nopeJejakSeen');
-      if (isFirstTime) {
-        const onboarding = `
-          <div class="onboarding-welcome">
-            <div class="onboarding-title">Selamat datang di Jejak</div>
-            <div class="onboarding-text">
-              Di sini, kamu meninggalkan jejak, bukan performa.<br>
-              Setiap 30 hari, kamu boleh menyimpan satu kenangan.<br>
-              Tak perlu dilihat. Cukup dirasakan.
-            </div>
-            <div class="onboarding-reminder">Jejak pertamamu sudah tersimpan</div>
-          </div>
-        `;
-        document.getElementById('mainContainer').insertAdjacentHTML('beforeend', onboarding);
-        localStorage.setItem('nopeJejakSeen', 'true');
-        setTimeout(() => {
-          renderRestOfPage();
-        }, 1500);
-      } else {
-        renderRestOfPage();
-      }
-    }
-
-    // ==== Render sisa halaman ====
-    function renderRestOfPage() {
+    // ==== Render Onboarding atau Artefak ====
+    function renderMainContent() {
       const container = document.getElementById('mainContainer');
       
       // Tambahkan intro
@@ -996,23 +898,52 @@
         <div class="artefact-intro">Ini jejakmu. Sunyi, tapi nyata.</div>
       `);
 
-      // Render artefak utama
-      renderMainArtefact();
+      // Jika belum upload artefak pertama → tampilkan white canvas + onboarding ringkas
+      if (savedArtefacts.length === 0) {
+        // Onboarding ringkas
+        container.insertAdjacentHTML('beforeend', `
+          <div class="onboarding-first">
+            <div class="onboarding-text">
+              Pilih satu kenangan yang layak kau simpan selamanya.<br>
+              Setiap 30 hari, kamu boleh meninggalkan satu jejak.
+            </div>
+          </div>
+        `);
 
-      // Tambahkan emoji bar
+        // White canvas
+        container.insertAdjacentHTML('beforeend', `
+          <div class="white-canvas" onclick="triggerUpload()">
+            <div class="canvas-icon">🖼️</div>
+            <div class="canvas-text">Upload artefak pertamamu</div>
+          </div>
+        `);
+      } else {
+        // Tampilkan artefak terbaru
+        const latest = savedArtefacts[savedArtefacts.length - 1];
+        const artefactHTML = `
+          <div class="artefact-header">
+            <img id="artefactImage" class="artefact-image" src="${latest.url}" alt="Artefak">
+            <div class="artefact-vignette"></div>
+            <div id="artefactStamp" class="artefact-stamp">
+              <span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>
+              <span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', artefactHTML);
+      }
+
+      // Emoji bar
       container.insertAdjacentHTML('beforeend', `
         <div class="emoji-bar">
           <button class="emoji-btn pulse" title="GueJuga">🖤</button>
           <button class="emoji-btn pulse" title="Peluk">🤗</button>
           <button class="emoji-btn pulse" title="Bangga">🌟</button>
-          <button class="emoji-btn upload" title="Unggah Artefak" onclick="triggerUpload()" onmouseenter="showUploadTooltip()">📎</button>
+          <button class="emoji-btn upload" title="Unggah Artefak" onclick="triggerUpload()">📎</button>
         </div>
       `);
 
-      // Render timer jika perlu
-      renderTimerIfNeeded();
-
-      // Tambahkan rantbox
+      // Rantbox
       container.insertAdjacentHTML('beforeend', `
         <div class="rantbox">
           <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
@@ -1020,37 +951,19 @@
         </div>
       `);
 
-      // Tambahkan jurnal
+      // Jurnal
       container.insertAdjacentHTML('beforeend', `
         <div class="jurnal-title">Jurnal 3 Rant Terakhir</div>
         <div id="jurnalList"></div>
       `);
       renderJurnal();
 
-      // Tambahkan tray
+      // Tray
       container.insertAdjacentHTML('beforeend', `
         <div class="tray-title">Jejak Terkirim</div>
         <div class="artefact-tray" id="trayList"></div>
       `);
       renderTray();
-    }
-
-    // ==== Render Artefak Utama ====
-    function renderMainArtefact() {
-      const container = document.getElementById('mainContainer');
-      const latest = savedArtefacts[savedArtefacts.length - 1];
-      
-      const artefactHTML = `
-        <div class="artefact-header">
-          <img id="artefactImage" class="artefact-image" src="${latest.url}" alt="Artefak">
-          <div class="artefact-vignette"></div>
-          <div id="artefactStamp" class="artefact-stamp">
-            <span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>
-            <span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-          </div>
-        </div>
-      `;
-      container.insertAdjacentHTML('beforeend', artefactHTML);
     }
 
     // ==== Render Tray (INTERAKTIF) ====
@@ -1071,7 +984,7 @@
       });
     }
 
-    // ==== MODAL DETAIL ====
+    // ==== MODAL DETAIL ARTEFAK ====
     function openDetailModal(artefact) {
       currentArtefactUrl = artefact.url;
       document.getElementById('detailImage').src = artefact.url;
@@ -1123,12 +1036,13 @@
 
     // ==== RITUAL UPLOAD ====
     function triggerUpload() {
+      // Cek apakah sudah upload pertama atau masih dalam cooldown
       const daysLeft = getDaysUntilNextUpload();
-      if (daysLeft > 0) {
-        showUploadTooltip();
-        return;
+      if (savedArtefacts.length === 0 || daysLeft === 0) {
+        document.getElementById('artefactInput').click();
+      } else {
+        showFeedback(`Jejak berikutnya bisa disimpan dalam ${daysLeft} hari lagi.`);
       }
-      document.getElementById('artefactInput').click();
     }
 
     function handleArtefactUpload(event) {
@@ -1159,7 +1073,16 @@
       savedArtefacts.push(newArtefact);
       localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
       
-      location.reload();
+      location.reload(); // Refresh untuk tampilkan artefak baru
+    }
+
+    function getDaysUntilNextUpload() {
+      if (savedArtefacts.length === 0) return 0;
+      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
+      const now = new Date();
+      const diffTime = now - lastUpload;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return Math.max(0, 30 - diffDays);
     }
 
     // ==== Rantbox ====
@@ -1225,7 +1148,7 @@
       window.location.href = '/index.html';
     }
 
-    renderOnboardingIfNeeded();
+    renderMainContent();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
