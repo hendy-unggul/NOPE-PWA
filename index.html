@@ -68,6 +68,15 @@
       cursor: pointer;
       animation: pulse 2s infinite;
     }
+    .cta.loading {
+      background: #555;
+      cursor: wait;
+      pointer-events: none;
+    }
+    .cta.loading::after {
+      content: "⏳";
+      margin-left: 8px;
+    }
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0.4); }
       70% { box-shadow: 0 0 0 10px rgba(11, 42, 77, 0); }
@@ -84,18 +93,26 @@
       <img src="/logo-nope-512.png" alt="NOPE">
     </div>
     <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
-    <button class="cta" onclick="generateAndGo()">gaskeun</button>
+    <button class="cta" onclick="generateAndGo(event)">gaskeun</button>
   </div>
 
   <script>
-    function generateAndGo() {
+    function generateAndGo(event) {
+      event.preventDefault();
+      const ctaButton = document.querySelector('.cta');
+      ctaButton.classList.add('loading');
+
       const email = document.getElementById('email').value.trim();
-      if (!email || !email.includes('@')) {
-        alert('masukkan email yang valid');
+
+      // Validasi email lebih ketat
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Masukkan email yang valid.');
+        ctaButton.classList.remove('loading');
         return;
       }
 
-      // Generate @nope_username
+      // Generate username
       const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
       const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
       const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
@@ -109,20 +126,29 @@
 
       // Simpan ke localStorage
       try {
+        localStorage.setItem('nopeEmail', email);
         localStorage.setItem('nopeUsername', nopeUsername);
         localStorage.setItem('nopeVibe', vibe);
         localStorage.setItem('nopeJoined', joined);
       } catch (e) {
         console.error('localStorage error:', e);
-        // Jika localStorage gagal, paksa redirect tanpa simpan
-        window.location.href = '/onboarding.html';
+        alert('Gagal menyimpan data. Pastikan browser tidak dalam mode private.');
+        ctaButton.classList.remove('loading');
         return;
       }
 
-      // Redirect
-      window.location.href = '/onboarding.html';
+      // Redirect ke onboarding
+      setTimeout(() => {
+        try {
+          window.location.href = '/onboarding.html';
+        } catch (err) {
+          alert('Gagal membuka halaman berikutnya. Pastikan file onboarding.html ada.');
+          ctaButton.classList.remove('loading');
+        }
+      }, 500);
     }
 
+    // Daftarkan Service Worker untuk PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
