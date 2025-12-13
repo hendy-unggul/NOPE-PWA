@@ -33,7 +33,7 @@
     .container {
       max-width: 390px;
       margin: 0 auto;
-      padding: 28px 20px 80px; /* extra padding bawah untuk tombol */
+      padding: 28px 20px 80px;
     }
 
     .user-info {
@@ -204,7 +204,6 @@
   <script>
     let selections = { pop: null, pain: null, sick: null };
 
-    // Ambil atau buat username
     function getOrCreateUsername() {
       let username = localStorage.getItem('nopeUsername');
       if (!username) {
@@ -228,13 +227,11 @@
     const username = getOrCreateUsername();
     document.getElementById('usernameDisplay').innerText = username;
 
-    // Event listener untuk setiap hashtag yang bisa dipilih
     document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
       el.addEventListener('click', () => {
         const zone = el.closest('.hashtags').dataset.zone;
         if (!zone) return;
 
-        // Hapus seleksi sebelumnya di zona ini
         el.closest('.hashtags').querySelectorAll('.hashtag').forEach(h => {
           h.classList.remove('selected');
         });
@@ -242,7 +239,6 @@
         el.classList.add('selected');
         selections[zone] = el.dataset.tag;
 
-        // Update status
         const count = Object.values(selections).filter(Boolean).length;
         document.getElementById('statusText').textContent = 
           count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
@@ -259,7 +255,7 @@
           alert('Gagal menyimpan. Coba non-private mode.');
           return;
         }
-        window.location.href = '/jejak.html';
+        window.location.href = '/jejak'; // ✅ CLEAN URL — thanks to vercel.json
       }
     }
 
@@ -271,3 +267,5 @@
   </script>
 </body>
 </html>
+
+dan saya akan bantu checklist akhir. 🌑
