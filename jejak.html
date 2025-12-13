@@ -52,16 +52,30 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: drop-shadow(0 0 0 rgba(0,0,0,0.7)) contrast(1.1) brightness(0.95);
+      position: relative;
     }
 
-    /* Notasi + Stamp — satu baris, kiri atas */
+    .artefact-vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        circle at 50% 50%,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0.8) 100%
+      );
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* Notasi + Stamp — tanpa container, transparan 100% */
     .artefact-stamp {
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 4px 8px;
-      border-radius: 6px;
       font-size: 10px;
       color: rgba(255, 255, 255, 0.55);
       z-index: 10;
@@ -72,7 +86,7 @@
     }
 
     .artefact-notasi {
-      font-size: 20px; /* 200% dari 10px */
+      font-size: 20px;
       font-weight: 600;
       color: #fff;
       margin-right: 4px;
@@ -98,7 +112,7 @@
       background: none;
       border: none;
       color: #aaa;
-      font-size: 14px; /* 50% lebih kecil dari 28px → 14px */
+      font-size: 14px;
       cursor: pointer;
       opacity: 0.8;
       transition: opacity 0.2s;
@@ -109,7 +123,7 @@
       opacity: 1;
     }
 
-    /* 3. Rantbox */
+    /* 3. Rantbox — 4 baris, 240 karakter, tanpa counter */
     .rantbox {
       background: #0a0a0a;
       border-radius: 12px;
@@ -119,7 +133,7 @@
 
     textarea {
       width: 100%;
-      height: 70px;
+      height: 80px; /* 4 baris */
       background: #111;
       border: 1px solid #222;
       border-radius: 10px;
@@ -128,18 +142,13 @@
       padding: 10px;
       resize: none;
       outline: none;
-    }
-
-    .char-count {
-      text-align: right;
-      font-size: 11px;
-      color: #666;
-      margin-top: 4px;
+      line-height: 1.4;
+      font-family: inherit;
     }
 
     .submit-btn {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       background: #0b2a4d;
       color: white;
       border: none;
@@ -347,10 +356,11 @@
   <div class="container">
     <!-- 1. Artefak -->
     <div class="artefact-header">
-      <img id="artefactImage" class="artefact-image" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format" alt="Artefak">
+      <img id="artefactImage" class="artefact-image" src="https://images.pexels.com/photos/3487777/pexels-photo-3487777.jpeg?auto=compress&cs=tinysrgb&w=800&h=640&fit=crop" alt="Artefak">
+      <div class="artefact-vignette"></div>
       <div id="artefactStamp" class="artefact-stamp">
-        <span id="artefactNotasi" class="artefact-notasi">perahu</span>
-        <span id="artefactDate" class="artefact-date">5 Mar 2025</span>
+        <span id="artefactNotasi" class="artefact-notasi">perahu di laut biru</span>
+        <span id="artefactDate" class="artefact-date">25 Jun 2025</span>
       </div>
     </div>
 
@@ -361,11 +371,10 @@
       <button class="emoji-btn pulse" title="Bangga">🌟</button>
     </div>
 
-    <!-- 3. Rantbox -->
+    <!-- 3. Rantbox — 4 baris, 240 karakter, tanpa counter -->
     <div class="rantbox">
-      <textarea id="rantInput" maxlength="280" placeholder="Tuliskan, ledakkan di sini..."></textarea>
-      <div class="char-count"><span id="charCount">0</span>/280</div>
-      <button class="submit-btn" onclick="submitRant()">kirim jejak</button>
+      <textarea id="rantInput" maxlength="240" placeholder="Tuliskan, ledakkan di sini..."></textarea>
+      <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
     </div>
 
     <!-- 4. Jurnal -->
@@ -405,12 +414,12 @@
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     const savedArtefacts = [
-      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
-      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
-      { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-01-20T10:00:00Z", notasi: "karcis konser" },
-      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-04-05T10:00:00Z", notasi: "surat lama" },
-      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
-      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-06-25T10:00:00Z", notasi: "kopi pagi" }
+      { url: "https://images.pexels.com/photos/3487777/pexels-photo-3487777.jpeg?auto=compress&cs=tinysrgb&w=800&h=640&fit=crop", date: "2025-06-25T10:00:00Z", notasi: "perahu di laut biru" },
+      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
+      { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
+      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-01-20T10:00:00Z", notasi: "karcis konser" },
+      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-04-05T10:00:00Z", notasi: "surat lama" },
+      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" }
     ];
     let currentNotasiUrl = '';
 
@@ -430,7 +439,7 @@
           year: 'numeric'
         });
       } else {
-        imageEl.src = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format';
+        imageEl.src = 'https://images.pexels.com/photos/3487777/pexels-photo-3487777.jpeg?auto=compress&cs=tinysrgb&w=800&h=640&fit=crop';
         notasiEl.textContent = '—';
         dateEl.textContent = '—';
       }
@@ -505,18 +514,16 @@
 
     // ==== Rantbox ====
     const rantInput = document.getElementById('rantInput');
-    const charCount = document.getElementById('charCount');
     rantInput.addEventListener('input', () => {
-      charCount.textContent = rantInput.value.length;
+      // Tidak ada counter — hanya batas 240 karakter
     });
 
     function submitRant() {
       const text = rantInput.value.trim();
       if (!text) { alert('Tulis dulu jejakmu.'); return; }
-      if (text.length > 280) { alert('Maksimal 280 karakter.'); return; }
+      if (text.length > 240) { alert('Maksimal 240 karakter.'); return; }
       alert('Jejak terkirim. 🖤');
       rantInput.value = '';
-      charCount.textContent = '0';
     }
 
     // ==== Jurnal ====
