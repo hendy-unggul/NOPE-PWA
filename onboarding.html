@@ -22,6 +22,12 @@
       margin: 0 auto;
       padding: 0 24px;
     }
+    .user-info {
+      text-align: right;
+      font-size: 12px;
+      color: #0b2a4d;
+      margin-bottom: 16px;
+    }
     .section-title {
       font-size: 18px;
       font-weight: 600;
@@ -92,6 +98,9 @@
 </head>
 <body>
   <div class="container">
+    <!-- Tampilkan @nope_username -->
+    <div class="user-info" id="usernameDisplay">—</div>
+
     <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
 
     <!-- ZONE 1: POP CULTURE -->
@@ -143,7 +152,6 @@
       <p style="color: #ff6b00; font-size: 12px; margin-top: 10px;">🔒 Aktif setelah 6 bulan atau undangan</p>
     </div>
 
-    <!-- STATUS -->
     <div class="status-bar">
       Pilih 1 hashtag dari tiap zona di atas.<br>
       <span id="statusText">Belum lengkap (0/3)</span>
@@ -155,32 +163,22 @@
   <script>
     let selections = { pop: null, pain: null, sick: null };
 
-    // Auto-generate @nope_username jika belum ada
-    if (!localStorage.getItem('nopeUsername')) {
-      const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-      const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-      const noun = nouns[Math.floor(Math.random() * nouns.length)];
-      const num = Math.floor(1000 + Math.random() * 9000);
-      const nopeUsername = `@nope.${adj}.${noun}.${num}`;
-      const vibe = ['dingin', 'hangat', 'dalam', 'samar'][Math.floor(Math.random() * 4)];
-      const joined = new Date().toISOString().split('T')[0];
-
-      localStorage.setItem('nopeUsername', nopeUsername);
-      localStorage.setItem('nopeVibe', vibe);
-      localStorage.setItem('nopeJoined', joined);
+    // Baca @nope_username dari localStorage
+    const username = localStorage.getItem('nopeUsername');
+    if (!username) {
+      // Jika tidak ada, kembali ke index
+      window.location.href = '/index.html';
+    } else {
+      document.getElementById('usernameDisplay').innerText = username;
     }
 
     document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
       el.addEventListener('click', () => {
         const zone = el.dataset.zone;
-        // Hapus seleksi sebelumnya di zona ini
         document.querySelectorAll(`.hashtag[data-zone="${zone}"]`).forEach(h => h.classList.remove('selected'));
-        // Tambah seleksi baru
         el.classList.add('selected');
         selections[zone] = el.dataset.tag;
 
-        // Update status
         const count = Object.values(selections).filter(v => v).length;
         document.getElementById('statusText').innerText = count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
         document.getElementById('continueBtn').disabled = count !== 3;
