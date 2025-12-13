@@ -13,8 +13,6 @@
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 15px;
-      line-height: 1.35;
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -26,12 +24,13 @@
       max-width: 390px;
       padding: 0 24px;
       box-sizing: border-box;
+      text-align: center;
     }
     .logo {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 24px;
-      border-radius: 12px;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 32px;
+      border-radius: 16px;
       overflow: hidden;
       display: flex;
       justify-content: center;
@@ -42,25 +41,12 @@
       height: 100%;
       object-fit: cover;
     }
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
-      letter-spacing: -0.4px;
-      margin: 0 0 16px;
-      text-align: center;
-    }
-    p {
-      color: #aaa;
-      font-size: 14px;
-      margin: 0 0 24px;
-      text-align: center;
-    }
     input {
       width: 100%;
-      padding: 14px 16px;
+      padding: 16px;
       background: #111;
       border: 1px solid #222;
-      border-radius: 12px;
+      border-radius: 14px;
       color: #fff;
       font-size: 16px;
       margin-bottom: 24px;
@@ -72,12 +58,12 @@
     }
     .cta {
       width: 100%;
-      padding: 14px;
+      padding: 16px;
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 14px;
-      font-size: 16px;
+      border-radius: 16px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
       animation: pulse 2s infinite;
@@ -97,16 +83,13 @@
     <div class="logo">
       <img src="/logo-nope-512.png" alt="NOPE">
     </div>
-    <h1>NOPE</h1>
-    <p>masukkan @nope_username atau emailmu</p>
-    <input type="text" id="identifier" placeholder="@nope.peluk.aura.7392 atau email@email.com" autocomplete="off" autocapitalize="none" required>
-    <button class="cta" onclick="handleSubmit()">lanjut</button>
+    <input type="text" id="identifier" placeholder="@nope_usernama atau emailmu" autocomplete="off" autocapitalize="none" required>
+    <button class="cta" onclick="handleSubmit()">gaskeun</button>
   </div>
 
   <!-- Supabase JS v2 via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // 🔥 Sudah pakai URL & Key-mu — tidak perlu edit lagi
     const supabase = window.supabase.createClient(
       'https://iiznshiqpibtqqttrtm.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.6xK0VfWj7L8o9bN3eQz6uM2gTtHlCwYr4yQZaX5m7dA'
@@ -114,9 +97,9 @@
 
     async function handleSubmit() {
       const val = document.getElementById('identifier').value.trim();
-      if (!val) { alert('isi dulu'); return; }
+      if (!val) { return; }
 
-      // 🔹 MODE LOGIN: jika input dimulai dengan @nope.
+      // 🔹 LOGIN: jika input dimulai dengan @nope.
       if (val.startsWith('@nope.')) {
         const { data, error } = await supabase
           .from('users')
@@ -134,7 +117,7 @@
         localStorage.setItem('nopeJoined', data.joined_at);
         window.location.href = '/inner.html';
 
-      // 🔹 MODE REGISTER: jika email (dan bukan @nope.)
+      // 🔹 REGISTER: jika email (dan bukan @nope.)
       } else if (val.includes('@') && !val.startsWith('@nope.')) {
         const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
         const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
@@ -152,8 +135,7 @@
           .insert({ nope_username: nopeUsername, vibe, joined_at: joined });
 
         if (error) {
-          console.error(error);
-          alert('gagal daftar, coba lagi');
+          alert('gagal daftar');
           return;
         }
 
@@ -162,11 +144,10 @@
         localStorage.setItem('nopeJoined', joined);
         window.location.href = '/onboarding.html';
       } else {
-        alert('format: email atau @nope.username');
+        alert('format tidak valid');
       }
     }
 
-    // PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
