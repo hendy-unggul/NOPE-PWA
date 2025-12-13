@@ -297,7 +297,129 @@
       background: #2a5ca8;
       transform: translateY(-1px);
     }
+<!-- TAMBAHKAN DI BAWAH RANTBOX -->
+<div class="rantbox">
+  <textarea id="rantInput" maxlength="240" placeholder="Jejakmu dalam 240 huruf."></textarea>
+  
+  <!-- Preview additional artefak (sembunyikan awalnya) -->
+  <div id="additionalPreview" class="additional-preview" style="display:none; margin-top:12px;">
+    <div style="font-size:12px; color:#888; margin-bottom:6px;">Artefak tambahan</div>
+    <div class="artefact-header" style="height:120px; border-radius:12px;">
+      <img id="additionalImage" class="artefact-image" src="" alt="Additional artefak">
+    </div>
+    <button type="button" class="remove-btn" onclick="removeAdditionalArt()" style="margin-top:8px; background:#222; color:#aaa; border:none; padding:4px 10px; border-radius:6px; font-size:12px;">Hapus</button>
+  </div>
+  
+  <!-- Tombol tambah artefak -->
+  <button type="button" class="add-art-btn" onclick="addAdditionalArt()" style="margin-top:8px; background:rgba(11,42,77,0.1); color:#0b2a4d; border:none; padding:4px 12px; border-radius:8px; font-size:13px; width:fit-content;">
+    📎 Tambah artefak untuk jejak ini
+  </button>
+  
+  <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
+</div>
 
+<!-- TAMBAHKAN DI AKHIR BODY -->
+<input type="file" id="additionalInput" accept="image/*" style="display:none;" onchange="handleAdditionalUpload(event)">
+
+<style>
+  /* Tidak perlu tambahan CSS khusus — pakai yang sudah ada */
+  .add-art-btn:hover {
+    background: rgba(11,42,77,0.2);
+  }
+  .remove-btn:hover {
+    background: #333;
+  }
+</style>
+
+<script>
+  // ... (semua kode sebelumnya tetap sama)
+
+  // ==== TAMBAHKAN VARIABEL UNTUK ADDITIONAL ARTEFAK ====
+  let additionalArtefactUrl = '';
+
+  // ==== FUNGSI TAMBAHAN ====
+  function addAdditionalArt() {
+    document.getElementById('additionalInput').click();
+  }
+
+  function handleAdditionalUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      additionalArtefactUrl = e.target.result;
+      document.getElementById('additionalImage').src = additionalArtefactUrl;
+      document.getElementById('additionalPreview').style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeAdditionalArt() {
+    additionalArtefactUrl = '';
+    document.getElementById('additionalPreview').style.display = 'none';
+  }
+
+  // ==== PERBARUI FUNGSI submitRant ====
+  function submitRant() {
+    const text = document.getElementById('rantInput').value.trim();
+    if (!text) { showFeedback('Tulis dulu jejakmu.'); return; }
+    if (text.length > 240) { showFeedback('Maksimal 240 karakter.'); return; }
+
+    // Simpan rant + additional artefak
+    const rantData = {
+      text: text,
+      timestamp: new Date().toISOString(),
+      author: username,
+      additionalArtefact: additionalArtefactUrl || null
+    };
+
+    // Simpan ke localStorage (atau kirim ke backend)
+    let rants = JSON.parse(localStorage.getItem('nopeRants') || '[]');
+    rants.push(rantData);
+    localStorage.setItem('nopeRants', JSON.stringify(rants));
+
+    // Reset
+    document.getElementById('rantInput').value = '';
+    removeAdditionalArt();
+
+    showFeedback('Jejak terkirim. 🖤');
+  }
+
+  // ==== PERBARUI FUNGSI renderJurnal (opsional) ====
+  function renderJurnal() {
+    const container = document.getElementById('jurnalList');
+    container.innerHTML = '';
+    
+    const rants = JSON.parse(localStorage.getItem('nopeRants') || '[]')
+      .slice(-3).reverse();
+
+    rants.forEach(rant => {
+      const div = document.createElement('div');
+      div.className = 'rant-item';
+      
+      let rantContent = `<div class="rant-text">${rant.text}</div>`;
+      
+      // Tampilkan additional artefak di jurnal juga
+      if (rant.additionalArtefact) {
+        rantContent += `
+          <div class="artefact-header" style="height:100px; margin-top:10px; border-radius:10px;">
+            <img class="artefact-image" src="${rant.additionalArtefact}" alt="Additional">
+          </div>
+        `;
+      }
+      
+      rantContent += `
+        <button class="reveal-btn" onclick="toggleResponses(this)">•</button>
+        <div class="responses" style="display:none;"></div>
+      `;
+      
+      div.innerHTML = rantContent;
+      container.appendChild(div);
+    });
+  }
+
+  // ... (sisanya tetap sama)
+</script>
     /* Jurnal */
     .jurnal-title {
       font-size: 14px;
