@@ -164,13 +164,22 @@
     let selections = { pop: null, pain: null, sick: null };
 
     // Baca @nope_username dari localStorage
-    const username = localStorage.getItem('nopeUsername');
+    let username = localStorage.getItem('nopeUsername');
+
+    // Jika tidak ada, generate default
     if (!username) {
-      // Jika tidak ada, kembali ke index
-      window.location.href = '/index.html';
-    } else {
-      document.getElementById('usernameDisplay').innerText = username;
+      const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
+      const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const noun = nouns[Math.floor(Math.random() * nouns.length)];
+      const num = Math.floor(1000 + Math.random() * 9000);
+      username = `@nope.${adj}.${noun}.${num}`;
+      localStorage.setItem('nopeUsername', username);
+      localStorage.setItem('nopeVibe', 'dalam');
+      localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
     }
+
+    document.getElementById('usernameDisplay').innerText = username;
 
     document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
       el.addEventListener('click', () => {
