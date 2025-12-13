@@ -2,115 +2,188 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
-  <meta name="theme-color" content="#0b2a4d">
-  <title>Outer • NOPE</title>
+  <meta name="theme-color" content="#000000">
+  <title>Jalan • NOPE</title>
   <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: #000;
       color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 13px;
-      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      padding-top: var(--safe-top);
+      padding-bottom: 72px;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.45;
     }
+
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      padding: 16px 0 20px;
+      color: #0b2a4d;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 15px;
     }
-    .artefak {
-      background: #0b0b0b;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      position: relative;
+
+    .feed {
+      padding: 0 16px;
     }
-    .timestamp {
-      position: absolute;
-      top: 6px;
-      left: 8px;
-      font-size: 10px;
-      opacity: 0.4;
+
+    .artifact {
+      padding: 16px 0;
+      border-bottom: 1px solid #111;
     }
-    .notation {
-      position: absolute;
-      top: 6px;
-      right: 8px;
-      font-size: 11px;
-      opacity: 0.9;
+
+    .artifact:last-child {
+      border-bottom: none;
     }
-    .emoji {
+
+    .content {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vibe {
+      color: #0b2a4d;
+      font-weight: 600;
+    }
+
+    .pulse-emoji {
+      display: inline-block;
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: #000;
+      border-top: 1px solid #1a1a1a;
+      padding-bottom: var(--safe-bottom);
+    }
+
+    .nav-item {
+      flex: 1;
       text-align: center;
-      font-size: 20px;
-      margin-top: 12px;
-      animation: float 3s infinite ease-in-out;
+      padding: 12px 0;
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
     }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+
+    .nav-item.active {
+      color: #0b2a4d;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="header">frekuensi luar</div>
+  <div class="header">Jalan</div>
 
-  <div class="artefak">
-    <div class="timestamp">10-12-2025...</div>
-    <div class="notation">Kado terakhir dari Ayah</div>
-    <div style="margin-top: 24px; text-align: center; color: #555;">[ foto benda ]</div>
-    <div class="emoji">🤍</div>
+  <div class="feed" id="feed">
+    <!-- Feed jejak anonim acak -->
   </div>
 
-  <div class="artefak">
-    <div class="timestamp">08-12-2025...</div>
-    <div class="notation">Bangga pada Peluk</div>
-    <div style="margin-top: 24px; text-align: center; color: #555;">[ kanvas abu-abu ]</div>
-    <div class="emoji">🌀</div>
-  </div>
+  <nav class="bottom-nav">
+    <a href="/jejak" class="nav-item">Jejak</a>
+    <a href="/dunia" class="nav-item">Dunia</a>
+    <a href="/jalan" class="nav-item active">Jalan</a>
+  </nav>
 
   <script>
+    // Simulasi feed jejak anonim (di produksi: dari cache atau API anonim)
+    function loadPublicArtifacts() {
+      const container = document.getElementById('feed');
+      container.innerHTML = '';
+
+      const artifacts = [
+        {
+          content: "aku diam bukan karena tak punya suara, tapi karena suaraku hanya untuk yang mau mendengar.",
+          vibe: "diam",
+          time: "5 menit lalu",
+          responses: 9
+        },
+        {
+          content: "hari ini aku pura-pura kuat. padahal aku hanya ingin dipeluk tanpa ditanya.",
+          vibe: "peluk",
+          time: "22 menit lalu",
+          responses: 14
+        },
+        {
+          content: "kadang aku iri sama orang yang bisa bilang 'ga suka' tanpa merasa bersalah.",
+          vibe: "sunyi",
+          time: "1 jam lalu",
+          responses: 6
+        },
+        {
+          content: "aku bangga aku masih bisa tersenyum, meski hatiku sedang hujan deras.",
+          vibe: "bangga",
+          time: "3 jam lalu",
+          responses: 11
+        }
+      ];
+
+      artifacts.forEach(art => {
+        const div = document.createElement('div');
+        div.className = 'artifact';
+        div.innerHTML = `
+          <div class="content">${art.content}</div>
+          <div class="meta">
+            <span class="vibe">${art.vibe}</span>
+            •
+            <span>${art.time}</span>
+            •
+            <span class="responses">
+              <span class="pulse-emoji">🖤</span> ${art.responses}
+            </span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Redirect ke index jika belum onboard
+    if (!localStorage.getItem('nopeOnboarded')) {
+      window.location.href = '/index.html';
+    }
+
+    loadPublicArtifacts();
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
   </script>
-<script>
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Otomatis tampilkan prompt setelah 3 detik (jika user belum install)
-    setTimeout(() => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-          deferredPrompt = null;
-        });
-      }
-    }, 3000);
-  });
-
-  // Jika user sudah install, sembunyikan tombol "masuk" atau ganti teks
-  window.addEventListener('appinstalled', (evt) => {
-    console.log('PWA was installed');
-    // Kamu bisa ubah UI di sini, misalnya: document.querySelector('.cta').innerText = 'Buka App';
-  });
-</script>
 </body>
 </html>
