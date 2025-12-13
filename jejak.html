@@ -84,7 +84,7 @@
       z-index: 5;
     }
 
-    /* Notasi + Stamp — transparan, elegan */
+    /* Notasi + Stamp */
     .artefact-stamp {
       position: absolute;
       top: 12px;
@@ -114,7 +114,7 @@
       display: inline;
     }
 
-    /* Emoji bar — interaktif, hidup */
+    /* Emoji bar */
     .emoji-bar {
       display: flex;
       justify-content: flex-end;
@@ -146,7 +146,6 @@
       transform: scale(1.15);
     }
 
-    /* Upload icon — lebih tenang */
     .emoji-btn.upload {
       opacity: 0.7;
       font-size: 15px;
@@ -189,7 +188,7 @@
 
     .submit-btn {
       padding: 7px 16px;
-      background: #1e4b8f; /* lebih terang, lebih kontras */
+      background: #1e4b8f;
       color: white;
       border: none;
       border-radius: 10px;
@@ -268,7 +267,7 @@
       margin-top: 6px;
     }
 
-    /* Tray artefak — 3x2, rapat, hidup */
+    /* Tray artefak — INTERAKTIF */
     .tray-title {
       padding: 0 12px;
       font-size: 14px;
@@ -321,6 +320,117 @@
       overflow: hidden;
       text-overflow: ellipsis;
       letter-spacing: -0.1px;
+    }
+
+    /* MODAL DETAIL ARTEFAK — BARU */
+    .detail-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .detail-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-content {
+      width: 92%;
+      max-width: 360px;
+      background: #0a0a0a;
+      border-radius: 18px;
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .detail-modal.show .detail-content {
+      transform: scale(1);
+    }
+
+    .detail-image-container {
+      width: 100%;
+      aspect-ratio: 1 / 0.8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(1.1) brightness(0.92);
+    }
+
+    .detail-vignette {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+    }
+
+    .detail-stamp {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-weight: 500;
+      max-width: 85%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-notasi {
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      margin-right: 4px;
+    }
+
+    .detail-date {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .detail-actions {
+      padding: 16px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .close-btn:hover {
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
     }
 
     /* Bottom nav */
@@ -492,6 +602,23 @@
     <a href="/jalan" class="nav-item">Jalan</a>
   </nav>
 
+  <!-- MODAL DETAIL ARTEFAK — BARU -->
+  <div id="detailModal" class="detail-modal">
+    <div class="detail-content">
+      <div class="detail-image-container">
+        <img id="detailImage" class="detail-image" src="" alt="Detail artefak">
+        <div class="detail-vignette"></div>
+        <div id="detailStamp" class="detail-stamp">
+          <span id="detailNotasi" class="detail-notasi"></span>
+          <span id="detailDate" class="detail-date"></span>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button class="close-btn" onclick="closeDetailModal()">✕</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Modal Notasi -->
   <div id="notasiModal" class="modal" style="display:none;">
     <div class="modal-content">
@@ -553,14 +680,15 @@
       }
     }
 
-    // ==== Render Tray ====
+    // ==== Render Tray (INTERAKTIF) ====
     function renderTray() {
       const tray = document.getElementById('trayList');
       tray.innerHTML = '';
       const recent = savedArtefacts.slice(-6).reverse();
-      recent.forEach(art => {
+      recent.forEach((art, index) => {
         const div = document.createElement('div');
         div.className = 'tray-item';
+        div.onclick = () => openDetailModal(art);
         const dateStr = new Date(art.date).toLocaleDateString('id-ID', {
           day: 'numeric',
           month: 'short'
@@ -569,6 +697,27 @@
         tray.appendChild(div);
       });
     }
+
+    // ==== MODAL DETAIL ====
+    function openDetailModal(artefact) {
+      document.getElementById('detailImage').src = artefact.url;
+      document.getElementById('detailNotasi').textContent = artefact.notasi;
+      document.getElementById('detailDate').textContent = new Date(artefact.date).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+      document.getElementById('detailModal').classList.add('show');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.remove('show');
+    }
+
+    // Tutup modal dengan ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDetailModal();
+    });
 
     // ==== Upload ====
     function triggerUpload() {
