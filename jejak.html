@@ -146,17 +146,20 @@
       font-family: inherit;
     }
 
+    /* ✅ CTA "Gaskeun!" — kecil, rata kanan, lebar sesuai teks */
     .submit-btn {
-      width: fit-content;
-      padding: 8px;
+      padding: 6px 12px;
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 8px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      margin-right: auto;
+      margin-top: 8px;
+      width: fit-content;
+      margin-left: auto;
+      display: block;
     }
 
     /* 4. Jurnal */
@@ -210,7 +213,7 @@
       margin-top: 4px;
     }
 
-    /* 5. Tray artefak */
+    /* 5. Tray artefak — ✅ GRID 2x3 */
     .tray-title {
       padding: 0 12px;
       font-size: 14px;
@@ -220,24 +223,20 @@
     }
 
     .artefact-tray {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
       padding: 0 12px 16px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .artefact-tray::-webkit-scrollbar {
-      display: none;
+      justify-items: center;
     }
 
     .tray-item {
-      flex: 0 0 72px;
+      width: 72px;
       height: 72px;
       border-radius: 8px;
       background: #111;
       position: relative;
+      overflow: hidden;
     }
 
     .tray-item img {
@@ -260,6 +259,14 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    /* Hover effect halus (opsional) */
+    .tray-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(11, 42, 77, 0.4);
+      z-index: 1;
+      transition: all 0.2s ease;
     }
 
     /* Bottom nav */
@@ -356,7 +363,6 @@
   <div class="container">
     <!-- 1. Artefak -->
     <div class="artefact-header">
-      <!-- ✅ FOTO UTA MA SUDAH DIGANTI KE "TIKET BIOSKOP" -->
       <img id="artefactImage" class="artefact-image" src="https://i.imgur.com/8Xz9Y7p.jpeg" alt="Tiket bioskop">
       <div class="artefact-vignette"></div>
       <div id="artefactStamp" class="artefact-stamp">
@@ -372,9 +378,9 @@
       <button class="emoji-btn pulse" title="Bangga">🌟</button>
     </div>
 
-    <!-- 3. Rantbox — 4 baris, 240 karakter, tanpa counter -->
+    <!-- 3. Rantbox -->
     <div class="rantbox">
-      <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejak"></textarea>
+      <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
       <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
     </div>
 
@@ -384,7 +390,7 @@
       <!-- Diisi oleh JS -->
     </div>
 
-    <!-- 5. Tray artefak -->
+    <!-- 5. Tray artefak — ✅ GRID 2x3 -->
     <div class="tray-title">Jejak Terkirim</div>
     <div class="artefact-tray" id="trayList">
       <!-- Diisi oleh JS -->
@@ -415,7 +421,6 @@
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     const savedArtefacts = [
-      // ✅ ITEM PERTAMA SUDAH DIUBAH MENJADI "TIKET BIOSKOP"
       { url: "https://i.imgur.com/8Xz9Y7p.jpeg", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
       { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
       { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
@@ -447,11 +452,11 @@
       }
     }
 
-    // ==== Render Tray ====
+    // ==== Render Tray (2x3 grid) ====
     function renderTray() {
       const tray = document.getElementById('trayList');
       tray.innerHTML = '';
-      const recent = savedArtefacts.slice(-6).reverse();
+      const recent = savedArtefacts.slice(-6).reverse(); // Ambil 6 terakhir, urut terbaru dulu
       recent.forEach(art => {
         const div = document.createElement('div');
         div.className = 'tray-item';
@@ -516,9 +521,7 @@
 
     // ==== Rantbox ====
     const rantInput = document.getElementById('rantInput');
-    rantInput.addEventListener('input', () => {
-      // Tidak ada counter — hanya batas 240 karakter
-    });
+    rantInput.addEventListener('input', () => {});
 
     function submitRant() {
       const text = rantInput.value.trim();
@@ -597,3 +600,4 @@
   <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
 </body>
 </html>
+Aku di sini. 💙
