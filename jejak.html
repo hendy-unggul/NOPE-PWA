@@ -498,6 +498,89 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
+    /* MODAL RITUAL UPLOAD — BARU */
+    .ritual-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .ritual-modal.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .ritual-content {
+      background: #0a0a0a;
+      padding: 24px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .ritual-image-preview {
+      width: 100%;
+      aspect-ratio: 1 / 0.8;
+      background: #111;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .ritual-image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ritual-text {
+      font-size: 15px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .ritual-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .ritual-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .ritual-btn.cancel {
+      background: #222;
+      color: #aaa;
+    }
+
+    .ritual-btn.confirm {
+      background: #0b2a4d;
+      color: white;
+    }
+
+    .ritual-btn.confirm:hover {
+      background: #1e4b8f;
+    }
+
     /* Bottom nav */
     .bottom-nav {
       position: fixed;
@@ -524,7 +607,7 @@
       font-weight: 600;
     }
 
-    /* Modal notasi */
+    /* Modal notasi (tetap ada untuk notasi sistem) */
     .modal {
       position: fixed;
       top: 0;
@@ -704,7 +787,24 @@
   <!-- TOOLTIP RESPONDERS -->
   <div id="emojiTooltip" class="emoji-tooltip"></div>
 
-  <!-- Modal Notasi -->
+  <!-- MODAL RITUAL UPLOAD — BARU -->
+  <div id="ritualModal" class="ritual-modal">
+    <div class="ritual-content">
+      <div class="ritual-image-preview">
+        <img id="ritualImage" src="" alt="Pratinjau artefak">
+      </div>
+      <div class="ritual-text">
+        Apa kenangan di balik artefak ini?<br>
+        <small style="font-size:12px;color:rgba(255,255,255,0.5);">Ini akan jadi bagian dari jejakmu selamanya.</small>
+      </div>
+      <div class="ritual-btns">
+        <button class="ritual-btn cancel" onclick="closeRitualModal()">Batal</button>
+        <button class="ritual-btn confirm" onclick="confirmArtefactUpload()">Simpan Jejak</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Notasi (untuk notasi sistem, tapi sekarang tidak dipakai karena notasi dipilih sistem) -->
   <div id="notasiModal" class="modal" style="display:none;">
     <div class="modal-content">
       <div>Maksimal 4 kata (tanpa emoji)</div>
@@ -743,6 +843,7 @@
     ];
     let currentNotasiUrl = '';
     let currentArtefactUrl = '';
+    let tempArtefactUrl = '';
 
     // ==== UI Feedback ====
     function showFeedback(text) {
@@ -805,7 +906,6 @@
         year: 'numeric'
       });
 
-      // Update emoji counts
       const responses = artefactResponses[artefact.url] || {};
       document.getElementById('count-🖤').textContent = responses['🖤'] ? responses['🖤'].length : 0;
       document.getElementById('count-🤗').textContent = responses['🤗'] ? responses['🤗'].length : 0;
@@ -827,7 +927,6 @@
         return;
       }
 
-      // Sembunyikan bagian username (anonim)
       const masked = responses.map(u => {
         const parts = u.split('.');
         if (parts.length >= 4) {
@@ -839,8 +938,6 @@
       const tooltip = document.getElementById('emojiTooltip');
       tooltip.textContent = masked;
       tooltip.classList.add('show');
-
-      // Tutup otomatis setelah 3 detik
       setTimeout(hideTooltip, 3000);
     }
 
@@ -848,33 +945,9 @@
       document.getElementById('emojiTooltip').classList.remove('show');
     }
 
-    // Tutup tooltip jika klik luar
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.detail-emoji-btn') && !e.target.closest('#emojiTooltip')) {
-        hideTooltip();
-      }
-    });
-
-    // Tutup modal dengan ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeDetailModal();
-        hideTooltip();
-      }
-    });
-
-    // ==== Upload ====
+    // ==== RITUAL UPLOAD ====
     function triggerUpload() {
       document.getElementById('artefactInput').click();
-    }
-
-    function canUploadNewArtefact() {
-      if (savedArtefacts.length === 0) return true;
-      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
-      const now = new Date();
-      const diffTime = Math.abs(now - lastUpload);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays >= 30;
     }
 
     function handleArtefactUpload(event) {
@@ -886,31 +959,43 @@
       }
       const reader = new FileReader();
       reader.onload = function(e) {
-        currentNotasiUrl = e.target.result;
-        document.getElementById('notasiInput').value = '';
-        document.getElementById('notasiModal').style.display = 'flex';
+        tempArtefactUrl = e.target.result;
+        document.getElementById('ritualImage').src = tempArtefactUrl;
+        document.getElementById('ritualModal').classList.add('show');
       };
       reader.readAsDataURL(file);
     }
 
-    function closeModal() {
-      document.getElementById('notasiModal').style.display = 'none';
+    function closeRitualModal() {
+      document.getElementById('ritualModal').classList.remove('show');
     }
 
-    function confirmNotasi() {
-      const input = document.getElementById('notasiInput').value.trim();
-      if (!input) { showFeedback('Notasi wajib diisi (maks 4 kata).'); return; }
-      const words = input.split(/\s+/);
-      if (words.length > 4) { showFeedback('Maksimal 4 kata.'); return; }
-      const notasi = words.join(' ');
+    function confirmArtefactUpload() {
+      // Sistem pilih notasi otomatis (sesuai visimu)
+      const notasiOptions = [
+        "kenangan tak terlupakan", "jejak pertama", "bukti aku pernah ada",
+        "masa kecilku", "hadiah terakhir", "surat yang tak terkirim"
+      ];
+      const notasi = notasiOptions[Math.floor(Math.random() * notasiOptions.length)];
       const date = new Date().toISOString();
-      const newArtefact = { url: currentNotasiUrl, date, notasi };
+      
+      const newArtefact = { url: tempArtefactUrl, date, notasi };
       savedArtefacts.push(newArtefact);
       localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
+      
       renderMainArtefact();
       renderTray();
-      closeModal();
-      showFeedback('Artefak terunggah. 🖤');
+      closeRitualModal();
+      showFeedback('Jejakmu telah disimpan. 🖤');
+    }
+
+    function canUploadNewArtefact() {
+      if (savedArtefacts.length === 0) return true;
+      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
+      const now = new Date();
+      const diffTime = Math.abs(now - lastUpload);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays >= 30;
     }
 
     // ==== Rantbox ====
@@ -985,6 +1070,22 @@
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
+
+    // Tutup modal dengan ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetailModal();
+        hideTooltip();
+        closeRitualModal();
+      }
+    });
+
+    // Tutup tooltip jika klik luar
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.detail-emoji-btn') && !e.target.closest('#emojiTooltip')) {
+        hideTooltip();
+      }
+    });
   </script>
 
   <!-- Input file tersembunyi -->
