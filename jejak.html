@@ -44,7 +44,40 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: brightness(0.7);
+    }
+
+    /* Stamp notasi + tanggal */
+    .artefact-stamp {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px; /* terkecil yang readable */
+      color: rgba(255, 255, 255, 0.55); /* warna samar */
+      z-index: 10;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Emosi berbasis font */
+    .artefact-stamp.family {
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    .artefact-stamp.achievement {
+      font-family: 'Courier New', monospace;
+    }
+    .artefact-stamp.social {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .artefact-stamp.melancholy {
+      font-family: 'Times New Roman', Georgia, serif;
+    }
+    .artefact-stamp.default {
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
     .artefact-upload-btn {
@@ -60,17 +93,6 @@
       font-size: 14px;
       cursor: pointer;
       z-index: 10;
-    }
-
-    .artefact-date {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-size: 12px;
-      color: #aaa;
     }
 
     /* 2. Emoji respons */
@@ -234,15 +256,19 @@
       border-radius: 12px;
     }
 
-    .tray-item .date {
+    .tray-item .stamp {
       position: absolute;
       bottom: 4px;
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0,0,0,0.5);
       padding: 2px 4px;
-      font-size: 10px;
+      font-size: 8px;
+      color: rgba(255,255,255,0.5);
       text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* Bottom nav */
@@ -270,13 +296,75 @@
       color: #0b2a4d;
       font-weight: 600;
     }
+
+    /* Modal input notasi */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: #0a0a0a;
+      padding: 20px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 350px;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      margin: 10px 0;
+    }
+
+    .modal input::placeholder {
+      color: #555;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+
+    .modal-btn.cancel {
+      background: #222;
+      color: #aaa;
+    }
+
+    .modal-btn.confirm {
+      background: #0b2a4d;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <!-- 1. Artefak penuh -->
   <div class="artefact-header">
     <img id="artefactImage" class="artefact-image" src="/default-artefact.jpg" alt="Artefak">
-    <span id="artefactDate" class="artefact-date">—</span>
+    <div id="artefactStamp" class="artefact-stamp default">—</div>
     <button class="artefact-upload-btn" onclick="uploadArtefact()">unggah artefak</button>
     <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
   </div>
@@ -305,31 +393,8 @@
 
   <!-- 5. Tray artefak -->
   <div class="tray-title">Jejak Terkirim</div>
-  <div class="artefact-tray">
-    <div class="tray-item">
-      <img src="/artefact1.jpg" alt="Artefak 1">
-      <span class="date">12 Jan</span>
-    </div>
-    <div class="tray-item">
-      <img src="/artefact2.jpg" alt="Artefak 2">
-      <span class="date">15 Feb</span>
-    </div>
-    <div class="tray-item">
-      <img src="/artefact3.jpg" alt="Artefak 3">
-      <span class="date">20 Mar</span>
-    </div>
-    <div class="tray-item">
-      <img src="/artefact4.jpg" alt="Artefak 4">
-      <span class="date">5 Apr</span>
-    </div>
-    <div class="tray-item">
-      <img src="/artefact5.jpg" alt="Artefak 5">
-      <span class="date">10 Mei</span>
-    </div>
-    <div class="tray-item">
-      <img src="/artefact6.jpg" alt="Artefak 6">
-      <span class="date">25 Jun</span>
-    </div>
+  <div class="artefact-tray" id="trayList">
+    <!-- Diisi oleh JS -->
   </div>
 
   <!-- Bottom Navigation -->
@@ -339,13 +404,26 @@
     <a href="/jalan" class="nav-item">Jalan</a>
   </nav>
 
+  <!-- Modal Notasi -->
+  <div id="notasiModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <div>Maksimal 4 kata (tanpa emoji)</div>
+      <input type="text" id="notasiInput" maxlength="50" placeholder="contoh: struk gaji pertama">
+      <div class="modal-btns">
+        <button class="modal-btn cancel" onclick="closeModal()">batal</button>
+        <button class="modal-btn confirm" onclick="confirmNotasi()">simpan</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Ambil data dari localStorage
+    // ==== DATA ====
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     const savedArtefacts = JSON.parse(localStorage.getItem('nopeArtefacts') || '[]');
+    let currentNotasiUrl = '';
 
-    // Fungsi untuk cek apakah sudah 30 hari sejak upload terakhir
+    // ==== Fungsi Validasi Upload ====
     function canUploadNewArtefact() {
       if (savedArtefacts.length === 0) return true;
       const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
@@ -355,22 +433,64 @@
       return diffDays >= 30;
     }
 
-    // Render artefak utama
+    // ==== Deteksi Kategori Emosi ====
+    function getStampClass(notasi) {
+      const text = notasi.toLowerCase();
+      if (/bapak|ibu|kakak|adik|keluarga|sepatu|hadiah|kado/i.test(text)) return 'family';
+      if (/gaji|kerja|lulus|ujian|pertama|struk|slip|kantor/i.test(text)) return 'achievement';
+      if (/konser|nonton|jalan|teman|bareng|karcis|bioskop|cafe/i.test(text)) return 'social';
+      if (/terakhir|pergi|rindu|sunyi|sendiri|hilang|akhir/i.test(text)) return 'melancholy';
+      return 'default';
+    }
+
+    // ==== Render Artefak Utama ====
     function renderMainArtefact() {
       const imageEl = document.getElementById('artefactImage');
-      const dateEl = document.getElementById('artefactDate');
+      const stampEl = document.getElementById('artefactStamp');
 
       if (savedArtefacts.length > 0) {
         const latest = savedArtefacts[savedArtefacts.length - 1];
         imageEl.src = latest.url;
-        dateEl.textContent = new Date(latest.date).toLocaleDateString();
+        
+        const dateStr = new Date(latest.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        });
+        
+        const displayText = latest.notasi ? `${latest.notasi} | ${dateStr}` : dateStr;
+        stampEl.textContent = displayText;
+        
+        stampEl.className = 'artefact-stamp';
+        stampEl.classList.add(latest.notasi ? getStampClass(latest.notasi) : 'default');
       } else {
         imageEl.src = '/default-artefact.jpg';
-        dateEl.textContent = '—';
+        stampEl.textContent = '—';
+        stampEl.className = 'artefact-stamp default';
       }
     }
 
-    // Upload artefak
+    // ==== Render Tray Artefak ====
+    function renderTray() {
+      const tray = document.getElementById('trayList');
+      tray.innerHTML = '';
+      const recent = savedArtefacts.slice(-6).reverse();
+      recent.forEach(art => {
+        const div = document.createElement('div');
+        div.className = 'tray-item';
+        const dateStr = new Date(art.date).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short'
+        });
+        div.innerHTML = `
+          <img src="${art.url}" alt="Artefak">
+          <span class="stamp">${art.notasi || ''} ${dateStr}</span>
+        `;
+        tray.appendChild(div);
+      });
+    }
+
+    // ==== Upload Artefak ====
     function uploadArtefact() {
       if (!canUploadNewArtefact()) {
         alert('Bisa unggah lagi setelah 30 hari.');
@@ -382,78 +502,67 @@
     function handleArtefactUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(e) {
-        const url = e.target.result;
-        const date = new Date().toISOString();
-
-        // Simpan ke localStorage
-        const newArtefact = { url, date };
-        savedArtefacts.push(newArtefact);
-        localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
-
-        // Update tampilan
-        renderMainArtefact();
-        alert('Artefak terunggah. 🖤');
+        currentNotasiUrl = e.target.result;
+        document.getElementById('notasiInput').value = '';
+        document.getElementById('notasiModal').style.display = 'flex';
       };
       reader.readAsDataURL(file);
     }
 
-    // Simulasi data jurnal
-    const sampleRants = [
-      {
-        text: "hari ini aku bilang 'ga apa-apa' padahal hati retak. tapi aku bangga aku masih bisa tersenyum.",
-        responses: [
-          { emoji: "🖤", comment: "aku juga pernah" },
-          { emoji: "🤗", comment: "" },
-          { emoji: "🌟", comment: "kamu kuat" }
-        ]
-      },
-      {
-        text: "diamku bukan kosong. di dalam, aku sedang menulis puisi untuk dunia yang tak pernah membaca.",
-        responses: [
-          { emoji: "🖤", comment: "" },
-          { emoji: "🌟", comment: "diammu indah" }
-        ]
-      },
-      {
-        text: "aku memilih sunyi, bukan karena tak punya suara, tapi karena suaraku hanya untuk yang mau mendengar.",
-        responses: [
-          { emoji: "🖤", comment: "sama" }
-        ]
-      }
-    ];
+    function closeModal() {
+      document.getElementById('notasiModal').style.display = 'none';
+    }
 
-    // Hitung karakter
+    function confirmNotasi() {
+      const input = document.getElementById('notasiInput').value.trim();
+      if (!input) {
+        alert('Notasi wajib diisi (maks 4 kata).');
+        return;
+      }
+      const words = input.split(/\s+/);
+      if (words.length > 4) {
+        alert('Maksimal 4 kata.');
+        return;
+      }
+      const notasi = words.join(' ');
+      const date = new Date().toISOString();
+      const newArtefact = { url: currentNotasiUrl, date, notasi };
+      savedArtefacts.push(newArtefact);
+      localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
+      renderMainArtefact();
+      renderTray();
+      closeModal();
+      alert('Artefak terunggah. 🖤');
+    }
+
+    // ==== Rantbox ====
     const rantInput = document.getElementById('rantInput');
     const charCount = document.getElementById('charCount');
     rantInput.addEventListener('input', () => {
       charCount.textContent = rantInput.value.length;
     });
 
-    // Submit rant
     function submitRant() {
       const text = rantInput.value.trim();
-      if (!text) {
-        alert('Tulis dulu jejakmu.');
-        return;
-      }
-      if (text.length > 280) {
-        alert('Maksimal 280 karakter.');
-        return;
-      }
+      if (!text) { alert('Tulis dulu jejakmu.'); return; }
+      if (text.length > 280) { alert('Maksimal 280 karakter.'); return; }
       alert('Jejak terkirim. 🖤');
       rantInput.value = '';
       charCount.textContent = '0';
-      // Simpan ke localStorage atau kirim ke backend (opsional)
     }
 
-    // Render jurnal
+    // ==== Jurnal ====
+    const sampleRants = [
+      { text: "hari ini aku bilang 'ga apa-apa' padahal hati retak...", responses: [{ emoji: "🖤", comment: "aku juga pernah" }] },
+      { text: "diamku bukan kosong. di dalam, aku sedang menulis puisi...", responses: [{ emoji: "🌟", comment: "diammu indah" }] },
+      { text: "aku memilih sunyi, bukan karena tak punya suara...", responses: [{ emoji: "🖤", comment: "sama" }] }
+    ];
+
     function renderJurnal() {
       const container = document.getElementById('jurnalList');
       container.innerHTML = '';
-
       sampleRants.forEach(rant => {
         const div = document.createElement('div');
         div.className = 'rant-item';
@@ -461,12 +570,7 @@
           <div class="rant-text">${rant.text}</div>
           <button class="reveal-btn" onclick="toggleResponses(this)">lihat respons</button>
           <div class="responses" style="display:none;">
-            ${rant.responses.map(r => 
-              `<div class="response-item">
-                <span>${r.emoji}</span>
-                <span>${r.comment || ''}</span>
-              </div>`
-            ).join('')}
+            ${rant.responses.map(r => `<div class="response-item"><span>${r.emoji}</span><span>${r.comment || ''}</span></div>`).join('')}
           </div>
         `;
         container.appendChild(div);
@@ -475,22 +579,17 @@
 
     function toggleResponses(btn) {
       const responses = btn.nextElementSibling;
-      if (responses.style.display === 'none') {
-        responses.style.display = 'block';
-        btn.textContent = 'sembunyikan';
-      } else {
-        responses.style.display = 'none';
-        btn.textContent = 'lihat respons';
-      }
+      responses.style.display = responses.style.display === 'none' ? 'block' : 'none';
+      btn.textContent = responses.style.display === 'none' ? 'lihat respons' : 'sembunyikan';
     }
 
-    // Redirect jika belum onboard
+    // ==== Inisialisasi ====
     if (!localStorage.getItem('nopeOnboarded')) {
       window.location.href = '/index.html';
     }
 
-    // Render saat load
     renderMainArtefact();
+    renderTray();
     renderJurnal();
 
     if ('serviceWorker' in navigator) {
