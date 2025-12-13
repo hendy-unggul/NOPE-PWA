@@ -6,200 +6,121 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
   <meta name="theme-color" content="#0b2a4d">
-  <title>Onboarding • NOPE</title>
+  <title>NOPE</title>
   <style>
     body {
       margin: 0;
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 13px;
-      padding: 24px 0;
-      line-height: 1.4;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
     }
     .container {
+      width: 100%;
       max-width: 390px;
-      margin: 0 auto;
       padding: 0 24px;
-    }
-    .user-info {
-      text-align: right;
-      font-size: 12px;
-      color: #0b2a4d;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0 0 20px;
+      box-sizing: border-box;
       text-align: center;
     }
-    .zone {
-      margin-bottom: 32px;
-    }
-    .zone-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #0b2a4d;
-    }
-    .hashtags {
+    .logo {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 28px;
+      border-radius: 16px;
+      overflow: hidden;
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      justify-content: center;
+      align-items: center;
     }
-    .hashtag {
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    input {
+      width: 100%;
+      padding: 16px;
       background: #111;
       border: 1px solid #222;
-      color: #aaa;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 24px;
+      box-sizing: border-box;
+      outline: none;
     }
-    .hashtag.selected {
-      background: #0b2a4d;
-      color: white;
-      border-color: #0b2a4d;
+    input::placeholder {
+      color: #555;
     }
-    .locked {
-      opacity: 0.5;
-      pointer-events: none;
-      background: #111 !important;
-      color: #444 !important;
-      border-color: #222 !important;
-    }
-    .status-bar {
-      background: #0a0a0a;
-      padding: 12px;
-      border-radius: 12px;
-      margin: 24px 0;
-      font-size: 12px;
-      color: #777;
-    }
-    .continue-btn {
+    .cta {
       width: 100%;
-      padding: 14px;
+      padding: 16px;
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 14px;
-      font-size: 16px;
+      border-radius: 16px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 16px;
+      animation: pulse 2s infinite;
     }
-    .continue-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(11, 42, 77, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0); }
+    }
+    .cta:active {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Tampilkan @nope_username -->
-    <div class="user-info" id="usernameDisplay">—</div>
-
-    <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
-
-    <!-- ZONE 1: POP CULTURE -->
-    <div class="zone">
-      <div class="zone-title">🔥 POP CULTURE ZONE</div>
-      <div class="hashtags" id="popCulture">
-        <div class="hashtag" data-zone="pop" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
-        <div class="hashtag" data-zone="pop" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
-        <div class="hashtag" data-zone="pop" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
-        <div class="hashtag" data-zone="pop" data-tag="#TikTokCringe">#TikTokCringe</div>
-        <div class="hashtag" data-zone="pop" data-tag="#CelebrityFail">#CelebrityFail</div>
-      </div>
+    <div class="logo">
+      <img src="/logo-nope-512.png" alt="NOPE">
     </div>
-
-    <!-- ZONE 2: PERSONAL PAIN -->
-    <div class="zone">
-      <div class="zone-title">💀 PERSONAL PAIN ZONE</div>
-      <div class="hashtags" id="personalPain">
-        <div class="hashtag" data-zone="pain" data-tag="#DighostingGebetan">#DighostingGebetan</div>
-        <div class="hashtag" data-zone="pain" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
-        <div class="hashtag" data-zone="pain" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
-        <div class="hashtag" data-zone="pain" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
-        <div class="hashtag" data-zone="pain" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
-      </div>
-    </div>
-
-    <!-- ZONE 3: SOCIAL SICKNESS -->
-    <div class="zone">
-      <div class="zone-title">🤮 SOCIAL SICKNESS ZONE</div>
-      <div class="hashtags" id="socialSickness">
-        <div class="hashtag" data-zone="sick" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
-        <div class="hashtag" data-zone="sick" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
-        <div class="hashtag" data-zone="sick" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
-        <div class="hashtag" data-zone="sick" data-tag="#GhostingCulture">#GhostingCulture</div>
-        <div class="hashtag" data-zone="sick" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
-      </div>
-    </div>
-
-    <!-- ZONE 4: MOVEMENT (LOCKED) -->
-    <div class="zone">
-      <div class="zone-title">⚡ MOVEMENT ZONE (LOCKED)</div>
-      <div class="hashtags">
-        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
-        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
-        <div class="hashtag locked">#ReformasiSistem</div>
-        <div class="hashtag locked">#AksiNyata2024</div>
-        <div class="hashtag locked">#VoiceForChange</div>
-      </div>
-      <p style="color: #ff6b00; font-size: 12px; margin-top: 10px;">🔒 Aktif setelah 6 bulan atau undangan</p>
-    </div>
-
-    <div class="status-bar">
-      Pilih 1 hashtag dari tiap zona di atas.<br>
-      <span id="statusText">Belum lengkap (0/3)</span>
-    </div>
-
-    <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke inner</button>
+    <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
+    <button class="cta" onclick="generateAndGo()">gaskeun</button>
   </div>
 
   <script>
-    let selections = { pop: null, pain: null, sick: null };
+    function generateAndGo() {
+      const email = document.getElementById('email').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('masukkan email yang valid');
+        return;
+      }
 
-    // Baca @nope_username dari localStorage
-    let username = localStorage.getItem('nopeUsername');
-
-    // Jika tidak ada, generate default
-    if (!username) {
+      // Generate @nope_username
       const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
       const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
       const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
       const noun = nouns[Math.floor(Math.random() * nouns.length)];
       const num = Math.floor(1000 + Math.random() * 9000);
-      username = `@nope.${adj}.${noun}.${num}`;
-      localStorage.setItem('nopeUsername', username);
-      localStorage.setItem('nopeVibe', 'dalam');
-      localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
-    }
+      const nopeUsername = `@nope.${adj}.${noun}.${num}`;
 
-    document.getElementById('usernameDisplay').innerText = username;
+      const vibes = ['dingin', 'hangat', 'dalam', 'samar'];
+      const vibe = vibes[Math.floor(Math.random() * vibes.length)];
+      const joined = new Date().toISOString().split('T')[0];
 
-    document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
-      el.addEventListener('click', () => {
-        const zone = el.dataset.zone;
-        document.querySelectorAll(`.hashtag[data-zone="${zone}"]`).forEach(h => h.classList.remove('selected'));
-        el.classList.add('selected');
-        selections[zone] = el.dataset.tag;
-
-        const count = Object.values(selections).filter(v => v).length;
-        document.getElementById('statusText').innerText = count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
-        document.getElementById('continueBtn').disabled = count !== 3;
-      });
-    });
-
-    function saveAndRedirect() {
-      if (Object.values(selections).every(v => v)) {
-        localStorage.setItem('nopeZones', JSON.stringify(selections));
-        localStorage.setItem('nopeOnboarded', 'true');
-        window.location.href = '/inner.html';
+      // Simpan ke localStorage
+      try {
+        localStorage.setItem('nopeUsername', nopeUsername);
+        localStorage.setItem('nopeVibe', vibe);
+        localStorage.setItem('nopeJoined', joined);
+      } catch (e) {
+        console.error('localStorage error:', e);
+        // Jika localStorage gagal, paksa redirect tanpa simpan
+        window.location.href = '/onboarding.html';
+        return;
       }
+
+      // Redirect
+      window.location.href = '/onboarding.html';
     }
 
     if ('serviceWorker' in navigator) {
