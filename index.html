@@ -29,7 +29,7 @@
     .logo {
       width: 200px;
       height: 200px;
-      margin: 0 auto 32px;
+      margin: 0 auto 28px;
       border-radius: 16px;
       overflow: hidden;
       display: flex;
@@ -83,11 +83,11 @@
     <div class="logo">
       <img src="/logo-nope-512.png" alt="NOPE">
     </div>
-    <input type="text" id="identifier" placeholder="@nope_usernama atau emailmu" autocomplete="off" autocapitalize="none" required>
-    <button class="cta" onclick="handleSubmit()">gaskeun</button>
+    <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
+    <button class="cta" onclick="registerAndGo()">gaskeun</button>
   </div>
 
-  <!-- Supabase JS v2 via CDN -->
+  <!-- Supabase JS v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const supabase = window.supabase.createClient(
@@ -95,57 +95,43 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.6xK0VfWj7L8o9bN3eQz6uM2gTtHlCwYr4yQZaX5m7dA'
     );
 
-    async function handleSubmit() {
-      const val = document.getElementById('identifier').value.trim();
-      if (!val) { return; }
-
-      // 🔹 LOGIN: jika input dimulai dengan @nope.
-      if (val.startsWith('@nope.')) {
-        const { data, error } = await supabase
-          .from('users')
-          .select('nope_username, vibe, joined_at')
-          .eq('nope_username', val)
-          .single();
-
-        if (error || !data) {
-          alert('frekuensi tidak ditemukan');
-          return;
-        }
-
-        localStorage.setItem('nopeUsername', data.nope_username);
-        localStorage.setItem('nopeVibe', data.vibe);
-        localStorage.setItem('nopeJoined', data.joined_at);
-        window.location.href = '/inner.html';
-
-      // 🔹 REGISTER: jika email (dan bukan @nope.)
-      } else if (val.includes('@') && !val.startsWith('@nope.')) {
-        const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-        const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-        const noun = nouns[Math.floor(Math.random() * nouns.length)];
-        const num = Math.floor(1000 + Math.random() * 9000);
-        const nopeUsername = `@nope.${adj}.${noun}.${num}`;
-
-        const vibes = ['dingin', 'hangat', 'dalam', 'samar'];
-        const vibe = vibes[Math.floor(Math.random() * vibes.length)];
-        const joined = new Date().toISOString().split('T')[0];
-
-        const { error } = await supabase
-          .from('users')
-          .insert({ nope_username: nopeUsername, vibe, joined_at: joined });
-
-        if (error) {
-          alert('gagal daftar');
-          return;
-        }
-
-        localStorage.setItem('nopeUsername', nopeUsername);
-        localStorage.setItem('nopeVibe', vibe);
-        localStorage.setItem('nopeJoined', joined);
-        window.location.href = '/onboarding.html';
-      } else {
-        alert('format tidak valid');
+    async function registerAndGo() {
+      const email = document.getElementById('email').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('masukkan email yang valid');
+        return;
       }
+
+      // Generate @nope_username
+      const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
+      const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const noun = nouns[Math.floor(Math.random() * nouns.length)];
+      const num = Math.floor(1000 + Math.random() * 9000);
+      const nopeUsername = `@nope.${adj}.${noun}.${num}`;
+
+      const vibes = ['dingin', 'hangat', 'dalam', 'samar'];
+      const vibe = vibes[Math.floor(Math.random() * vibes.length)];
+      const joined = new Date().toISOString().split('T')[0];
+
+      // Simpan ke Supabase — TANPA EMAIL
+      const { error } = await supabase
+        .from('users')
+        .insert({ nope_username: nopeUsername, vibe, joined_at: joined });
+
+      if (error) {
+        console.error(error);
+        alert('gagal daftar, coba lagi');
+        return;
+      }
+
+      // Simpan ke localStorage
+      localStorage.setItem('nopeUsername', nopeUsername);
+      localStorage.setItem('nopeVibe', vibe);
+      localStorage.setItem('nopeJoined', joined);
+
+      // Redirect
+      window.location.href = '/onboarding.html';
     }
 
     if ('serviceWorker' in navigator) {
