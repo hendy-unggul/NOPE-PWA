@@ -157,7 +157,7 @@
       z-index: 5;
     }
 
-    /* Notasi + Stamp */
+    /* Notasi + Stamp — hanya muncul jika ada notasi */
     .artefact-stamp {
       position: absolute;
       top: 12px;
@@ -577,7 +577,7 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* MODAL RITUAL UPLOAD */
+    /* MODAL RITUAL UPLOAD — DIPERBARUI */
     .ritual-modal {
       position: fixed;
       top: 0;
@@ -626,8 +626,36 @@
     .ritual-text {
       font-size: 15px;
       color: rgba(255,255,255,0.8);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       line-height: 1.5;
+    }
+
+    .ritual-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 12px;
+    }
+
+    .ritual-input {
+      width: 100%;
+      padding: 10px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .ritual-input::placeholder {
+      color: #555;
+    }
+
+    .ritual-subtext {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 16px;
     }
 
     .ritual-btns {
@@ -684,80 +712,6 @@
     .nav-item.active {
       color: #0b2a4d;
       font-weight: 600;
-    }
-
-    /* Modal notasi */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      backdrop-filter: blur(4px);
-    }
-
-    .modal-content {
-      background: #0a0a0a;
-      padding: 20px;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 340px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    }
-
-    .modal input {
-      width: 100%;
-      padding: 12px;
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 14px;
-      margin: 10px 0;
-    }
-
-    .modal input::placeholder {
-      color: #555;
-    }
-
-    .modal-btns {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .modal-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 12px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .modal-btn.cancel {
-      background: #222;
-      color: #aaa;
-    }
-
-    .modal-btn.cancel:hover {
-      background: #333;
-    }
-
-    .modal-btn.confirm {
-      background: #0b2a4d;
-      color: white;
-    }
-
-    .modal-btn.confirm:hover {
-      background: #1e4b8f;
     }
 
     /* Feedback toast */
@@ -836,24 +790,19 @@
         <img id="ritualImage" src="" alt="Pratinjau artefak">
       </div>
       <div class="ritual-text">
-        Apa kenangan di balik artefak ini?<br>
-        <small style="font-size:12px;color:rgba(255,255,255,0.5);">Ini akan jadi bagian dari jejakmu selamanya.</small>
+        Apa kenangan di balik artefak ini?
+      </div>
+      <div class="ritual-note">
+        (opsional, maksimal 4 kata)
+      </div>
+      <input type="text" id="ritualNotasi" class="ritual-input" maxlength="50" placeholder="contoh: struk gaji pertama">
+      <div class="ritual-subtext">
+        Beberapa kenangan cukup berbicara sendiri.<br>
+        Yang lain butuh kata untuk mengingat.
       </div>
       <div class="ritual-btns">
         <button class="ritual-btn cancel" onclick="closeRitualModal()">Batal</button>
         <button class="ritual-btn confirm" onclick="confirmArtefactUpload()">Simpan Jejak</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Notasi -->
-  <div id="notasiModal" class="modal" style="display:none;">
-    <div class="modal-content">
-      <div>Maksimal 4 kata (tanpa emoji)</div>
-      <input type="text" id="notasiInput" maxlength="50" placeholder="contoh: struk gaji pertama">
-      <div class="modal-btns">
-        <button class="modal-btn cancel" onclick="closeModal()">batal</button>
-        <button class="modal-btn confirm" onclick="confirmNotasi()">simpan</button>
       </div>
     </div>
   </div>
@@ -889,18 +838,15 @@
       }, 2000);
     }
 
-    // ==== Render Onboarding atau Artefak ====
+    // ==== Render Main Content ====
     function renderMainContent() {
       const container = document.getElementById('mainContainer');
       
-      // Tambahkan intro
       container.insertAdjacentHTML('beforeend', `
         <div class="artefact-intro">Ini jejakmu. Sunyi, tapi nyata.</div>
       `);
 
-      // Jika belum upload artefak pertama → tampilkan white canvas + onboarding ringkas
       if (savedArtefacts.length === 0) {
-        // Onboarding ringkas
         container.insertAdjacentHTML('beforeend', `
           <div class="onboarding-first">
             <div class="onboarding-text">
@@ -910,7 +856,6 @@
           </div>
         `);
 
-        // White canvas
         container.insertAdjacentHTML('beforeend', `
           <div class="white-canvas" onclick="triggerUpload()">
             <div class="canvas-icon">🖼️</div>
@@ -918,22 +863,23 @@
           </div>
         `);
       } else {
-        // Tampilkan artefak terbaru
         const latest = savedArtefacts[savedArtefacts.length - 1];
+        // Hanya tampilkan notasi jika ada
+        const notasiPart = latest.notasi ? `<span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>` : '';
+        const stampPart = latest.notasi ? 
+          `<div id="artefactStamp" class="artefact-stamp">${notasiPart}<span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span></div>` :
+          `<div id="artefactStamp" class="artefact-stamp"><span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span></div>`;
+
         const artefactHTML = `
           <div class="artefact-header">
             <img id="artefactImage" class="artefact-image" src="${latest.url}" alt="Artefak">
             <div class="artefact-vignette"></div>
-            <div id="artefactStamp" class="artefact-stamp">
-              <span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>
-              <span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-            </div>
+            ${stampPart}
           </div>
         `;
         container.insertAdjacentHTML('beforeend', artefactHTML);
       }
 
-      // Emoji bar
       container.insertAdjacentHTML('beforeend', `
         <div class="emoji-bar">
           <button class="emoji-btn pulse" title="GueJuga">🖤</button>
@@ -943,7 +889,6 @@
         </div>
       `);
 
-      // Rantbox
       container.insertAdjacentHTML('beforeend', `
         <div class="rantbox">
           <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
@@ -951,14 +896,12 @@
         </div>
       `);
 
-      // Jurnal
       container.insertAdjacentHTML('beforeend', `
         <div class="jurnal-title">Jurnal 3 Rant Terakhir</div>
         <div id="jurnalList"></div>
       `);
       renderJurnal();
 
-      // Tray
       container.insertAdjacentHTML('beforeend', `
         <div class="tray-title">Jejak Terkirim</div>
         <div class="artefact-tray" id="trayList"></div>
@@ -966,7 +909,7 @@
       renderTray();
     }
 
-    // ==== Render Tray (INTERAKTIF) ====
+    // ==== Render Tray ====
     function renderTray() {
       const tray = document.getElementById('trayList');
       tray.innerHTML = '';
@@ -979,21 +922,25 @@
           day: 'numeric',
           month: 'short'
         });
-        div.innerHTML = `<img src="${art.url}" alt="Artefak"><span class="stamp">${art.notasi || ''} ${dateStr}</span>`;
+        // Tampilkan notasi hanya jika ada
+        const stampText = art.notasi ? `${art.notasi} ${dateStr}` : dateStr;
+        div.innerHTML = `<img src="${art.url}" alt="Artefak"><span class="stamp">${stampText}</span>`;
         tray.appendChild(div);
       });
     }
 
-    // ==== MODAL DETAIL ARTEFAK ====
+    // ==== MODAL DETAIL ====
     function openDetailModal(artefact) {
       currentArtefactUrl = artefact.url;
       document.getElementById('detailImage').src = artefact.url;
-      document.getElementById('detailNotasi').textContent = artefact.notasi;
-      document.getElementById('detailDate').textContent = new Date(artefact.date).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      });
+      
+      // Tampilkan notasi hanya jika ada
+      const notasiPart = artefact.notasi ? 
+        `<span id="detailNotasi" class="detail-notasi">${artefact.notasi}</span>` : '';
+      const stampHTML = artefact.notasi ?
+        `${notasiPart}<span id="detailDate" class="detail-date">${new Date(artefact.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>` :
+        `<span id="detailDate" class="detail-date">${new Date(artefact.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>`;
+      document.getElementById('detailStamp').innerHTML = stampHTML;
 
       const responses = artefactResponses[artefact.url] || {};
       document.getElementById('count-🖤').textContent = responses['🖤'] ? responses['🖤'].length : 0;
@@ -1034,9 +981,8 @@
       document.getElementById('emojiTooltip').classList.remove('show');
     }
 
-    // ==== RITUAL UPLOAD ====
+    // ==== RITUAL UPLOAD DENGAN NOTASI OPSIONAL ====
     function triggerUpload() {
-      // Cek apakah sudah upload pertama atau masih dalam cooldown
       const daysLeft = getDaysUntilNextUpload();
       if (savedArtefacts.length === 0 || daysLeft === 0) {
         document.getElementById('artefactInput').click();
@@ -1052,6 +998,7 @@
       reader.onload = function(e) {
         tempArtefactUrl = e.target.result;
         document.getElementById('ritualImage').src = tempArtefactUrl;
+        document.getElementById('ritualNotasi').value = '';
         document.getElementById('ritualModal').classList.add('show');
       };
       reader.readAsDataURL(file);
@@ -1062,18 +1009,23 @@
     }
 
     function confirmArtefactUpload() {
-      const notasiOptions = [
-        "kenangan tak terlupakan", "jejak pertama", "bukti aku pernah ada",
-        "masa kecilku", "hadiah terakhir", "surat yang tak terkirim"
-      ];
-      const notasi = notasiOptions[Math.floor(Math.random() * notasiOptions.length)];
+      const input = document.getElementById('ritualNotasi').value.trim();
+      let notasi = '';
+      if (input) {
+        const words = input.split(/\s+/);
+        if (words.length > 4) {
+          showFeedback('Maksimal 4 kata.');
+          return;
+        }
+        notasi = words.join(' ');
+      }
+      // Jika kosong, notasi = "" → artefak berbicara sendiri
+
       const date = new Date().toISOString();
-      
       const newArtefact = { url: tempArtefactUrl, date, notasi };
       savedArtefacts.push(newArtefact);
       localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
-      
-      location.reload(); // Refresh untuk tampilkan artefak baru
+      location.reload();
     }
 
     function getDaysUntilNextUpload() {
