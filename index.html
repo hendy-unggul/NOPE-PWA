@@ -6,7 +6,7 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
   <meta name="theme-color" content="#000000">
-  <title>NOPE</title>
+  <title>Onboarding • NOPE</title>
   <style>
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
@@ -23,189 +23,240 @@
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-weight: 400;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 100vh;
+      font-size: 14px;
       padding-top: var(--safe-top);
+      padding-bottom: var(--safe-bottom);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
 
     .container {
-      width: 100%;
       max-width: 390px;
-      padding: 0 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      /* Turunkan konten agar berada di atas area bottom nav (yang belum ada di sini) */
-      margin-bottom: calc(var(--safe-bottom) + 32px);
+      margin: 0 auto;
+      padding: 28px 20px 80px;
     }
 
-    .logo {
-      width: 192px;
-      height: 192px;
-      margin: 0 0 24px;
-      border-radius: 24px;
-      overflow: hidden;
-      background: #0a0a0a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    .user-info {
+      text-align: right;
+      font-size: 12px;
+      color: #0b2a4d;
+      margin-bottom: 20px;
     }
 
-    .logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .tagline {
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 1.4;
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
       text-align: center;
-      color: #aaa;
-      margin: 0 0 28px;
-      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+      padding: 0 8px;
     }
 
-    .tagline-line {
-      display: block;
+    .zone {
+      background: #0a0a0a;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 28px;
     }
 
-    .heart {
-      display: inline-block;
-      font-size: 16px;
-      animation: heartbeat 2s infinite;
-      vertical-align: middle;
+    .zone-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0b2a4d;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    @keyframes heartbeat {
-      0% { transform: scale(1); opacity: 0.9; }
-      14% { transform: scale(1.15); }
-      28% { transform: scale(1); }
-      42% { transform: scale(1.15); }
-      70% { transform: scale(1); }
-      100% { transform: scale(1); opacity: 0.9; }
+    .hashtags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    input {
-      width: 100%;
-      padding: 16px 20px;
-      background: #0f0f0f;
+    .hashtag {
+      background: #111;
       border: 1px solid #222;
-      border-radius: 16px;
-      color: #fff;
-      font-size: 17px;
-      font-weight: 400;
-      margin-bottom: 16px;
-      outline: none;
-      -webkit-appearance: none;
+      color: #aaa;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
     }
 
-    input::placeholder {
-      color: #555;
+    .hashtag.selected {
+      background: #0b2a4d;
+      color: white;
+      border-color: #0b2a4d;
     }
 
-    .cta {
-      width: 100%;
-      padding: 18px 20px;
+    .hashtag.locked {
+      opacity: 0.4;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .locked-note {
+      color: #ff6b00;
+      font-size: 11px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .status-bar {
+      background: #0a0a0a;
+      padding: 12px;
+      border-radius: 14px;
+      margin: 28px 0;
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+    }
+
+    .continue-btn {
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 24px);
+      left: 20px;
+      right: 20px;
+      width: auto;
+      padding: 17px;
       background: #0b2a4d;
       color: white;
       border: none;
       border-radius: 16px;
       font-size: 17px;
       font-weight: 600;
-      letter-spacing: -0.02em;
       cursor: pointer;
-      animation: pulse 2s infinite;
-      transition: opacity 0.2s;
+      z-index: 10;
     }
 
-    .cta.loading {
-      background: #1a1a1a;
-      cursor: wait;
-      pointer-events: none;
-      animation: none;
-    }
-
-    .cta.loading::after {
-      content: "⏳";
-      margin-left: 8px;
-    }
-
-    .cta:active:not(.loading) {
-      opacity: 0.88;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0.6); }
-      70% { box-shadow: 0 0 0 12px rgba(11, 42, 77, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0); }
+    .continue-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo">
-      <img src="/logo-nope-512.png" alt="NOPE">
+    <div class="user-info" id="usernameDisplay">—</div>
+
+    <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
+
+    <!-- ZONE 1: POP CULTURE -->
+    <div class="zone">
+      <div class="zone-title">🔥 POP CULTURE</div>
+      <div class="hashtags" data-zone="pop">
+        <div class="hashtag" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
+        <div class="hashtag" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
+        <div class="hashtag" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
+        <div class="hashtag" data-tag="#TikTokCringe">#TikTokCringe</div>
+        <div class="hashtag" data-tag="#CelebrityFail">#CelebrityFail</div>
+      </div>
     </div>
 
-    <div class="tagline">
-      <span class="tagline-line">untuk setiap jiwa,</span>
-      <span class="tagline-line">yang memilih kejujuran,</span>
-      <span class="tagline-line">tanpa meminta pengakuan <span class="heart">🖤</span></span>
+    <!-- ZONE 2: PERSONAL PAIN -->
+    <div class="zone">
+      <div class="zone-title">💀 PERSONAL PAIN</div>
+      <div class="hashtags" data-zone="pain">
+        <div class="hashtag" data-tag="#DighostingGebetan">#DighostingGebetan</div>
+        <div class="hashtag" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
+        <div class="hashtag" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
+        <div class="hashtag" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
+        <div class="hashtag" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
+      </div>
     </div>
 
-    <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
-    <button class="cta" onclick="generateAndGo(event)">gaskeun</button>
+    <!-- ZONE 3: SOCIAL SICKNESS -->
+    <div class="zone">
+      <div class="zone-title">🤮 SOCIAL SICKNESS</div>
+      <div class="hashtags" data-zone="sick">
+        <div class="hashtag" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
+        <div class="hashtag" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
+        <div class="hashtag" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
+        <div class="hashtag" data-tag="#GhostingCulture">#GhostingCulture</div>
+        <div class="hashtag" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
+      </div>
+    </div>
+
+    <!-- ZONE 4: MOVEMENT (LOCKED) -->
+    <div class="zone">
+      <div class="zone-title">⚡ MOVEMENT (LOCKED)</div>
+      <div class="hashtags">
+        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
+        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
+        <div class="hashtag locked">#ReformasiSistem</div>
+        <div class="hashtag locked">#AksiNyata2024</div>
+        <div class="hashtag locked">#VoiceForChange</div>
+      </div>
+      <p class="locked-note">🔒 Aktif setelah 6 bulan atau undangan</p>
+    </div>
+
+    <div class="status-bar">
+      Pilih 1 dari tiap zona di atas.<br>
+      <span id="statusText">Belum lengkap (0/3)</span>
+    </div>
   </div>
 
+  <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke jejak</button>
+
   <script>
-    function generateAndGo(event) {
-      event.preventDefault();
-      const cta = document.querySelector('.cta');
-      cta.classList.add('loading');
+    let selections = { pop: null, pain: null, sick: null };
 
-      const email = document.getElementById('email').value.trim();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
-        alert('Masukkan email yang valid.');
-        cta.classList.remove('loading');
-        return;
+    function getOrCreateUsername() {
+      let username = localStorage.getItem('nopeUsername');
+      if (!username) {
+        const adjs = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
+        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
+        const adj = adjs[Math.floor(Math.random() * adjs.length)];
+        const noun = nouns[Math.floor(Math.random() * nouns.length)];
+        const num = Math.floor(1000 + Math.random() * 9000);
+        username = `@nope.${adj}.${noun}.${num}`;
+        try {
+          localStorage.setItem('nopeUsername', username);
+          localStorage.setItem('nopeVibe', 'dalam');
+          localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
+        } catch (e) {
+          console.warn('localStorage tidak tersedia');
+        }
       }
+      return username;
+    }
 
-      const adjs = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-      const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-      const adj = adjs[Math.floor(Math.random() * adjs.length)];
-      const noun = nouns[Math.floor(Math.random() * nouns.length)];
-      const num = Math.floor(1000 + Math.random() * 9000);
-      const nopeUsername = `@nope.${adj}.${noun}.${num}`;
+    const username = getOrCreateUsername();
+    document.getElementById('usernameDisplay').innerText = username;
 
-      const vibes = ['dingin', 'hangat', 'dalam', 'samar'];
-      const vibe = vibes[Math.floor(Math.random() * vibes.length)];
-      const joined = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
+      el.addEventListener('click', () => {
+        const zone = el.closest('.hashtags').dataset.zone;
+        if (!zone) return;
 
-      try {
-        localStorage.setItem('nopeEmail', email);
-        localStorage.setItem('nopeUsername', nopeUsername);
-        localStorage.setItem('nopeVibe', vibe);
-        localStorage.setItem('nopeJoined', joined);
-      } catch (e) {
-        console.error('localStorage error:', e);
-        alert('Gagal menyimpan. Coba non-private mode.');
-        cta.classList.remove('loading');
-        return;
+        el.closest('.hashtags').querySelectorAll('.hashtag').forEach(h => {
+          h.classList.remove('selected');
+        });
+
+        el.classList.add('selected');
+        selections[zone] = el.dataset.tag;
+
+        const count = Object.values(selections).filter(Boolean).length;
+        document.getElementById('statusText').textContent = 
+          count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
+        document.getElementById('continueBtn').disabled = (count !== 3);
+      });
+    });
+
+    function saveAndRedirect() {
+      if (Object.values(selections).every(v => v)) {
+        try {
+          localStorage.setItem('nopeZones', JSON.stringify(selections));
+          localStorage.setItem('nopeOnboarded', 'true');
+        } catch (e) {
+          alert('Gagal menyimpan. Coba non-private mode.');
+          return;
+        }
+        window.location.href = '/jejak'; // ✅ CLEAN URL — thanks to vercel.json
       }
-
-      setTimeout(() => {
-        window.location.href = '/onboarding.html';
-      }, 400);
     }
 
     if ('serviceWorker' in navigator) {
@@ -216,3 +267,4 @@
   </script>
 </body>
 </html>
+dan saya akan bantu checklist akhir. 🌑
