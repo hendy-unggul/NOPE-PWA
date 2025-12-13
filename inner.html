@@ -1,121 +1,165 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/icon-192.png">
-  <meta name="theme-color" content="#0b2a4d">
-  <title>Inner • NOPE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NOPE • Inner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 13px;
-      padding: 20px;
+    body { font-family: 'Inter', sans-serif; background: #000; color: #fff; }
+    .header-id { @apply text-[#ff2d55] font-bold mb-4; }
+    .input-rage {
+      @apply w-full bg-[#222] text-white rounded-xl px-4 py-3 text-sm border-none outline-none mb-4;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 24px;
+    .hashtag-selector {
+      @apply bg-[#222] rounded-xl p-3 mb-4;
     }
-    .title {
-      font-weight: 600;
-      font-size: 18px;
+    .hashtag-item {
+      @apply inline-block bg-[#333] text-gray-300 px-3 py-1 rounded-full text-xs mr-2 mb-2 cursor-pointer;
     }
-    .artefak {
-      background: #0b0b0b;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      position: relative;
+    .hashtag-item.active {
+      @apply bg-[#ff2d55] text-black;
     }
-    .timestamp {
-      position: absolute;
-      top: 6px;
-      left: 8px;
-      font-size: 10px;
-      opacity: 0.4;
+    .preview-box {
+      @apply bg-[#222] rounded-xl p-3 mt-4;
     }
-    .notation {
-      position: absolute;
-      top: 6px;
-      right: 8px;
-      font-size: 11px;
-      opacity: 0.9;
-    }
-    .action {
-      text-align: center;
-      margin-top: 30px;
-    }
-    .btn {
-      color: #0b2a4d;
-      background: transparent;
-      border: 1px solid #0b2a4d;
-      padding: 8px 16px;
-      border-radius: 16px;
-      font-size: 14px;
-      cursor: pointer;
+    .btn-leave {
+      @apply w-full bg-[#ff2d55] text-black font-bold py-3 rounded-xl mt-4;
     }
   </style>
 </head>
-<body>
-  <div class="header">
-    <div class="title">inner</div>
-    <div>• • •</div>
-  </div>
+<body class="min-h-screen p-4">
+  <div class="max-w-md mx-auto">
 
-  <div class="artefak">
-    <div class="timestamp">13-12-2025...</div>
-    <div class="notation">I am alive</div>
-    <div style="margin-top: 24px; text-align: center; color: #555;">[ kanvas hitam ]</div>
-  </div>
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-2">
+      <h1 class="text-xl font-bold">NOPE</h1>
+      <div class="w-2 h-2 rounded-full bg-red-500"></div>
+    </div>
 
-  <div class="action">
-    <button class="btn" onclick="window.location.href='/outer.html'">lihat frekuensi luar</button>
+    <!-- Identitas -->
+    <div id="userId" class="header-id"></div>
+
+    <!-- Form Rage -->
+    <form id="rageForm">
+      <textarea 
+        id="rageInput" 
+        class="input-rage" 
+        placeholder="Ngomong pelan-pelan… gue denger." 
+        rows="4"
+      ></textarea>
+
+      <!-- Pilih Zona -->
+      <div class="hashtag-selector">
+        <p class="text-xs text-gray-400 mb-2">Pilih zona jejak lo:</p>
+        <div id="hashtagOptions"></div>
+      </div>
+
+      <!-- Preview -->
+      <div class="preview-box">
+        <p class="text-xs text-gray-400 mb-1">Preview jejak:</p>
+        <p id="previewText" class="text-sm text-gray-300 italic">“...”</p>
+        <p id="previewHashtag" class="text-xs text-[#ff2d55] mt-1"></p>
+      </div>
+
+      <button type="submit" class="btn-leave">TINGGALKAN JEJAK</button>
+    </form>
+
+    <!-- Bottom Nav -->
+    <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800">
+      <div class="flex justify-around py-2">
+        <div class="text-gray-400 text-xs">Luar</div>
+        <div class="text-gray-600 text-xs">Notifikasi</div>
+        <div class="text-[#ff2d55] font-bold text-xs">Rage</div>
+        <div class="text-gray-600 text-xs">Inner</div>
+      </div>
+    </div>
   </div>
 
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(console.warn);
-      });
+    // Ambil user
+    const currentUser = JSON.parse(localStorage.getItem('current_user'));
+    if (!currentUser) {
+      window.location.href = 'register.html';
     }
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
+
+    // Tampilkan ID
+    document.getElementById('userId').textContent = `@${currentUser.nope_id}`;
+
+    // Muat hashtag dari onboarding
+    const users = JSON.parse(localStorage.getItem('nope_users') || '{}');
+    const userData = users[currentUser.email];
+    const hashtags = userData.hashtags || { pilih: '#Pilih', personal: '#PersonalPain', social: '#SocialSickness' };
+
+    // Render opsi hashtag
+    const hashtagList = [
+      { key: 'pilih', label: hashtags.pilih },
+      { key: 'personal', label: hashtags.personal },
+      { key: 'social', label: hashtags.social }
+    ];
+
+    const hashtagContainer = document.getElementById('hashtagOptions');
+    hashtagList.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'hashtag-item';
+      el.textContent = item.label;
+      el.onclick = () => {
+        document.querySelectorAll('.hashtag-item').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        updatePreview();
+      };
+      hashtagContainer.appendChild(el);
+    });
+
+    // Aktifkan yang pertama
+    if (hashtagContainer.firstChild) {
+      hashtagContainer.firstChild.classList.add('active');
+    }
+
+    // Preview
+    const rageInput = document.getElementById('rageInput');
+    const previewText = document.getElementById('previewText');
+    const previewHashtag = document.getElementById('previewHashtag');
+
+    function updatePreview() {
+      const text = rageInput.value.trim() || '“...”';
+      previewText.textContent = `“${text}”`;
+      
+      const active = document.querySelector('.hashtag-item.active');
+      previewHashtag.textContent = active ? active.textContent : '';
+    }
+
+    rageInput.addEventListener('input', updatePreview);
+    updatePreview();
+
+    // Submit
+    document.getElementById('rageForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      deferredPrompt = e;
+      const text = rageInput.value.trim();
+      const active = document.querySelector('.hashtag-item.active');
+      const hashtag = active ? active.textContent : '#Pilih';
+
+      if (!text) return alert('Jejak lo kosong.');
+
+      // Simpan ke mock feed (localStorage)
+      const feeds = JSON.parse(localStorage.getItem('nope_feeds') || '[]');
+      feeds.push({
+        id: Date.now(),
+        user: currentUser.nope_id,
+        text: text,
+        hashtag: hashtag,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('nope_feeds', JSON.stringify(feeds));
+
+      // Reset & feedback
+      rageInput.value = '';
+      updatePreview();
+      alert('Jejak lo sudah meninggalkan gema.');
     });
   </script>
-<script>
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Otomatis tampilkan prompt setelah 3 detik (jika user belum install)
-    setTimeout(() => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-          deferredPrompt = null;
-        });
-      }
-    }, 3000);
-  });
-
-  // Jika user sudah install, sembunyikan tombol "masuk" atau ganti teks
-  window.addEventListener('appinstalled', (evt) => {
-    console.log('PWA was installed');
-    // Kamu bisa ubah UI di sini, misalnya: document.querySelector('.cta').innerText = 'Buka App';
-  });
-</script>
 </body>
-</html>
+</html> 
+
+Kamu yang tentuin, bro. 🖤
