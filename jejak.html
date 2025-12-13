@@ -35,7 +35,7 @@
       padding-bottom: calc(68px + var(--safe-bottom));
     }
 
-    /* ✨ INTRO — jiwa pertama */
+    /* ✨ INTRO — haiku style */
     .artefact-intro {
       font-size: 16px;
       color: rgba(255, 255, 255, 0.75);
@@ -46,7 +46,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* ONBOARDING: hanya muncul sebelum artefak pertama */
+    /* ONBOARDING */
     .onboarding-first {
       text-align: center;
       padding: 20px 12px;
@@ -58,13 +58,6 @@
       animation: fadeInUp 0.6s ease forwards;
     }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
     .onboarding-text {
       font-size: 15px;
       color: rgba(255, 255, 255, 0.8);
@@ -72,7 +65,7 @@
       margin-bottom: 16px;
     }
 
-    /* WHITE CANVAS — artefak placeholder */
+    /* WHITE CANVAS */
     .white-canvas {
       width: 100%;
       aspect-ratio: 1 / 0.8;
@@ -109,7 +102,7 @@
       line-height: 1.4;
     }
 
-    /* 1. Artefak — fokus utama (jika sudah upload) */
+    /* 1. Artefak */
     .artefact-header {
       width: 100%;
       aspect-ratio: 1 / 0.8;
@@ -125,13 +118,6 @@
       opacity: 0;
       transform: scale(0.95);
       animation: fadeInScale 0.5s ease 0.3s forwards;
-    }
-
-    @keyframes fadeInScale {
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
 
     .artefact-image {
@@ -157,13 +143,13 @@
       z-index: 5;
     }
 
-    /* Notasi + Stamp — tanggal selalu ada, notasi opsional */
+    /* Notasi + Stamp */
     .artefact-stamp {
       position: absolute;
       top: 12px;
       left: 12px;
-      font-size: 11px; /* Lebih kecil, lebih samar */
-      color: #888; /* Warna samar */
+      font-size: 11px;
+      color: #888;
       z-index: 10;
       max-width: 85%;
       overflow: hidden;
@@ -188,7 +174,6 @@
       display: inline;
     }
 
-    /* DETAK WAKTU — animasi halus */
     .pulse-date {
       animation: gentlePulseDate 30s infinite;
     }
@@ -207,10 +192,6 @@
       margin-bottom: 10px;
       opacity: 0;
       animation: fadeIn 0.4s ease 0.5s forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
     }
 
     .emoji-btn {
@@ -297,129 +278,24 @@
       background: #2a5ca8;
       transform: translateY(-1px);
     }
-<!-- TAMBAHKAN DI BAWAH RANTBOX -->
-<div class="rantbox">
-  <textarea id="rantInput" maxlength="240" placeholder="Jejakmu dalam 240 huruf."></textarea>
-  
-  <!-- Preview additional artefak (sembunyikan awalnya) -->
-  <div id="additionalPreview" class="additional-preview" style="display:none; margin-top:12px;">
-    <div style="font-size:12px; color:#888; margin-bottom:6px;">Artefak tambahan</div>
-    <div class="artefact-header" style="height:120px; border-radius:12px;">
-      <img id="additionalImage" class="artefact-image" src="" alt="Additional artefak">
-    </div>
-    <button type="button" class="remove-btn" onclick="removeAdditionalArt()" style="margin-top:8px; background:#222; color:#aaa; border:none; padding:4px 10px; border-radius:6px; font-size:12px;">Hapus</button>
-  </div>
-  
-  <!-- Tombol tambah artefak -->
-  <button type="button" class="add-art-btn" onclick="addAdditionalArt()" style="margin-top:8px; background:rgba(11,42,77,0.1); color:#0b2a4d; border:none; padding:4px 12px; border-radius:8px; font-size:13px; width:fit-content;">
-    📎 Tambah artefak untuk jejak ini
-  </button>
-  
-  <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
-</div>
 
-<!-- TAMBAHKAN DI AKHIR BODY -->
-<input type="file" id="additionalInput" accept="image/*" style="display:none;" onchange="handleAdditionalUpload(event)">
+    /* Additional artefak */
+    .add-art-btn {
+      background: rgba(11, 42, 77, 0.1);
+      color: #0b2a4d;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 8px;
+      width: fit-content;
+      cursor: pointer;
+    }
 
-<style>
-  /* Tidak perlu tambahan CSS khusus — pakai yang sudah ada */
-  .add-art-btn:hover {
-    background: rgba(11,42,77,0.2);
-  }
-  .remove-btn:hover {
-    background: #333;
-  }
-</style>
+    .add-art-btn:hover {
+      background: rgba(11, 42, 77, 0.2);
+    }
 
-<script>
-  // ... (semua kode sebelumnya tetap sama)
-
-  // ==== TAMBAHKAN VARIABEL UNTUK ADDITIONAL ARTEFAK ====
-  let additionalArtefactUrl = '';
-
-  // ==== FUNGSI TAMBAHAN ====
-  function addAdditionalArt() {
-    document.getElementById('additionalInput').click();
-  }
-
-  function handleAdditionalUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      additionalArtefactUrl = e.target.result;
-      document.getElementById('additionalImage').src = additionalArtefactUrl;
-      document.getElementById('additionalPreview').style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function removeAdditionalArt() {
-    additionalArtefactUrl = '';
-    document.getElementById('additionalPreview').style.display = 'none';
-  }
-
-  // ==== PERBARUI FUNGSI submitRant ====
-  function submitRant() {
-    const text = document.getElementById('rantInput').value.trim();
-    if (!text) { showFeedback('Tulis dulu jejakmu.'); return; }
-    if (text.length > 240) { showFeedback('Maksimal 240 karakter.'); return; }
-
-    // Simpan rant + additional artefak
-    const rantData = {
-      text: text,
-      timestamp: new Date().toISOString(),
-      author: username,
-      additionalArtefact: additionalArtefactUrl || null
-    };
-
-    // Simpan ke localStorage (atau kirim ke backend)
-    let rants = JSON.parse(localStorage.getItem('nopeRants') || '[]');
-    rants.push(rantData);
-    localStorage.setItem('nopeRants', JSON.stringify(rants));
-
-    // Reset
-    document.getElementById('rantInput').value = '';
-    removeAdditionalArt();
-
-    showFeedback('Jejak terkirim. 🖤');
-  }
-
-  // ==== PERBARUI FUNGSI renderJurnal (opsional) ====
-  function renderJurnal() {
-    const container = document.getElementById('jurnalList');
-    container.innerHTML = '';
-    
-    const rants = JSON.parse(localStorage.getItem('nopeRants') || '[]')
-      .slice(-3).reverse();
-
-    rants.forEach(rant => {
-      const div = document.createElement('div');
-      div.className = 'rant-item';
-      
-      let rantContent = `<div class="rant-text">${rant.text}</div>`;
-      
-      // Tampilkan additional artefak di jurnal juga
-      if (rant.additionalArtefact) {
-        rantContent += `
-          <div class="artefact-header" style="height:100px; margin-top:10px; border-radius:10px;">
-            <img class="artefact-image" src="${rant.additionalArtefact}" alt="Additional">
-          </div>
-        `;
-      }
-      
-      rantContent += `
-        <button class="reveal-btn" onclick="toggleResponses(this)">•</button>
-        <div class="responses" style="display:none;"></div>
-      `;
-      
-      div.innerHTML = rantContent;
-      container.appendChild(div);
-    });
-  }
-
-  // ... (sisanya tetap sama)
-</script>
     /* Jurnal */
     .jurnal-title {
       font-size: 14px;
@@ -442,6 +318,20 @@
       white-space: pre-line;
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .artefact-preview {
+      width: 100%;
+      height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .artefact-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .reveal-btn {
@@ -873,14 +763,12 @@
     <!-- Akan diisi oleh JS -->
   </div>
 
-  <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="/jejak" class="nav-item active">Jejak</a>
     <a href="/dunia" class="nav-item">Dunia</a>
     <a href="/jalan" class="nav-item">Jalan</a>
   </nav>
 
-  <!-- MODAL DETAIL ARTEFAK -->
   <div id="detailModal" class="detail-modal">
     <div class="detail-content">
       <div class="detail-image-container">
@@ -889,7 +777,6 @@
         <div id="detailStamp" class="detail-stamp"></div>
       </div>
       
-      <!-- Emoji responses -->
       <div class="detail-emoji-bar">
         <button class="detail-emoji-btn" onclick="showResponders('🖤')">
           🖤
@@ -911,25 +798,23 @@
     </div>
   </div>
 
-  <!-- TOOLTIP RESPONDERS -->
   <div id="emojiTooltip" class="emoji-tooltip"></div>
 
-  <!-- MODAL RITUAL UPLOAD -->
   <div id="ritualModal" class="ritual-modal">
     <div class="ritual-content">
       <div class="ritual-image-preview">
         <img id="ritualImage" src="" alt="Pratinjau artefak">
       </div>
       <div class="ritual-text">
-        Apa kenangan di balik artefak ini?
+        Ada kata untuk kenangan ini?
       </div>
       <div class="ritual-note">
         (opsional, maksimal 4 kata)
       </div>
       <input type="text" id="ritualNotasi" class="ritual-input" maxlength="50" placeholder="contoh: struk gaji pertama">
       <div class="ritual-subtext">
-        Beberapa kenangan cukup berbicara sendiri.<br>
-        Yang lain butuh kata untuk mengingat.
+        Boleh dikosongkan.<br>
+        Ada kenangan yang tak butuh kata.
       </div>
       <div class="ritual-btns">
         <button class="ritual-btn cancel" onclick="closeRitualModal()">Batal</button>
@@ -938,8 +823,10 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="feedbackToast"></div>
+
+  <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
+  <input type="file" id="additionalInput" accept="image/*" style="display:none;" onchange="handleAdditionalUpload(event)">
 
   <script>
     // ==== DATA DUMMY ====
@@ -958,6 +845,7 @@
     let currentNotasiUrl = '';
     let currentArtefactUrl = '';
     let tempArtefactUrl = '';
+    let additionalArtefactUrl = '';
 
     // ==== UI Feedback ====
     function showFeedback(text) {
@@ -969,7 +857,6 @@
       }, 2000);
     }
 
-    // ==== Format tanggal Jejak ====
     function formatJejakDate(dateStr) {
       return new Date(dateStr).toLocaleDateString('id-ID', {
         day: 'numeric',
@@ -983,15 +870,15 @@
       const container = document.getElementById('mainContainer');
       
       container.insertAdjacentHTML('beforeend', `
-        <div class="artefact-intro">Ini jejakmu. Sunyi, tapi nyata.</div>
+        <div class="artefact-intro">Jejakmu. Nyata. Tak perlu dilihat.</div>
       `);
 
       if (savedArtefacts.length === 0) {
         container.insertAdjacentHTML('beforeend', `
           <div class="onboarding-first">
             <div class="onboarding-text">
-              Pilih satu kenangan yang layak kau simpan selamanya.<br>
-              Setiap 30 hari, kamu boleh meninggalkan satu jejak.
+              Simpan satu kenangan.<br>
+              30 hari, satu jejak.
             </div>
           </div>
         `);
@@ -999,7 +886,7 @@
         container.insertAdjacentHTML('beforeend', `
           <div class="white-canvas" onclick="triggerUpload()">
             <div class="canvas-icon">🖼️</div>
-            <div class="canvas-text">Upload artefak pertamamu</div>
+            <div class="canvas-text">Jejak pertamamu di sini</div>
           </div>
         `);
       } else {
@@ -1022,18 +909,18 @@
         container.insertAdjacentHTML('beforeend', artefactHTML);
       }
 
-      container.insertAdjacentHTML('beforeend', `
-        <div class="emoji-bar">
-          <button class="emoji-btn pulse" title="GueJuga">🖤</button>
-          <button class="emoji-btn pulse" title="Peluk">🤗</button>
-          <button class="emoji-btn pulse" title="Bangga">🌟</button>
-          <button class="emoji-btn upload" title="Unggah Artefak" onclick="triggerUpload()">📎</button>
-        </div>
-      `);
-
+      // Rantbox dengan additional artefak
       container.insertAdjacentHTML('beforeend', `
         <div class="rantbox">
-          <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
+          <textarea id="rantInput" maxlength="240" placeholder="Jejakmu dalam 240 huruf."></textarea>
+          <div id="additionalPreview" style="display:none; margin-top:12px;">
+            <div style="font-size:12px; color:#888; margin-bottom:6px;">Artefak tambahan</div>
+            <div class="artefact-header" style="height:120px; border-radius:12px;">
+              <img id="additionalImage" class="artefact-image" src="" alt="Additional artefak">
+            </div>
+            <button type="button" class="remove-btn" onclick="removeAdditionalArt()" style="margin-top:8px; background:#222; color:#aaa; border:none; padding:4px 10px; border-radius:6px; font-size:12px;">Hapus</button>
+          </div>
+          <button type="button" class="add-art-btn" onclick="addAdditionalArt()">📎 Tambah artefak untuk jejak ini</button>
           <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
         </div>
       `);
@@ -1045,21 +932,16 @@
       renderJurnal();
 
       container.insertAdjacentHTML('beforeend', `
-        <div class="tray-title">Jejak Terkirim</div>
+        <div class="tray-title">Jejakmu</div>
         <div class="artefact-tray" id="trayList"></div>
       `);
       renderTray();
 
-      // Mulai detak tanggal
       startPulseAnimation();
     }
 
-    // ==== Animasi detak tanggal ====
-    function startPulseAnimation() {
-      // Tidak perlu interval — cukup CSS animation
-    }
+    function startPulseAnimation() {}
 
-    // ==== Render Tray ====
     function renderTray() {
       const tray = document.getElementById('trayList');
       tray.innerHTML = '';
@@ -1078,7 +960,6 @@
       });
     }
 
-    // ==== MODAL DETAIL ====
     function openDetailModal(artefact) {
       currentArtefactUrl = artefact.url;
       document.getElementById('detailImage').src = artefact.url;
@@ -1105,7 +986,6 @@
       hideTooltip();
     }
 
-    // ==== TOOLTIP RESPONDERS ====
     function showResponders(emoji) {
       const responses = artefactResponses[currentArtefactUrl]?.[emoji] || [];
       if (responses.length === 0) {
@@ -1131,13 +1011,12 @@
       document.getElementById('emojiTooltip').classList.remove('show');
     }
 
-    // ==== RITUAL UPLOAD DENGAN NOTASI OPSIONAL ====
     function triggerUpload() {
       const daysLeft = getDaysUntilNextUpload();
       if (savedArtefacts.length === 0 || daysLeft === 0) {
         document.getElementById('artefactInput').click();
       } else {
-        showFeedback(`Jejak berikutnya bisa disimpan dalam ${daysLeft} hari lagi.`);
+        showFeedback(`Tunggu ${daysLeft} hari lagi.`);
       }
     }
 
@@ -1186,54 +1065,78 @@
       return Math.max(0, 30 - diffDays);
     }
 
-    // ==== Rantbox ====
+    // ==== ADDITIONAL ARTEFAK ====
+    function addAdditionalArt() {
+      document.getElementById('additionalInput').click();
+    }
+
+    function handleAdditionalUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        additionalArtefactUrl = e.target.result;
+        document.getElementById('additionalImage').src = additionalArtefactUrl;
+        document.getElementById('additionalPreview').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAdditionalArt() {
+      additionalArtefactUrl = '';
+      document.getElementById('additionalPreview').style.display = 'none';
+    }
+
     function submitRant() {
       const text = document.getElementById('rantInput').value.trim();
       if (!text) { showFeedback('Tulis dulu jejakmu.'); return; }
       if (text.length > 240) { showFeedback('Maksimal 240 karakter.'); return; }
-      showFeedback('Jejak terkirim. 🖤');
-      document.getElementById('rantInput').value = '';
-    }
 
-    // ==== Jurnal ====
-    const sampleRants = [
-      { 
-        text: "hari ini aku bilang 'ga apa-apa' padahal hati retak...",
-        responses: [
-          { emoji: "🖤", comment: "aku juga pernah", username: "@nope.bangga.aura.1234" },
-          { emoji: "🌟", comment: "kamu kuat", username: "@nope.diam.frekuensi.5678" },
-          { emoji: "🤗", comment: "", username: "@nope.sunyi.nada.9012" }
-        ]
-      },
-      { 
-        text: "diamku bukan kosong. di dalam, aku sedang menulis puisi...",
-        responses: [
-          { emoji: "🌟", comment: "diammu indah", username: "@nope.tenang.jiwa.3456" },
-          { emoji: "🖤", comment: "", username: "@nope.aura.sinyal.7890" }
-        ]
-      },
-      { 
-        text: "aku memilih sunyi, bukan karena tak punya suara...",
-        responses: [
-          { emoji: "🖤", comment: "sama", username: "@nope.senyap.ritme.1234" }
-        ]
-      }
-    ];
+      const rantData = {
+        text: text,
+        timestamp: new Date().toISOString(),
+        author: username,
+        additionalArtefact: additionalArtefactUrl || null
+      };
+
+      let rants = JSON.parse(localStorage.getItem('nopeRants') || '[]');
+      rants.push(rantData);
+      localStorage.setItem('nopeRants', JSON.stringify(rants));
+
+      document.getElementById('rantInput').value = '';
+      removeAdditionalArt();
+
+      showFeedback('Jejak terkirim. 🖤');
+      renderJurnal();
+    }
 
     function renderJurnal() {
       const container = document.getElementById('jurnalList');
       container.innerHTML = '';
-      sampleRants.forEach(rant => {
+      
+      const rants = JSON.parse(localStorage.getItem('nopeRants') || '[]')
+        .slice(-3).reverse();
+
+      rants.forEach(rant => {
         const div = document.createElement('div');
         div.className = 'rant-item';
-        let responsesHtml = rant.responses.map(r => 
-          `<div class="response-item"><span>${r.emoji}</span><span>${r.comment || ''}</span></div>`
-        ).join('');
-        div.innerHTML = `
-          <div class="rant-text">${rant.text}</div>
+        
+        let rantContent = `<div class="rant-text">${rant.text}</div>`;
+        
+        if (rant.additionalArtefact) {
+          rantContent += `
+            <div class="artefact-preview">
+              <img src="${rant.additionalArtefact}" alt="Additional">
+            </div>
+          `;
+        }
+        
+        rantContent += `
           <button class="reveal-btn" onclick="toggleResponses(this)">•</button>
-          <div class="responses" style="display:none;">${responsesHtml}</div>
+          <div class="responses" style="display:none;"></div>
         `;
+        
+        div.innerHTML = rantContent;
         container.appendChild(div);
       });
     }
@@ -1244,7 +1147,6 @@
       btn.textContent = responses.style.display === 'none' ? '•' : '×';
     }
 
-    // ==== Init ====
     if (!localStorage.getItem('nopeOnboarded')) {
       window.location.href = '/index.html';
     }
@@ -1257,7 +1159,6 @@
       });
     }
 
-    // Tutup modal dengan ESC
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeDetailModal();
@@ -1266,15 +1167,11 @@
       }
     });
 
-    // Tutup tooltip jika klik luar
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.detail-emoji-btn') && !e.target.closest('#emojiTooltip')) {
         hideTooltip();
       }
     });
   </script>
-
-  <!-- Input file tersembunyi -->
-  <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
 </body>
 </html>
