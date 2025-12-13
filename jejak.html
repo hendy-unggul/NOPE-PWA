@@ -360,11 +360,12 @@
       </div>
     </div>
 
-    <!-- 2. Emoji respons -->
+    <!-- 2. Emoji respons + Upload -->
     <div class="emoji-bar">
       <button class="emoji-btn pulse" title="GueJuga">🖤</button>
       <button class="emoji-btn pulse" title="Peluk">🤗</button>
       <button class="emoji-btn pulse" title="Bangga">🌟</button>
+      <button class="emoji-btn" title="Unggah Artefak" onclick="triggerUpload()">📎</button>
     </div>
 
     <!-- 3. Rantbox -->
@@ -459,11 +460,7 @@
     }
 
     // ==== Upload ====
-    function uploadArtefact() {
-      if (!canUploadNewArtefact()) {
-        alert('Bisa unggah lagi setelah 30 hari.');
-        return;
-      }
+    function triggerUpload() {
       document.getElementById('artefactInput').click();
     }
 
@@ -479,6 +476,10 @@
     function handleArtefactUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
+      if (!canUploadNewArtefact()) {
+        alert('Hanya bisa unggah 1x per 30 hari.');
+        return;
+      }
       const reader = new FileReader();
       reader.onload = function(e) {
         currentNotasiUrl = e.target.result;
