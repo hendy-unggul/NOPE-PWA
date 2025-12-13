@@ -84,5 +84,33 @@
       deferredPrompt = e;
     });
   </script>
+<script>
+  let deferredPrompt;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Otomatis tampilkan prompt setelah 3 detik (jika user belum install)
+    setTimeout(() => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          deferredPrompt = null;
+        });
+      }
+    }, 3000);
+  });
+
+  // Jika user sudah install, sembunyikan tombol "masuk" atau ganti teks
+  window.addEventListener('appinstalled', (evt) => {
+    console.log('PWA was installed');
+    // Kamu bisa ubah UI di sini, misalnya: document.querySelector('.cta').innerText = 'Buka App';
+  });
+</script>
 </body>
 </html>
