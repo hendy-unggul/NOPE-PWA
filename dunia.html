@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon-192.png">
+  <meta name="theme-color" content="#000000">
+  <title>Dunia • NOPE</title>
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      padding-top: var(--safe-top);
+      padding-bottom: 72px;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.45;
+    }
+
+    .header {
+      text-align: center;
+      padding: 16px 0 20px;
+      color: #0b2a4d;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: #0a0a0a;
+      border-radius: 16px;
+      overflow: hidden;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-image {
+      height: 90px;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 12px;
+    }
+
+    .card-content {
+      padding: 10px;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .card-meta {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .vibe {
+      color: #0b2a4d;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: #000;
+      border-top: 1px solid #1a1a1a;
+      padding-bottom: var(--safe-bottom);
+    }
+
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      font-size: 13px;
+      color: #666;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      color: #0b2a4d;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Dunia</div>
+
+  <div class="grid" id="grid">
+    <!-- Kartu akan di-generate -->
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="/jejak" class="nav-item">Jejak</a>
+    <a href="/dunia" class="nav-item active">Dunia</a>
+    <a href="/jalan" class="nav-item">Jalan</a>
+  </nav>
+
+  <script>
+    // Data resensi (di produksi: dari localStorage/cache terpilih)
+    const picks = [
+      {
+        type: "film",
+        title: "Past Lives",
+        meta: "Celine Song • 2023",
+        vibe: "sunyi",
+        image: "🎬"
+      },
+      {
+        type: "buku",
+        title: "Manusia Setengah Salmon",
+        meta: "Raditya Dika",
+        vibe: "diam",
+        image: "📚"
+      },
+      {
+        type: "tokoh",
+        title: "Rasulullah SAW",
+        meta: "Nabi terakhir",
+        vibe: "bangga",
+        image: "👤"
+      },
+      {
+        type: "hangout",
+        title: "Kopi Puntung",
+        meta: "Yogyakarta",
+        vibe: "peluk",
+        image: "☕"
+      },
+      {
+        type: "film",
+        title: "Everything Everywhere All At Once",
+        meta: "Daniels • 2022",
+        vibe: "aura",
+        image: "🎬"
+      },
+      {
+        type: "buku",
+        title: "The Midnight Library",
+        meta: "Matt Haig",
+        vibe: "frekuensi",
+        image: "📚"
+      }
+    ];
+
+    function renderPicks() {
+      const container = document.getElementById('grid');
+      container.innerHTML = '';
+
+      picks.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-image">${item.image}</div>
+          <div class="card-content">
+            <div class="card-title">${item.title}</div>
+            <div class="card-meta">
+              <span class="vibe">${item.vibe}</span> • ${item.meta}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Redirect ke index jika belum onboard
+    if (!localStorage.getItem('nopeOnboarded')) {
+      window.location.href = '/index.html';
+    }
+
+    renderPicks();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(console.warn);
+      });
+    }
+  </script>
+</body>
+</html>
