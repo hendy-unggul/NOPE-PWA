@@ -267,7 +267,7 @@
       margin-top: 6px;
     }
 
-    /* Tray artefak — INTERAKTIF */
+    /* Tray artefak */
     .tray-title {
       padding: 0 12px;
       font-size: 14px;
@@ -322,7 +322,7 @@
       letter-spacing: -0.1px;
     }
 
-    /* MODAL DETAIL ARTEFAK — BARU */
+    /* MODAL DETAIL ARTEFAK */
     .detail-modal {
       position: fixed;
       top: 0;
@@ -405,6 +405,71 @@
     .detail-date {
       font-size: 11px;
       color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Emoji responses in detail */
+    .detail-emoji-bar {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      padding: 12px 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .detail-emoji-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .detail-emoji-btn:hover {
+      opacity: 1;
+      color: #fff;
+      transform: scale(1.2);
+    }
+
+    .emoji-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #0b2a4d;
+      color: white;
+      font-size: 9px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Emoji responders tooltip */
+    .emoji-tooltip {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 42, 77, 0.95);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .emoji-tooltip.show {
+      opacity: 1;
     }
 
     .detail-actions {
@@ -602,7 +667,7 @@
     <a href="/jalan" class="nav-item">Jalan</a>
   </nav>
 
-  <!-- MODAL DETAIL ARTEFAK — BARU -->
+  <!-- MODAL DETAIL ARTEFAK -->
   <div id="detailModal" class="detail-modal">
     <div class="detail-content">
       <div class="detail-image-container">
@@ -613,11 +678,31 @@
           <span id="detailDate" class="detail-date"></span>
         </div>
       </div>
+      
+      <!-- Emoji responses -->
+      <div class="detail-emoji-bar">
+        <button class="detail-emoji-btn" onclick="showResponders('🖤')">
+          🖤
+          <span class="emoji-count" id="count-🖤">3</span>
+        </button>
+        <button class="detail-emoji-btn" onclick="showResponders('🤗')">
+          🤗
+          <span class="emoji-count" id="count-🤗">1</span>
+        </button>
+        <button class="detail-emoji-btn" onclick="showResponders('🌟')">
+          🌟
+          <span class="emoji-count" id="count-🌟">2</span>
+        </button>
+      </div>
+      
       <div class="detail-actions">
         <button class="close-btn" onclick="closeDetailModal()">✕</button>
       </div>
     </div>
   </div>
+
+  <!-- TOOLTIP RESPONDERS -->
+  <div id="emojiTooltip" class="emoji-tooltip"></div>
 
   <!-- Modal Notasi -->
   <div id="notasiModal" class="modal" style="display:none;">
@@ -638,6 +723,16 @@
     // ==== DATA DUMMY ====
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
+    
+    // Simulasi data respons per artefak
+    const artefactResponses = {
+      "https://i.imgur.com/8Xz9Y7p.jpeg": {
+        "🖤": ["@nope.bangga.aura.1234", "@nope.diam.frekuensi.5678", "@nope.sunyi.nada.9012"],
+        "🤗": ["@nope.tenang.jiwa.3456"],
+        "🌟": ["@nope.aura.sinyal.7890", "@nope.senyap.ritme.1234"]
+      }
+    };
+
     const savedArtefacts = [
       { url: "https://i.imgur.com/8Xz9Y7p.jpeg", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
       { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
@@ -647,6 +742,7 @@
       { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" }
     ];
     let currentNotasiUrl = '';
+    let currentArtefactUrl = '';
 
     // ==== UI Feedback ====
     function showFeedback(text) {
@@ -700,6 +796,7 @@
 
     // ==== MODAL DETAIL ====
     function openDetailModal(artefact) {
+      currentArtefactUrl = artefact.url;
       document.getElementById('detailImage').src = artefact.url;
       document.getElementById('detailNotasi').textContent = artefact.notasi;
       document.getElementById('detailDate').textContent = new Date(artefact.date).toLocaleDateString('id-ID', {
@@ -707,16 +804,63 @@
         month: 'short',
         year: 'numeric'
       });
+
+      // Update emoji counts
+      const responses = artefactResponses[artefact.url] || {};
+      document.getElementById('count-🖤').textContent = responses['🖤'] ? responses['🖤'].length : 0;
+      document.getElementById('count-🤗').textContent = responses['🤗'] ? responses['🤗'].length : 0;
+      document.getElementById('count-🌟').textContent = responses['🌟'] ? responses['🌟'].length : 0;
+
       document.getElementById('detailModal').classList.add('show');
     }
 
     function closeDetailModal() {
       document.getElementById('detailModal').classList.remove('show');
+      hideTooltip();
     }
+
+    // ==== TOOLTIP RESPONDERS ====
+    function showResponders(emoji) {
+      const responses = artefactResponses[currentArtefactUrl]?.[emoji] || [];
+      if (responses.length === 0) {
+        showFeedback('Belum ada yang merespons.');
+        return;
+      }
+
+      // Sembunyikan bagian username (anonim)
+      const masked = responses.map(u => {
+        const parts = u.split('.');
+        if (parts.length >= 4) {
+          return `@nope.${parts[1]}.****.${parts[3]}`;
+        }
+        return u;
+      }).join(', ');
+
+      const tooltip = document.getElementById('emojiTooltip');
+      tooltip.textContent = masked;
+      tooltip.classList.add('show');
+
+      // Tutup otomatis setelah 3 detik
+      setTimeout(hideTooltip, 3000);
+    }
+
+    function hideTooltip() {
+      document.getElementById('emojiTooltip').classList.remove('show');
+    }
+
+    // Tutup tooltip jika klik luar
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.detail-emoji-btn') && !e.target.closest('#emojiTooltip')) {
+        hideTooltip();
+      }
+    });
 
     // Tutup modal dengan ESC
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeDetailModal();
+      if (e.key === 'Escape') {
+        closeDetailModal();
+        hideTooltip();
+      }
     });
 
     // ==== Upload ====
