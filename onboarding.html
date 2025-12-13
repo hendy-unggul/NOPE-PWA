@@ -5,269 +5,78 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#0b2a4d">
   <title>Onboarding • NOPE</title>
   <style>
-    :root {
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    * {
-      -webkit-tap-highlight-color: transparent;
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
+      display: grid;
+      grid-template-rows: 20% 60% 20%;
+      height: 100vh;
+      padding: 16px;
     }
-
-    .container {
-      max-width: 390px;
-      margin: 0 auto;
-      padding: 28px 20px 80px;
-    }
-
-    .user-info {
-      text-align: right;
-      font-size: 12px;
-      color: #0b2a4d;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 32px;
-      padding: 0 8px;
-    }
-
-    .zone {
-      background: #0a0a0a;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 28px;
-    }
-
-    .zone-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #0b2a4d;
-      margin-bottom: 14px;
+    .top { display: flex; align-items: flex-end; justify-content: center; }
+    .logo { font-size: 32px; font-weight: 700; }
+    .middle {
       display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 6px;
+      text-align: center;
+      padding: 0 20px;
     }
-
-    .hashtags {
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .desc {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+      max-width: 300px;
+    }
+    .bottom {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      justify-content: center;
+      align-items: flex-end;
     }
-
-    .hashtag {
-      background: #111;
-      border: 1px solid #222;
-      color: #aaa;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .hashtag.selected {
-      background: #0b2a4d;
-      color: white;
-      border-color: #0b2a4d;
-    }
-
-    .hashtag.locked {
-      opacity: 0.4;
-      cursor: default;
-      pointer-events: none;
-    }
-
-    .locked-note {
-      color: #ff6b00;
-      font-size: 11px;
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    .status-bar {
-      background: #0a0a0a;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin: 20px auto;
-      font-size: 12px;
-      color: #999;
-      text-align: center;
-      max-width: 80%;
-      box-sizing: border-box;
-    }
-
-    .continue-btn {
-      position: fixed;
-      bottom: calc(var(--safe-bottom) + 24px);
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 350px;
-      width: 90%;
-      padding: 17px 20px;
+    .cta-btn {
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 16px;
-      font-size: 17px;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      z-index: 10;
-      text-align: center;
-      box-sizing: border-box;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(11, 42, 77, 0.3);
     }
-
-    .continue-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
+    .cta-btn:hover { background: #1e4b8f; transform: translateY(-1px); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="user-info" id="usernameDisplay">—</div>
-
-    <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
-
-    <!-- ZONE 1: POP CULTURE -->
-    <div class="zone">
-      <div class="zone-title">🔥 POP CULTURE</div>
-      <div class="hashtags" data-zone="pop">
-        <div class="hashtag" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
-        <div class="hashtag" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
-        <div class="hashtag" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
-        <div class="hashtag" data-tag="#TikTokCringe">#TikTokCringe</div>
-        <div class="hashtag" data-tag="#CelebrityFail">#CelebrityFail</div>
-      </div>
-    </div>
-
-    <!-- ZONE 2: PERSONAL PAIN -->
-    <div class="zone">
-      <div class="zone-title">💀 PERSONAL PAIN</div>
-      <div class="hashtags" data-zone="pain">
-        <div class="hashtag" data-tag="#DighostingGebetan">#DighostingGebetan</div>
-        <div class="hashtag" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
-        <div class="hashtag" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
-        <div class="hashtag" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
-        <div class="hashtag" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
-      </div>
-    </div>
-
-    <!-- ZONE 3: SOCIAL SICKNESS -->
-    <div class="zone">
-      <div class="zone-title">🤮 SOCIAL SICKNESS</div>
-      <div class="hashtags" data-zone="sick">
-        <div class="hashtag" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
-        <div class="hashtag" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
-        <div class="hashtag" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
-        <div class="hashtag" data-tag="#GhostingCulture">#GhostingCulture</div>
-        <div class="hashtag" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
-      </div>
-    </div>
-
-    <!-- ZONE 4: MOVEMENT (LOCKED) -->
-    <div class="zone">
-      <div class="zone-title">⚡ MOVEMENT (LOCKED)</div>
-      <div class="hashtags">
-        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
-        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
-        <div class="hashtag locked">#ReformasiSistem</div>
-        <div class="hashtag locked">#AksiNyata2024</div>
-        <div class="hashtag locked">#VoiceForChange</div>
-      </div>
-      <p class="locked-note">🔒 Aktif setelah 6 bulan atau undangan</p>
-    </div>
-
-    <div class="status-bar">
-      Pilih 1 dari tiap zona di atas.<br>
-      <span id="statusText">Belum lengkap (0/3)</span>
-    </div>
+  <div class="top">
+    <div class="logo">NOPE.</div>
+  </div>
+  <div class="middle">
+    <div class="title">Temukan Frekuensimu</div>
+    <div class="desc">Di sini, kamu meninggalkan jejak, bukan performa. Setiap 30 hari, satu kenangan.</div>
+  </div>
+  <div class="bottom">
+    <button class="cta-btn" onclick="startJejak()">Mulai Jejak</button>
   </div>
 
-  <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke jejak</button>
-
   <script>
-    let selections = { pop: null, pain: null, sick: null };
-
-    function getOrCreateUsername() {
-      let username = localStorage.getItem('nopeUsername');
-      if (!username) {
-        const adjs = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-        const adj = adjs[Math.floor(Math.random() * adjs.length)];
-        const noun = nouns[Math.floor(Math.random() * nouns.length)];
-        const num = Math.floor(1000 + Math.random() * 9000);
-        username = `@nope.${adj}.${noun}.${num}`;
-        try {
-          localStorage.setItem('nopeUsername', username);
-          localStorage.setItem('nopeVibe', 'dalam');
-          localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
-        } catch (e) {
-          console.warn('localStorage tidak tersedia');
-        }
-      }
-      return username;
-    }
-
-    const username = getOrCreateUsername();
-    document.getElementById('usernameDisplay').innerText = username;
-
-    document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
-      el.addEventListener('click', () => {
-        const zone = el.closest('.hashtags').dataset.zone;
-        if (!zone) return;
-
-        el.closest('.hashtags').querySelectorAll('.hashtag').forEach(h => {
-          h.classList.remove('selected');
-        });
-
-        el.classList.add('selected');
-        selections[zone] = el.dataset.tag;
-
-        const count = Object.values(selections).filter(Boolean).length;
-        document.getElementById('statusText').textContent = 
-          count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
-        document.getElementById('continueBtn').disabled = (count !== 3);
-      });
-    });
-
-    function saveAndRedirect() {
-      if (Object.values(selections).every(v => v)) {
-        try {
-          localStorage.setItem('nopeZones', JSON.stringify(selections));
-          localStorage.setItem('nopeOnboarded', 'true');
-        } catch (e) {
-          alert('Gagal menyimpan. Coba non-private mode.');
-          return;
-        }
-        window.location.href = '/jejak';
-      }
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(console.warn);
-      });
+    function startJejak() {
+      localStorage.setItem('nopeOnboarded', 'true');
+      window.location.href = '/jejak.html';
     }
   </script>
 </body>
