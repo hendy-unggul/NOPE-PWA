@@ -63,12 +63,13 @@
       color: white;
       border-color: #0b2a4d;
     }
-    .locked {
+    .hashtag.locked {
       opacity: 0.5;
       pointer-events: none;
       background: #111 !important;
       color: #444 !important;
       border-color: #222 !important;
+      cursor: default;
     }
     .status-bar {
       background: #0a0a0a;
@@ -89,9 +90,10 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 16px;
+      transition: opacity 0.2s;
     }
     .continue-btn:disabled {
-      opacity: 0.5;
+      opacity: 0.4;
       cursor: not-allowed;
     }
   </style>
@@ -163,45 +165,71 @@
   <script>
     let selections = { pop: null, pain: null, sick: null };
 
-    // Baca @nope_username dari localStorage
-    let username = localStorage.getItem('nopeUsername');
-
-    // Jika tidak ada, generate default
-    if (!username) {
-      const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-      const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-      const noun = nouns[Math.floor(Math.random() * nouns.length)];
-      const num = Math.floor(1000 + Math.random() * 9000);
-      username = `@nope.${adj}.${noun}.${num}`;
-      localStorage.setItem('nopeUsername', username);
-      localStorage.setItem('nopeVibe', 'dalam');
-      localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
+    // Ambil username dari localStorage atau generate fallback
+    function getOrCreateUsername() {
+      let username = localStorage.getItem('nopeUsername');
+      if (!username) {
+        const adjs = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
+        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
+        const adj = adjs[Math.floor(Math.random() * adjs.length)];
+        const noun = nouns[Math.floor(Math.random() * nouns.length)];
+        const num = Math.floor(1000 + Math.random() * 9000);
+        username = `@nope.${adj}.${noun}.${num}`;
+        try {
+          localStorage.setItem('nopeUsername', username);
+          localStorage.setItem('nopeVibe', 'dalam');
+          localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
+        } catch (e) {
+          console.warn('localStorage tidak tersedia');
+        }
+      }
+      return username;
     }
 
+    const username = getOrCreateUsername();
     document.getElementById('usernameDisplay').innerText = username;
 
+    // Pasang event listener untuk hashtag yang bisa dipilih
     document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
       el.addEventListener('click', () => {
         const zone = el.dataset.zone;
-        document.querySelectorAll(`.hashtag[data-zone="${zone}"]`).forEach(h => h.classList.remove('selected'));
+        // Hapus selected dari semua di zona yang sama
+        document.querySelectorAll(`.hashtag[data-zone="${zone}"]`).forEach(h => {
+          h.classList.remove('selected');
+        });
+        // Tandai yang dipilih
         el.classList.add('selected');
         selections[zone] = el.dataset.tag;
 
-        const count = Object.values(selections).filter(v => v).length;
-        document.getElementById('statusText').innerText = count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
-        document.getElementById('continueBtn').disabled = count !== 3;
+        // Update status
+        const count = Object.values(selections).filter(Boolean).length;
+        document.getElementById('statusText').textContent = 
+          count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
+        document.getElementById('continueBtn').disabled = (count !== 3);
       });
     });
 
     function saveAndRedirect() {
       if (Object.values(selections).every(v => v)) {
-        localStorage.setItem('nopeZones', JSON.stringify(selections));
-        localStorage.setItem('nopeOnboarded', 'true');
-        window.location.href = '/inner.html';
+        try {
+          localStorage.setItem('nopeZones', JSON.stringify(selections));
+          localStorage.setItem('nopeOnboarded', 'true');
+        } catch (e) {
+          console.error('Gagal simpan ke localStorage:', e);
+          alert('Gagal menyimpan data. Izinkan localStorage atau coba browser lain.');
+          return;
+        }
+
+        // Redirect ke inner.html
+        try {
+          window.location.href = '/inner.html';
+        } catch (err) {
+          alert('Gagal membuka halaman berikutnya. Cek koneksi atau file inner.html.');
+        }
       }
     }
 
+    // Daftarkan service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
