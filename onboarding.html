@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
   <meta name="theme-color" content="#0b2a4d">
@@ -12,65 +12,179 @@
       margin: 0;
       background: #000;
       color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
       font-size: 13px;
-      padding: 24px;
-      line-height: 1.3;
+      padding: 24px 0;
+      line-height: 1.4;
     }
     .container {
-      max-width: 380px;
+      max-width: 390px;
       margin: 0 auto;
+      padding: 0 24px;
     }
-    h1 {
-      font-size: 20px;
+    .section-title {
+      font-size: 18px;
       font-weight: 600;
-      margin: 8px 0 16px;
+      margin: 0 0 20px;
+      text-align: center;
     }
-    p {
-      margin: 4px 0 20px;
-      opacity: 0.85;
+    .zone {
+      margin-bottom: 32px;
     }
-    input {
-      width: 100%;
-      padding: 10px;
+    .zone-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #0b2a4d;
+    }
+    .hashtags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .hashtag {
       background: #111;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: white;
-      margin-bottom: 24px;
-      font-size: 14px;
+      border: 1px solid #222;
+      color: #aaa;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    button {
+    .hashtag.selected {
+      background: #0b2a4d;
+      color: white;
+      border-color: #0b2a4d;
+    }
+    .locked {
+      opacity: 0.5;
+      pointer-events: none;
+      background: #111 !important;
+      color: #444 !important;
+      border-color: #222 !important;
+    }
+    .status-bar {
+      background: #0a0a0a;
+      padding: 12px;
+      border-radius: 12px;
+      margin: 24px 0;
+      font-size: 12px;
+      color: #777;
+    }
+    .continue-btn {
+      width: 100%;
+      padding: 14px;
       background: #0b2a4d;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 18px;
+      border-radius: 14px;
+      font-size: 16px;
       font-weight: 600;
-      width: 100%;
       cursor: pointer;
+      margin-top: 16px;
+    }
+    .continue-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>siapa frekuensimu?</h1>
-    <p>katakan namamu (bukan nama asli, boleh apa saja)</p>
-    <input type="text" placeholder="contoh: peluk.aura">
-    <button onclick="window.location.href='/inner.html'">lanjut</button>
+    <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
+
+    <!-- ZONE 1: POP CULTURE -->
+    <div class="zone">
+      <div class="zone-title">🔥 POP CULTURE ZONE</div>
+      <div class="hashtags" id="popCulture">
+        <div class="hashtag" data-zone="pop" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
+        <div class="hashtag" data-zone="pop" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
+        <div class="hashtag" data-zone="pop" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
+        <div class="hashtag" data-zone="pop" data-tag="#TikTokCringe">#TikTokCringe</div>
+        <div class="hashtag" data-zone="pop" data-tag="#CelebrityFail">#CelebrityFail</div>
+      </div>
+    </div>
+
+    <!-- ZONE 2: PERSONAL PAIN -->
+    <div class="zone">
+      <div class="zone-title">💀 PERSONAL PAIN ZONE</div>
+      <div class="hashtags" id="personalPain">
+        <div class="hashtag" data-zone="pain" data-tag="#DighostingGebetan">#DighostingGebetan</div>
+        <div class="hashtag" data-zone="pain" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
+        <div class="hashtag" data-zone="pain" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
+        <div class="hashtag" data-zone="pain" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
+        <div class="hashtag" data-zone="pain" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
+      </div>
+    </div>
+
+    <!-- ZONE 3: SOCIAL SICKNESS -->
+    <div class="zone">
+      <div class="zone-title">🤮 SOCIAL SICKNESS ZONE</div>
+      <div class="hashtags" id="socialSickness">
+        <div class="hashtag" data-zone="sick" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
+        <div class="hashtag" data-zone="sick" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
+        <div class="hashtag" data-zone="sick" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
+        <div class="hashtag" data-zone="sick" data-tag="#GhostingCulture">#GhostingCulture</div>
+        <div class="hashtag" data-zone="sick" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
+      </div>
+    </div>
+
+    <!-- ZONE 4: MOVEMENT (LOCKED) -->
+    <div class="zone">
+      <div class="zone-title">⚡ MOVEMENT ZONE (LOCKED)</div>
+      <div class="hashtags">
+        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
+        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
+        <div class="hashtag locked">#ReformasiSistem</div>
+        <div class="hashtag locked">#AksiNyata2024</div>
+        <div class="hashtag locked">#VoiceForChange</div>
+      </div>
+      <p style="color: #ff6b00; font-size: 12px; margin-top: 10px;">🔒 Aktif setelah 6 bulan atau undangan</p>
+    </div>
+
+    <!-- STATUS -->
+    <div class="status-bar">
+      Pilih 1 hashtag dari tiap zona di atas.<br>
+      <span id="statusText">Belum lengkap (0/3)</span>
+    </div>
+
+    <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke inner</button>
   </div>
 
   <script>
+    let selections = { pop: null, pain: null, sick: null };
+
+    document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
+      el.addEventListener('click', () => {
+        const zone = el.dataset.zone;
+        // Hapus seleksi sebelumnya di zona ini
+        document.querySelectorAll(`.hashtag[data-zone="${zone}"]`).forEach(h => h.classList.remove('selected'));
+        // Tambah seleksi baru
+        el.classList.add('selected');
+        selections[zone] = el.dataset.tag;
+
+        // Update status
+        const count = Object.values(selections).filter(v => v).length;
+        document.getElementById('statusText').innerText = count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
+        document.getElementById('continueBtn').disabled = count !== 3;
+      });
+    });
+
+    function saveAndRedirect() {
+      if (Object.values(selections).every(v => v)) {
+        // Simpan ke localStorage
+        localStorage.setItem('nopeZones', JSON.stringify(selections));
+        localStorage.setItem('nopeOnboarded', 'true');
+        window.location.href = '/inner.html';
+      }
+    }
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
   </script>
 </body>
 </html>
