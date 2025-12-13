@@ -29,7 +29,6 @@
       justify-content: center;
       min-height: 100vh;
       padding-top: var(--safe-top);
-      padding-bottom: max(24px, var(--safe-bottom));
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -41,6 +40,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      /* Turunkan konten agar berada di atas area bottom nav (yang belum ada di sini) */
+      margin-bottom: calc(var(--safe-bottom) + 32px);
     }
 
     .logo {
@@ -62,7 +63,6 @@
       object-fit: cover;
     }
 
-    /* Tagline styling */
     .tagline {
       font-size: 15px;
       font-weight: 400;
@@ -79,14 +79,9 @@
 
     .heart {
       display: inline-block;
-      color: #000;
-      background: #fff;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      margin-left: 4px;
-      vertical-align: middle;
+      font-size: 16px;
       animation: heartbeat 2s infinite;
+      vertical-align: middle;
     }
 
     @keyframes heartbeat {
@@ -107,7 +102,7 @@
       color: #fff;
       font-size: 17px;
       font-weight: 400;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       outline: none;
       -webkit-appearance: none;
     }
@@ -163,7 +158,7 @@
     <div class="tagline">
       <span class="tagline-line">untuk setiap jiwa,</span>
       <span class="tagline-line">yang memilih kejujuran,</span>
-      <span class="tagline-line">tanpa meminta pengakuan... <span class="heart"></span></span>
+      <span class="tagline-line">tanpa meminta pengakuan <span class="heart">🖤</span></span>
     </div>
 
     <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
