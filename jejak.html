@@ -356,12 +356,12 @@
   <div class="container">
     <!-- 1. Artefak -->
     <div class="artefact-header">
-      <!-- ✅ HANYA BARIS INI YANG DIUBAH: gambar utama diganti -->
-      <img id="artefactImage" class="artefact-image" src="https://i.imgur.com/9wQZq5Y.jpeg" alt="Perahu di laut biru">
+      <!-- ✅ FOTO UTA MA SUDAH DIGANTI KE "TIKET BIOSKOP" -->
+      <img id="artefactImage" class="artefact-image" src="https://i.imgur.com/8Xz9Y7p.jpeg" alt="Tiket bioskop">
       <div class="artefact-vignette"></div>
       <div id="artefactStamp" class="artefact-stamp">
-        <span id="artefactNotasi" class="artefact-notasi">perahu di laut biru</span>
-        <span id="artefactDate" class="artefact-date">25 Jun 2025</span>
+        <span id="artefactNotasi" class="artefact-notasi">tiket bioskop</span>
+        <span id="artefactDate" class="artefact-date">10 Mei 2025</span>
       </div>
     </div>
 
@@ -415,7 +415,8 @@
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     const savedArtefacts = [
-      { url: "https://i.imgur.com/9wQZq5Y.jpeg", date: "2025-06-25T10:00:00Z", notasi: "perahu di laut biru" },
+      // ✅ ITEM PERTAMA SUDAH DIUBAH MENJADI "TIKET BIOSKOP"
+      { url: "https://i.imgur.com/8Xz9Y7p.jpeg", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
       { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
       { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
       { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-01-20T10:00:00Z", notasi: "karcis konser" },
@@ -440,7 +441,7 @@
           year: 'numeric'
         });
       } else {
-        imageEl.src = 'https://i.imgur.com/9wQZq5Y.jpeg';
+        imageEl.src = 'https://i.imgur.com/8Xz9Y7p.jpeg';
         notasiEl.textContent = '—';
         dateEl.textContent = '—';
       }
@@ -592,7 +593,7 @@
     }
   </script>
 
-  <!-- Input file tersembunyi (untuk upload, jika aktif) -->
+  <!-- Input file tersembunyi -->
   <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
 </body>
 </html>
