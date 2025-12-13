@@ -8,7 +8,6 @@
   <meta name="theme-color" content="#000000">
   <title>NOPE</title>
   <style>
-    /* Apple-inspired fluid spacing & typography */
     :root {
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -23,7 +22,7 @@
       margin: 0;
       background: #000;
       color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
       font-weight: 400;
       display: flex;
       flex-direction: column;
@@ -47,7 +46,7 @@
     .logo {
       width: 192px;
       height: 192px;
-      margin: 0 0 32px;
+      margin: 0 0 24px;
       border-radius: 24px;
       overflow: hidden;
       background: #0a0a0a;
@@ -61,6 +60,42 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    /* Tagline styling */
+    .tagline {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.4;
+      text-align: center;
+      color: #aaa;
+      margin: 0 0 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .tagline-line {
+      display: block;
+    }
+
+    .heart {
+      display: inline-block;
+      color: #000;
+      background: #fff;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: heartbeat 2s infinite;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); opacity: 0.9; }
+      14% { transform: scale(1.15); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.15); }
+      70% { transform: scale(1); }
+      100% { transform: scale(1); opacity: 0.9; }
     }
 
     input {
@@ -79,7 +114,6 @@
 
     input::placeholder {
       color: #555;
-      font-weight: 400;
     }
 
     .cta {
@@ -125,6 +159,13 @@
     <div class="logo">
       <img src="/logo-nope-512.png" alt="NOPE">
     </div>
+
+    <div class="tagline">
+      <span class="tagline-line">Untuk setiap jiwa,</span>
+      <span class="tagline-line">Yang memilih kejujuran,</span>
+      <span class="tagline-line">Tanpa meminta pengakuan <span class="heart"></span></span>
+    </div>
+
     <input type="email" id="email" placeholder="emailmu" autocomplete="off" autocapitalize="none" required>
     <button class="cta" onclick="generateAndGo(event)">gaskeun</button>
   </div>
