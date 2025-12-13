@@ -157,13 +157,13 @@
       z-index: 5;
     }
 
-    /* Notasi + Stamp — hanya muncul jika ada notasi */
+    /* Notasi + Stamp — tanggal selalu ada, notasi opsional */
     .artefact-stamp {
       position: absolute;
       top: 12px;
       left: 12px;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px; /* Lebih kecil, lebih samar */
+      color: #888; /* Warna samar */
       z-index: 10;
       max-width: 85%;
       overflow: hidden;
@@ -171,10 +171,11 @@
       white-space: nowrap;
       font-weight: 500;
       letter-spacing: -0.1px;
+      line-height: 1.4;
     }
 
     .artefact-notasi {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
       color: #fff;
       margin-right: 4px;
@@ -183,8 +184,18 @@
 
     .artefact-date {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
+      color: #888;
       display: inline;
+    }
+
+    /* DETAK WAKTU — animasi halus */
+    .pulse-date {
+      animation: gentlePulseDate 30s infinite;
+    }
+
+    @keyframes gentlePulseDate {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
     }
 
     /* Emoji bar */
@@ -465,13 +476,14 @@
       position: absolute;
       top: 14px;
       left: 14px;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 12px;
+      color: #888;
+      font-size: 11px;
       font-weight: 500;
       max-width: 85%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      line-height: 1.4;
     }
 
     .detail-notasi {
@@ -483,7 +495,7 @@
 
     .detail-date {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
+      color: #888;
     }
 
     /* Emoji responses in detail */
@@ -577,7 +589,7 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* MODAL RITUAL UPLOAD — DIPERBARUI */
+    /* MODAL RITUAL UPLOAD */
     .ritual-modal {
       position: fixed;
       top: 0;
@@ -752,10 +764,7 @@
       <div class="detail-image-container">
         <img id="detailImage" class="detail-image" src="" alt="Detail artefak">
         <div class="detail-vignette"></div>
-        <div id="detailStamp" class="detail-stamp">
-          <span id="detailNotasi" class="detail-notasi"></span>
-          <span id="detailDate" class="detail-date"></span>
-        </div>
+        <div id="detailStamp" class="detail-stamp"></div>
       </div>
       
       <!-- Emoji responses -->
@@ -838,6 +847,15 @@
       }, 2000);
     }
 
+    // ==== Format tanggal Jejak ====
+    function formatJejakDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+
     // ==== Render Main Content ====
     function renderMainContent() {
       const container = document.getElementById('mainContainer');
@@ -864,17 +882,19 @@
         `);
       } else {
         const latest = savedArtefacts[savedArtefacts.length - 1];
-        // Hanya tampilkan notasi jika ada
-        const notasiPart = latest.notasi ? `<span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>` : '';
-        const stampPart = latest.notasi ? 
-          `<div id="artefactStamp" class="artefact-stamp">${notasiPart}<span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span></div>` :
-          `<div id="artefactStamp" class="artefact-stamp"><span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span></div>`;
+        const formattedDate = formatJejakDate(latest.date);
+        let stampHTML = '';
+        if (latest.notasi) {
+          stampHTML = `<span class="artefact-notasi">${latest.notasi}</span> <span class="artefact-date pulse-date">${formattedDate}</span>`;
+        } else {
+          stampHTML = `<span class="artefact-date pulse-date">${formattedDate}</span>`;
+        }
 
         const artefactHTML = `
           <div class="artefact-header">
             <img id="artefactImage" class="artefact-image" src="${latest.url}" alt="Artefak">
             <div class="artefact-vignette"></div>
-            ${stampPart}
+            <div class="artefact-stamp">${stampHTML}</div>
           </div>
         `;
         container.insertAdjacentHTML('beforeend', artefactHTML);
@@ -907,6 +927,14 @@
         <div class="artefact-tray" id="trayList"></div>
       `);
       renderTray();
+
+      // Mulai detak tanggal
+      startPulseAnimation();
+    }
+
+    // ==== Animasi detak tanggal ====
+    function startPulseAnimation() {
+      // Tidak perlu interval — cukup CSS animation
     }
 
     // ==== Render Tray ====
@@ -922,7 +950,6 @@
           day: 'numeric',
           month: 'short'
         });
-        // Tampilkan notasi hanya jika ada
         const stampText = art.notasi ? `${art.notasi} ${dateStr}` : dateStr;
         div.innerHTML = `<img src="${art.url}" alt="Artefak"><span class="stamp">${stampText}</span>`;
         tray.appendChild(div);
@@ -934,12 +961,13 @@
       currentArtefactUrl = artefact.url;
       document.getElementById('detailImage').src = artefact.url;
       
-      // Tampilkan notasi hanya jika ada
-      const notasiPart = artefact.notasi ? 
-        `<span id="detailNotasi" class="detail-notasi">${artefact.notasi}</span>` : '';
-      const stampHTML = artefact.notasi ?
-        `${notasiPart}<span id="detailDate" class="detail-date">${new Date(artefact.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>` :
-        `<span id="detailDate" class="detail-date">${new Date(artefact.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>`;
+      const formattedDate = formatJejakDate(artefact.date);
+      let stampHTML = '';
+      if (artefact.notasi) {
+        stampHTML = `<span class="detail-notasi">${artefact.notasi}</span> <span class="detail-date">${formattedDate}</span>`;
+      } else {
+        stampHTML = `<span class="detail-date">${formattedDate}</span>`;
+      }
       document.getElementById('detailStamp').innerHTML = stampHTML;
 
       const responses = artefactResponses[artefact.url] || {};
@@ -1019,7 +1047,6 @@
         }
         notasi = words.join(' ');
       }
-      // Jika kosong, notasi = "" → artefak berbicara sendiri
 
       const date = new Date().toISOString();
       const newArtefact = { url: tempArtefactUrl, date, notasi };
