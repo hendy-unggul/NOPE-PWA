@@ -46,6 +46,49 @@
       letter-spacing: -0.2px;
     }
 
+    /* ONBOARDING JEJAK PERTAMA */
+    .onboarding-welcome {
+      text-align: center;
+      padding: 20px 12px;
+      background: rgba(11, 42, 77, 0.15);
+      border-radius: 16px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .onboarding-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .onboarding-text {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .onboarding-reminder {
+      font-size: 13px;
+      color: rgba(11, 42, 77, 0.9);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 8px;
+    }
+
     /* 1. Artefak — fokus utama */
     .artefact-header {
       width: 100%;
@@ -59,6 +102,16 @@
       margin-bottom: 10px;
       border-radius: 14px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transform: scale(0.95);
+      animation: fadeInScale 0.5s ease 0.3s forwards;
+    }
+
+    @keyframes fadeInScale {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .artefact-image {
@@ -121,6 +174,12 @@
       gap: 12px;
       padding: 4px 12px 8px;
       margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 0.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     .emoji-btn {
@@ -322,6 +381,25 @@
       letter-spacing: -0.1px;
     }
 
+    /* TIMER 30 HARI — BARU */
+    .cooldown-timer {
+      text-align: center;
+      padding: 14px;
+      background: rgba(11, 42, 77, 0.1);
+      border-radius: 12px;
+      margin: 12px 0;
+      font-size: 13px;
+      color: rgba(11, 42, 77, 0.8);
+      display: none;
+    }
+
+    .timer-days {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0b2a4d;
+      margin: 0 4px;
+    }
+
     /* MODAL DETAIL ARTEFAK */
     .detail-modal {
       position: fixed;
@@ -498,7 +576,7 @@
       background: rgba(255, 255, 255, 0.1);
     }
 
-    /* MODAL RITUAL UPLOAD — BARU */
+    /* MODAL RITUAL UPLOAD */
     .ritual-modal {
       position: fixed;
       top: 0;
@@ -607,7 +685,7 @@
       font-weight: 600;
     }
 
-    /* Modal notasi (tetap ada untuk notasi sistem) */
+    /* Modal notasi */
     .modal {
       position: fixed;
       top: 0;
@@ -699,48 +777,35 @@
       letter-spacing: -0.1px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
+
+    /* Tooltip upload */
+    #uploadTooltip {
+      position: fixed;
+      bottom: 120px;
+      right: 20px;
+      background: rgba(11, 42, 77, 0.95);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      max-width: 200px;
+      text-align: center;
+    }
+
+    #uploadTooltip.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- ✨ Jiwa pertama -->
-    <div class="artefact-intro">Ini jejakmu. Sunyi, tapi nyata.</div>
+  <div class="container" id="mainContainer">
+    <!-- ONBOARDING JEJAK PERTAMA (akan diisi oleh JS jika belum upload) -->
+    <!-- Sisa konten akan diisi oleh JS -->
 
-    <!-- Artefak utama -->
-    <div class="artefact-header">
-      <img id="artefactImage" class="artefact-image" src="https://i.imgur.com/8Xz9Y7p.jpeg" alt="Tiket bioskop">
-      <div class="artefact-vignette"></div>
-      <div id="artefactStamp" class="artefact-stamp">
-        <span id="artefactNotasi" class="artefact-notasi">tiket bioskop</span>
-        <span id="artefactDate" class="artefact-date">10 Mei 2025</span>
-      </div>
-    </div>
-
-    <!-- Emoji + Upload -->
-    <div class="emoji-bar">
-      <button class="emoji-btn pulse" title="GueJuga">🖤</button>
-      <button class="emoji-btn pulse" title="Peluk">🤗</button>
-      <button class="emoji-btn pulse" title="Bangga">🌟</button>
-      <button class="emoji-btn upload" title="Unggah Artefak" onclick="triggerUpload()">📎</button>
-    </div>
-
-    <!-- Rantbox -->
-    <div class="rantbox">
-      <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
-      <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
-    </div>
-
-    <!-- Jurnal -->
-    <div class="jurnal-title">Jurnal 3 Rant Terakhir</div>
-    <div id="jurnalList">
-      <!-- Diisi oleh JS -->
-    </div>
-
-    <!-- Tray artefak -->
-    <div class="tray-title">Jejak Terkirim</div>
-    <div class="artefact-tray" id="trayList">
-      <!-- Diisi oleh JS -->
-    </div>
   </div>
 
   <!-- Bottom Navigation -->
@@ -787,7 +852,10 @@
   <!-- TOOLTIP RESPONDERS -->
   <div id="emojiTooltip" class="emoji-tooltip"></div>
 
-  <!-- MODAL RITUAL UPLOAD — BARU -->
+  <!-- TOOLTIP UPLOAD -->
+  <div id="uploadTooltip"></div>
+
+  <!-- MODAL RITUAL UPLOAD -->
   <div id="ritualModal" class="ritual-modal">
     <div class="ritual-content">
       <div class="ritual-image-preview">
@@ -804,7 +872,7 @@
     </div>
   </div>
 
-  <!-- Modal Notasi (untuk notasi sistem, tapi sekarang tidak dipakai karena notasi dipilih sistem) -->
+  <!-- Modal Notasi -->
   <div id="notasiModal" class="modal" style="display:none;">
     <div class="modal-content">
       <div>Maksimal 4 kata (tanpa emoji)</div>
@@ -824,7 +892,6 @@
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     
-    // Simulasi data respons per artefak
     const artefactResponses = {
       "https://i.imgur.com/8Xz9Y7p.jpeg": {
         "🖤": ["@nope.bangga.aura.1234", "@nope.diam.frekuensi.5678", "@nope.sunyi.nada.9012"],
@@ -833,17 +900,21 @@
       }
     };
 
-    const savedArtefacts = [
-      { url: "https://i.imgur.com/8Xz9Y7p.jpeg", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
-      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "perahu" },
-      { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
-      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-01-20T10:00:00Z", notasi: "karcis konser" },
-      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-04-05T10:00:00Z", notasi: "surat lama" },
-      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" }
-    ];
+    let savedArtefacts = JSON.parse(localStorage.getItem('nopeArtefacts') || '[]');
     let currentNotasiUrl = '';
     let currentArtefactUrl = '';
     let tempArtefactUrl = '';
+
+    // Jika belum pernah upload, beri artefak pertama otomatis
+    if (savedArtefacts.length === 0) {
+      const firstArtefact = {
+        url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format",
+        date: new Date().toISOString(),
+        notasi: "jejak pertamaku"
+      };
+      savedArtefacts.push(firstArtefact);
+      localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
+    }
 
     // ==== UI Feedback ====
     function showFeedback(text) {
@@ -855,26 +926,131 @@
       }, 2000);
     }
 
+    // ==== HITUNG SISA HARI ====
+    function getDaysUntilNextUpload() {
+      if (savedArtefacts.length === 0) return 0;
+      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
+      const now = new Date();
+      const diffTime = now - lastUpload;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return Math.max(0, 30 - diffDays);
+    }
+
+    // ==== Render Timer ====
+    function renderTimerIfNeeded() {
+      const daysLeft = getDaysUntilNextUpload();
+      if (daysLeft > 0) {
+        const timerHTML = `
+          <div class="cooldown-timer">
+            Jejak berikutnya bisa disimpan dalam <span class="timer-days">${daysLeft}</span> hari lagi.
+          </div>
+        `;
+        document.getElementById('mainContainer').insertAdjacentHTML('beforeend', timerHTML);
+      }
+    }
+
+    // ==== Tooltip Upload ====
+    function showUploadTooltip() {
+      const daysLeft = getDaysUntilNextUpload();
+      if (daysLeft > 0) {
+        const tooltip = document.getElementById('uploadTooltip');
+        tooltip.textContent = `Jejak berikutnya bisa disimpan dalam ${daysLeft} hari lagi.`;
+        tooltip.classList.add('show');
+        setTimeout(() => {
+          tooltip.classList.remove('show');
+        }, 3000);
+      }
+    }
+
+    // ==== Render Onboarding (jika baru pertama kali) ====
+    function renderOnboardingIfNeeded() {
+      const isFirstTime = !localStorage.getItem('nopeJejakSeen');
+      if (isFirstTime) {
+        const onboarding = `
+          <div class="onboarding-welcome">
+            <div class="onboarding-title">Selamat datang di Jejak</div>
+            <div class="onboarding-text">
+              Di sini, kamu meninggalkan jejak, bukan performa.<br>
+              Setiap 30 hari, kamu boleh menyimpan satu kenangan.<br>
+              Tak perlu dilihat. Cukup dirasakan.
+            </div>
+            <div class="onboarding-reminder">Jejak pertamamu sudah tersimpan</div>
+          </div>
+        `;
+        document.getElementById('mainContainer').insertAdjacentHTML('beforeend', onboarding);
+        localStorage.setItem('nopeJejakSeen', 'true');
+        setTimeout(() => {
+          renderRestOfPage();
+        }, 1500);
+      } else {
+        renderRestOfPage();
+      }
+    }
+
+    // ==== Render sisa halaman ====
+    function renderRestOfPage() {
+      const container = document.getElementById('mainContainer');
+      
+      // Tambahkan intro
+      container.insertAdjacentHTML('beforeend', `
+        <div class="artefact-intro">Ini jejakmu. Sunyi, tapi nyata.</div>
+      `);
+
+      // Render artefak utama
+      renderMainArtefact();
+
+      // Tambahkan emoji bar
+      container.insertAdjacentHTML('beforeend', `
+        <div class="emoji-bar">
+          <button class="emoji-btn pulse" title="GueJuga">🖤</button>
+          <button class="emoji-btn pulse" title="Peluk">🤗</button>
+          <button class="emoji-btn pulse" title="Bangga">🌟</button>
+          <button class="emoji-btn upload" title="Unggah Artefak" onclick="triggerUpload()" onmouseenter="showUploadTooltip()">📎</button>
+        </div>
+      `);
+
+      // Render timer jika perlu
+      renderTimerIfNeeded();
+
+      // Tambahkan rantbox
+      container.insertAdjacentHTML('beforeend', `
+        <div class="rantbox">
+          <textarea id="rantInput" maxlength="240" placeholder="240 huruf yang meninggalkan jejakmu"></textarea>
+          <button class="submit-btn" onclick="submitRant()">Gaskeun!</button>
+        </div>
+      `);
+
+      // Tambahkan jurnal
+      container.insertAdjacentHTML('beforeend', `
+        <div class="jurnal-title">Jurnal 3 Rant Terakhir</div>
+        <div id="jurnalList"></div>
+      `);
+      renderJurnal();
+
+      // Tambahkan tray
+      container.insertAdjacentHTML('beforeend', `
+        <div class="tray-title">Jejak Terkirim</div>
+        <div class="artefact-tray" id="trayList"></div>
+      `);
+      renderTray();
+    }
+
     // ==== Render Artefak Utama ====
     function renderMainArtefact() {
-      const imageEl = document.getElementById('artefactImage');
-      const notasiEl = document.getElementById('artefactNotasi');
-      const dateEl = document.getElementById('artefactDate');
-
-      if (savedArtefacts.length > 0) {
-        const latest = savedArtefacts[savedArtefacts.length - 1];
-        imageEl.src = latest.url;
-        notasiEl.textContent = latest.notasi;
-        dateEl.textContent = new Date(latest.date).toLocaleDateString('id-ID', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-        });
-      } else {
-        imageEl.src = 'https://i.imgur.com/8Xz9Y7p.jpeg';
-        notasiEl.textContent = '—';
-        dateEl.textContent = '—';
-      }
+      const container = document.getElementById('mainContainer');
+      const latest = savedArtefacts[savedArtefacts.length - 1];
+      
+      const artefactHTML = `
+        <div class="artefact-header">
+          <img id="artefactImage" class="artefact-image" src="${latest.url}" alt="Artefak">
+          <div class="artefact-vignette"></div>
+          <div id="artefactStamp" class="artefact-stamp">
+            <span id="artefactNotasi" class="artefact-notasi">${latest.notasi}</span>
+            <span id="artefactDate" class="artefact-date">${new Date(latest.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', artefactHTML);
     }
 
     // ==== Render Tray (INTERAKTIF) ====
@@ -947,16 +1123,17 @@
 
     // ==== RITUAL UPLOAD ====
     function triggerUpload() {
+      const daysLeft = getDaysUntilNextUpload();
+      if (daysLeft > 0) {
+        showUploadTooltip();
+        return;
+      }
       document.getElementById('artefactInput').click();
     }
 
     function handleArtefactUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-      if (!canUploadNewArtefact()) {
-        showFeedback('Hanya bisa unggah 1x per 30 hari.');
-        return;
-      }
       const reader = new FileReader();
       reader.onload = function(e) {
         tempArtefactUrl = e.target.result;
@@ -971,7 +1148,6 @@
     }
 
     function confirmArtefactUpload() {
-      // Sistem pilih notasi otomatis (sesuai visimu)
       const notasiOptions = [
         "kenangan tak terlupakan", "jejak pertama", "bukti aku pernah ada",
         "masa kecilku", "hadiah terakhir", "surat yang tak terkirim"
@@ -983,19 +1159,7 @@
       savedArtefacts.push(newArtefact);
       localStorage.setItem('nopeArtefacts', JSON.stringify(savedArtefacts));
       
-      renderMainArtefact();
-      renderTray();
-      closeRitualModal();
-      showFeedback('Jejakmu telah disimpan. 🖤');
-    }
-
-    function canUploadNewArtefact() {
-      if (savedArtefacts.length === 0) return true;
-      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
-      const now = new Date();
-      const diffTime = Math.abs(now - lastUpload);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays >= 30;
+      location.reload();
     }
 
     // ==== Rantbox ====
@@ -1061,9 +1225,7 @@
       window.location.href = '/index.html';
     }
 
-    renderMainArtefact();
-    renderTray();
-    renderJurnal();
+    renderOnboardingIfNeeded();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
