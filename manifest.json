@@ -1,21 +1,21 @@
 {
   "name": "NOPE",
   "short_name": "NOPE",
-  "description": "A quiet frequency for those who feel deeply.",
-  "start_url": "/index.html",
+  "description": "Jejak yang nyata. Tanpa meminta pengakuan.",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#0b2a4d",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "logo-nope-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "logo-nope-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
