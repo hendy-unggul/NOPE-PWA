@@ -5,266 +5,126 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
-  <meta name="theme-color" content="#000000">
-  <title>Onboarding • NOPE</title>
+  <meta name="theme-color" content="#0b2a4d">
+  <title>NOPE</title>
   <style>
-    :root {
-      --safe-top: env(safe-area-inset-top, 0px);
-      --safe-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
     * {
       -webkit-tap-highlight-color: transparent;
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 14px;
-      padding-top: var(--safe-top);
-      padding-bottom: var(--safe-bottom);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    .container {
-      max-width: 390px;
-      margin: 0 auto;
-      padding: 28px 20px 80px;
-    }
-
-    .user-info {
-      text-align: right;
-      font-size: 12px;
-      color: #0b2a4d;
-      margin-bottom: 20px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 32px;
-      padding: 0 8px;
-    }
-
-    .zone {
-      background: #0a0a0a;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 28px;
-    }
-
-    .zone-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #0b2a4d;
-      margin-bottom: 14px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
     }
-
-    .hashtags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .hashtag {
-      background: #111;
-      border: 1px solid #222;
-      color: #aaa;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .hashtag.selected {
-      background: #0b2a4d;
-      color: white;
-      border-color: #0b2a4d;
-    }
-
-    .hashtag.locked {
-      opacity: 0.4;
-      cursor: default;
-      pointer-events: none;
-    }
-
-    .locked-note {
-      color: #ff6b00;
-      font-size: 11px;
-      margin-top: 12px;
+    .logo { font-size: 48px; font-weight: 700; margin-bottom: 24px; letter-spacing: -1px; }
+    .tagline {
       text-align: center;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 320px;
+      letter-spacing: -0.2px;
     }
-
-    .status-bar {
+    .email-input {
       background: #0a0a0a;
-      padding: 12px;
-      border-radius: 14px;
-      margin: 28px 0;
-      font-size: 13px;
-      color: #777;
-      text-align: center;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 14px 18px;
+      width: 100%;
+      max-width: 320px;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 16px;
     }
-
-    .continue-btn {
-      position: fixed;
-      bottom: calc(var(--safe-bottom) + 24px);
-      left: 20px;
-      right: 20px;
-      width: auto;
-      padding: 17px;
+    .submit-btn {
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 16px;
-      font-size: 17px;
+      border-radius: 12px;
+      padding: 14px 24px;
+      font-size: 16px;
       font-weight: 600;
+      width: 100%;
+      max-width: 320px;
       cursor: pointer;
-      z-index: 10;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(11, 42, 77, 0.3);
     }
-
-    .continue-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
+    .submit-btn:hover { background: #1e4b8f; transform: translateY(-1px); }
+    .heartbeat { display: inline-block; margin-left: 4px; animation: heartbeat 2s infinite; }
+    @keyframes heartbeat { 0%,100% { transform: scale(1); opacity:0.8; } 50% { transform: scale(1.1); opacity:1; } }
+    #feedbackToast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(11, 42, 77, 0.92);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 24px;
+      font-size: 14px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="user-info" id="usernameDisplay">—</div>
-
-    <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
-
-    <!-- ZONE 1: POP CULTURE -->
-    <div class="zone">
-      <div class="zone-title">🔥 POP CULTURE</div>
-      <div class="hashtags" data-zone="pop">
-        <div class="hashtag" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
-        <div class="hashtag" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
-        <div class="hashtag" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
-        <div class="hashtag" data-tag="#TikTokCringe">#TikTokCringe</div>
-        <div class="hashtag" data-tag="#CelebrityFail">#CelebrityFail</div>
-      </div>
-    </div>
-
-    <!-- ZONE 2: PERSONAL PAIN -->
-    <div class="zone">
-      <div class="zone-title">💀 PERSONAL PAIN</div>
-      <div class="hashtags" data-zone="pain">
-        <div class="hashtag" data-tag="#DighostingGebetan">#DighostingGebetan</div>
-        <div class="hashtag" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
-        <div class="hashtag" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
-        <div class="hashtag" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
-        <div class="hashtag" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
-      </div>
-    </div>
-
-    <!-- ZONE 3: SOCIAL SICKNESS -->
-    <div class="zone">
-      <div class="zone-title">🤮 SOCIAL SICKNESS</div>
-      <div class="hashtags" data-zone="sick">
-        <div class="hashtag" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
-        <div class="hashtag" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
-        <div class="hashtag" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
-        <div class="hashtag" data-tag="#GhostingCulture">#GhostingCulture</div>
-        <div class="hashtag" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
-      </div>
-    </div>
-
-    <!-- ZONE 4: MOVEMENT (LOCKED) -->
-    <div class="zone">
-      <div class="zone-title">⚡ MOVEMENT (LOCKED)</div>
-      <div class="hashtags">
-        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
-        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
-        <div class="hashtag locked">#ReformasiSistem</div>
-        <div class="hashtag locked">#AksiNyata2024</div>
-        <div class="hashtag locked">#VoiceForChange</div>
-      </div>
-      <p class="locked-note">🔒 Aktif setelah 6 bulan atau undangan</p>
-    </div>
-
-    <div class="status-bar">
-      Pilih 1 dari tiap zona di atas.<br>
-      <span id="statusText">Belum lengkap (0/3)</span>
-    </div>
+  <div class="logo">NOPE.</div>
+  <div class="tagline">
+    Untuk setiap kamu<br>
+    Yang memilih diam<br>
+    Tapi tetap nyata<span class="heartbeat">💓</span>
   </div>
-
-  <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke jejak</button>
+  <input type="email" id="emailInput" class="email-input" placeholder="Masukkan emailmu jika berani">
+  <button class="submit-btn" onclick="submitEmail()">Gaskeun!</button>
+  <div id="feedbackToast"></div>
 
   <script>
-    let selections = { pop: null, pain: null, sick: null };
-
-    function getOrCreateUsername() {
-      let username = localStorage.getItem('nopeUsername');
-      if (!username) {
-        const adjs = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
-        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
-        const adj = adjs[Math.floor(Math.random() * adjs.length)];
-        const noun = nouns[Math.floor(Math.random() * nouns.length)];
-        const num = Math.floor(1000 + Math.random() * 9000);
-        username = `@nope.${adj}.${noun}.${num}`;
-        try {
-          localStorage.setItem('nopeUsername', username);
-          localStorage.setItem('nopeVibe', 'dalam');
-          localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
-        } catch (e) {
-          console.warn('localStorage tidak tersedia');
-        }
-      }
-      return username;
+    function showFeedback(text) {
+      const el = document.getElementById('feedbackToast');
+      el.textContent = text;
+      el.style.opacity = '1';
+      setTimeout(() => { el.style.opacity = '0'; }, 2000);
     }
 
-    const username = getOrCreateUsername();
-    document.getElementById('usernameDisplay').innerText = username;
+    function submitEmail() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) { showFeedback('Email wajib diisi.'); return; }
+      if (!/^\S+@\S+\.\S+$/.test(email)) { showFeedback('Format email tidak valid.'); return; }
 
-    document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
-      el.addEventListener('click', () => {
-        const zone = el.closest('.hashtags').dataset.zone;
-        if (!zone) return;
+      // Cek apakah email sudah pernah terdaftar
+      const existingEmail = localStorage.getItem('nopeEmail');
+      if (existingEmail === email) {
+        // User lama → langsung ke Jejak
+        window.location.href = '/jejak.html';
+        return;
+      }
 
-        el.closest('.hashtags').querySelectorAll('.hashtag').forEach(h => {
-          h.classList.remove('selected');
-        });
+      // User baru
+      localStorage.setItem('nopeEmail', email);
+      localStorage.setItem('nopeJoined', new Date().toISOString().split('T')[0]);
+      localStorage.setItem('nopeOnboarded', 'false');
+      // Generate username sementara (nanti bisa di-Supabase)
+      const username = '@nope.' + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem('nopeUsername', username);
 
-        el.classList.add('selected');
-        selections[zone] = el.dataset.tag;
+      // Arahkan ke onboarding
+      window.location.href = '/onboarding.html';
+    }
 
-        const count = Object.values(selections).filter(Boolean).length;
-        document.getElementById('statusText').textContent = 
-          count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
-        document.getElementById('continueBtn').disabled = (count !== 3);
-      });
+    document.getElementById('emailInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') submitEmail();
     });
-
-    function saveAndRedirect() {
-      if (Object.values(selections).every(v => v)) {
-        try {
-          localStorage.setItem('nopeZones', JSON.stringify(selections));
-          localStorage.setItem('nopeOnboarded', 'true');
-        } catch (e) {
-          alert('Gagal menyimpan. Coba non-private mode.');
-          return;
-        }
-        window.location.href = '/jejak'; // ✅ CLEAN URL — thanks to vercel.json
-      }
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(console.warn);
-      });
-    }
   </script>
 </body>
 </html>
-dan saya akan bantu checklist akhir. 🌑
