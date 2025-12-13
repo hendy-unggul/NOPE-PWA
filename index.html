@@ -2,114 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/icon-192.png">
   <meta name="theme-color" content="#0b2a4d">
   <title>NOPE</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #fff;
+      margin: 0; background: #000; color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 14px;
+      font-size: 15px; line-height: 1.35;
+      display: flex; justify-content: center;
+      min-height: 100vh; align-items: center;
+    }
+    .container {
+      width: 100%; max-width: 390px; padding: 0 24px;
+    }
+    h1 { font-size: 24px; font-weight: 600; margin: 0 0 16px; }
+    p { color: #aaa; font-size: 14px; margin: 0 0 24px; }
+    input {
+      width: 100%; padding: 14px 16px;
+      background: #111; border: 1px solid #222;
+      border-radius: 12px; color: #fff;
+      font-size: 16px; margin-bottom: 24px;
+    }
+    .hint {
+      font-size: 12px; color: #555; margin-bottom: 28px;
       line-height: 1.4;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      align-items: center;
     }
-    .iphone {
-      width: 390px;
-      height: 844px;
-      background: #000;
-      border-radius: 40px;
-      padding: 20px;
-      box-sizing: border-box;
-      position: relative;
-    }
-    .content {
-      text-align: center;
-      margin-top: 120px;
-    }
-    h1 {
-      font-weight: 600;
-      font-size: 28px;
-      margin: 0 0 24px;
-      letter-spacing: -0.5px;
-    }
-    p {
-      margin: 0 0 32px;
-      opacity: 0.8;
-    }
-    .cta {
-      background: #0b2a4d;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 20px;
-      font-size: 16px;
-      font-weight: 600;
-      animation: pulse 2s infinite;
-      cursor: pointer;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0.4); }
-      70% { box-shadow: 0 0 0 10px rgba(11, 42, 77, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0); }
+    button {
+      width: 100%; padding: 14px;
+      background: #0b2a4d; color: white;
+      border: none; border-radius: 14px;
+      font-size: 16px; font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <div class="iphone">
-    <div class="content">
-      <h1>masukke frekuensimu</h1>
-      <p>Masukkan emailmu jika berani.</p>
-      <button class="cta" onclick="window.location.href='/onboarding.html'">masuk</button>
+  <div class="container">
+    <h1>masuk atau daftar</h1>
+    <p>masukkan @nope_username atau emailmu</p>
+    <input type="text" id="identifier" placeholder="@nope.peluk.aura.7392 atau email@email.com">
+    <div class="hint">
+      • Sudah punya? Masukkan <b>@nope.username</b><br>
+      • Belum? Masukkan <b>emailmu</b>, kami akan buatkan @nope_username
     </div>
+    <button onclick="handleSubmit()">lanjut</button>
   </div>
 
+  <!-- Supabase JS v2 via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // 🔥 Sudah pakai URL & Key-mu — tidak perlu edit lagi
+    const supabase = window.supabase.createClient(
+      'https://iiznshiqpibtqqttrtm.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.6xK0VfWj7L8o9bN3eQz6uM2gTtHlCwYr4yQZaX5m7dA'
+    );
+
+    async function handleSubmit() {
+      const val = document.getElementById('identifier').value.trim();
+      if (!val) { alert('isi dulu'); return; }
+
+      // 🔹 MODE LOGIN: jika input dimulai dengan @nope.
+      if (val.startsWith('@nope.')) {
+        const { data, error } = await supabase
+          .from('users')
+          .select('nope_username, vibe, joined_at')
+          .eq('nope_username', val)
+          .single();
+
+        if (error || !data) {
+          alert('frekuensi tidak ditemukan');
+          return;
+        }
+
+        localStorage.setItem('nopeUsername', data.nope_username);
+        localStorage.setItem('nopeVibe', data.vibe);
+        localStorage.setItem('nopeJoined', data.joined_at);
+        window.location.href = '/inner.html';
+
+      // 🔹 MODE REGISTER: jika email (dan bukan @nope.)
+      } else if (val.includes('@') && !val.startsWith('@nope.')) {
+        const adjectives = ['peluk', 'bangga', 'aura', 'diam', 'tenang', 'sunyi'];
+        const nouns = ['frekuensi', 'jejak', 'nada', 'rasa', 'jiwa', 'sinyal'];
+        const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const noun = nouns[Math.floor(Math.random() * nouns.length)];
+        const num = Math.floor(1000 + Math.random() * 9000);
+        const nopeUsername = `@nope.${adj}.${noun}.${num}`;
+
+        const vibes = ['dingin', 'hangat', 'dalam', 'samar'];
+        const vibe = vibes[Math.floor(Math.random() * vibes.length)];
+        const joined = new Date().toISOString().split('T')[0];
+
+        const { error } = await supabase
+          .from('users')
+          .insert({ nope_username: nopeUsername, vibe, joined_at: joined });
+
+        if (error) {
+          console.error(error);
+          alert('gagal daftar, coba lagi');
+          return;
+        }
+
+        localStorage.setItem('nopeUsername', nopeUsername);
+        localStorage.setItem('nopeVibe', vibe);
+        localStorage.setItem('nopeJoined', joined);
+        window.location.href = '/onboarding.html';
+      } else {
+        alert('format: email atau @nope.username');
+      }
+    }
+
+    // PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch(console.warn);
       });
     }
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    });
   </script>
-<script>
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Otomatis tampilkan prompt setelah 3 detik (jika user belum install)
-    setTimeout(() => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-          } else {
-            console.log('User dismissed the A2HS prompt');
-          }
-          deferredPrompt = null;
-        });
-      }
-    }, 3000);
-  });
-
-  // Jika user sudah install, sembunyikan tombol "masuk" atau ganti teks
-  window.addEventListener('appinstalled', (evt) => {
-    console.log('PWA was installed');
-    // Kamu bisa ubah UI di sini, misalnya: document.querySelector('.cta').innerText = 'Buka App';
-  });
-</script>
 </body>
 </html>
