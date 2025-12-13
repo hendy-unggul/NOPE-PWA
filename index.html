@@ -9,45 +9,98 @@
   <title>NOPE</title>
   <style>
     body {
-      margin: 0; background: #000; color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      font-size: 15px; line-height: 1.35;
-      display: flex; justify-content: center;
-      min-height: 100vh; align-items: center;
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.35;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
     }
     .container {
-      width: 100%; max-width: 390px; padding: 0 24px;
+      width: 100%;
+      max-width: 390px;
+      padding: 0 24px;
+      box-sizing: border-box;
     }
-    h1 { font-size: 24px; font-weight: 600; margin: 0 0 16px; }
-    p { color: #aaa; font-size: 14px; margin: 0 0 24px; }
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 24px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.4px;
+      margin: 0 0 16px;
+      text-align: center;
+    }
+    p {
+      color: #aaa;
+      font-size: 14px;
+      margin: 0 0 24px;
+      text-align: center;
+    }
     input {
-      width: 100%; padding: 14px 16px;
-      background: #111; border: 1px solid #222;
-      border-radius: 12px; color: #fff;
-      font-size: 16px; margin-bottom: 24px;
+      width: 100%;
+      padding: 14px 16px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 24px;
+      box-sizing: border-box;
+      outline: none;
     }
-    .hint {
-      font-size: 12px; color: #555; margin-bottom: 28px;
-      line-height: 1.4;
+    input::placeholder {
+      color: #555;
     }
-    button {
-      width: 100%; padding: 14px;
-      background: #0b2a4d; color: white;
-      border: none; border-radius: 14px;
-      font-size: 16px; font-weight: 600;
+    .cta {
+      width: 100%;
+      padding: 14px;
+      background: #0b2a4d;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(11, 42, 77, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(11, 42, 77, 0); }
+    }
+    .cta:active {
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>masuk atau daftar</h1>
-    <p>masukkan @nope_username atau emailmu</p>
-    <input type="text" id="identifier" placeholder="@nope.peluk.aura.7392 atau email@email.com">
-    <div class="hint">
-      • Sudah punya? Masukkan <b>@nope.username</b><br>
-      • Belum? Masukkan <b>emailmu</b>, kami akan buatkan @nope_username
+    <div class="logo">
+      <img src="/logo-nope-512.png" alt="NOPE">
     </div>
-    <button onclick="handleSubmit()">lanjut</button>
+    <h1>NOPE</h1>
+    <p>masukkan @nope_username atau emailmu</p>
+    <input type="text" id="identifier" placeholder="@nope.peluk.aura.7392 atau email@email.com" autocomplete="off" autocapitalize="none" required>
+    <button class="cta" onclick="handleSubmit()">lanjut</button>
   </div>
 
   <!-- Supabase JS v2 via CDN -->
