@@ -31,8 +31,8 @@
     .container {
       max-width: 390px;
       margin: 0 auto;
-      padding: 20px 16px;
-      padding-bottom: calc(72px + var(--safe-bottom));
+      padding: 16px 12px;
+      padding-bottom: calc(68px + var(--safe-bottom));
     }
 
     /* 1. Artefak: tinggi = 80% lebar layar */
@@ -54,175 +54,160 @@
       object-fit: cover;
     }
 
+    /* Notasi + Stamp — dipisah jadi dua elemen */
+    .artefact-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 12px 8px;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      z-index: 10;
+    }
+
+    .artefact-notasi {
+      font-size: 20px; /* 200% dari 10px → 20px */
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
     .artefact-stamp {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 4px 8px;
-      border-radius: 6px;
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.55);
-      z-index: 10;
-      max-width: 90%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.2;
     }
 
-    .artefact-upload-btn {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 6px 16px;
-      background: rgba(11, 42, 77, 0.7);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 13px;
-      cursor: pointer;
-      z-index: 10;
-    }
-
-    /* 2. Emoji respons — lebih kecil, rapat */
+    /* Emoji — kecil, rata kanan, di bawah artefak */
     .emoji-bar {
       display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 8px 0;
-      margin-bottom: 16px;
-    }
-
-    .emoji-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      color: #aaa;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 6px 12px 10px;
+      margin-bottom: 12px;
     }
 
     .emoji-btn {
       background: none;
       border: none;
       color: #aaa;
-      font-size: 24px;
+      font-size: 16px; /* 50% dari 32px → 16px */
       cursor: pointer;
-      transition: transform 0.2s;
+      opacity: 0.8;
+      transition: opacity 0.2s;
     }
 
+    .emoji-btn:hover,
     .emoji-btn.pulse {
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
+      opacity: 1;
     }
 
     /* 3. Rantbox */
     .rantbox {
       background: #0a0a0a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 20px;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
     }
 
     textarea {
       width: 100%;
-      height: 80px;
+      height: 70px;
       background: #111;
       border: 1px solid #222;
-      border-radius: 12px;
+      border-radius: 10px;
       color: #fff;
       font-size: 14px;
-      padding: 12px;
+      padding: 10px;
       resize: none;
       outline: none;
     }
 
     .char-count {
       text-align: right;
-      font-size: 12px;
+      font-size: 11px;
       color: #666;
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .submit-btn {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: #0b2a4d;
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     /* 4. Jurnal */
     .jurnal-title {
-      font-size: 15px;
+      font-size: 14px;
       color: #0b2a4d;
-      margin: 16px 0 12px;
+      margin: 12px 0 8px;
       font-weight: 600;
+      padding: 0 4px;
     }
 
     .rant-item {
       background: #0a0a0a;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
     }
 
     .rant-text {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       white-space: pre-line;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
     .reveal-btn {
       background: none;
       border: none;
       color: #0b2a4d;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
-      padding: 4px;
+      padding: 3px;
       border-radius: 50%;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .responses {
-      margin-top: 12px;
-      font-size: 13px;
+      margin-top: 8px;
+      font-size: 12px;
       color: #aaa;
     }
 
     .response-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-top: 6px;
+      gap: 6px;
+      margin-top: 4px;
     }
 
     /* 5. Tray artefak */
     .tray-title {
-      padding: 0 16px;
-      font-size: 15px;
+      padding: 0 12px;
+      font-size: 14px;
       color: #0b2a4d;
-      margin: 16px 0 12px;
+      margin: 12px 0 8px;
       font-weight: 600;
     }
 
     .artefact-tray {
       display: flex;
-      gap: 10px;
-      padding: 0 16px 20px;
+      gap: 8px;
+      padding: 0 12px 16px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -233,14 +218,10 @@
     }
 
     .tray-item {
-      flex: 0 0 80px;
-      height: 80px;
-      border-radius: 10px;
+      flex: 0 0 72px;
+      height: 72px;
+      border-radius: 8px;
       background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #555;
       position: relative;
     }
 
@@ -248,7 +229,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 8px;
     }
 
     .tray-item .stamp {
@@ -257,8 +238,8 @@
       left: 0;
       right: 0;
       background: rgba(0,0,0,0.5);
-      padding: 2px 4px;
-      font-size: 8px;
+      padding: 1px 3px;
+      font-size: 7px;
       color: rgba(255,255,255,0.5);
       text-align: center;
       white-space: nowrap;
@@ -281,8 +262,8 @@
     .nav-item {
       flex: 1;
       text-align: center;
-      padding: 12px 0;
-      font-size: 13px;
+      padding: 10px 0;
+      font-size: 12px;
       color: #666;
       text-decoration: none;
     }
@@ -308,21 +289,21 @@
 
     .modal-content {
       background: #0a0a0a;
-      padding: 20px;
-      border-radius: 16px;
+      padding: 18px;
+      border-radius: 14px;
       width: 90%;
-      max-width: 350px;
+      max-width: 340px;
     }
 
     .modal input {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: #111;
       border: 1px solid #222;
-      border-radius: 12px;
+      border-radius: 10px;
       color: #fff;
-      font-size: 15px;
-      margin: 10px 0;
+      font-size: 14px;
+      margin: 8px 0;
     }
 
     .modal input::placeholder {
@@ -331,17 +312,18 @@
 
     .modal-btns {
       display: flex;
-      gap: 10px;
-      margin-top: 16px;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .modal-btn {
       flex: 1;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 8px;
+      border-radius: 10px;
       font-weight: 600;
       border: none;
       cursor: pointer;
+      font-size: 14px;
     }
 
     .modal-btn.cancel {
@@ -360,25 +342,17 @@
     <!-- 1. Artefak -->
     <div class="artefact-header">
       <img id="artefactImage" class="artefact-image" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format" alt="Artefak">
-      <div id="artefactStamp" class="artefact-stamp">struk gaji | 5 Mar 2025</div>
-      <button class="artefact-upload-btn" onclick="uploadArtefact()">unggah</button>
-      <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
+      <div class="artefact-text">
+        <div id="artefactNotasi" class="artefact-notasi">struk gaji</div>
+        <div id="artefactStamp" class="artefact-stamp">5 Mar 2025</div>
+      </div>
     </div>
 
     <!-- 2. Emoji respons -->
     <div class="emoji-bar">
-      <div class="emoji-item">
-        <button class="emoji-btn pulse" title="GueJuga">🖤</button>
-        <span>GueJuga</span>
-      </div>
-      <div class="emoji-item">
-        <button class="emoji-btn pulse" title="Peluk">🤗</button>
-        <span>Peluk</span>
-      </div>
-      <div class="emoji-item">
-        <button class="emoji-btn pulse" title="Bangga">🌟</button>
-        <span>Bangga</span>
-      </div>
+      <button class="emoji-btn pulse" title="GueJuga">🖤</button>
+      <button class="emoji-btn pulse" title="Peluk">🤗</button>
+      <button class="emoji-btn pulse" title="Bangga">🌟</button>
     </div>
 
     <!-- 3. Rantbox -->
@@ -425,86 +399,33 @@
     const joined = localStorage.getItem('nopeJoined') || new Date().toISOString().split('T')[0];
     const username = localStorage.getItem('nopeUsername') || '@nope.anon';
     const savedArtefacts = [
-      {
-        url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format",
-        date: "2025-03-05T10:00:00Z",
-        notasi: "struk gaji"
-      },
-      {
-        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format",
-        date: "2025-02-15T10:00:00Z",
-        notasi: "sepatu bapak"
-      },
-      {
-        url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format",
-        date: "2025-01-20T10:00:00Z",
-        notasi: "karcis konser"
-      },
-      {
-        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format",
-        date: "2025-04-05T10:00:00Z",
-        notasi: "surat lama"
-      },
-      {
-        url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format",
-        date: "2025-05-10T10:00:00Z",
-        notasi: "tiket bioskop"
-      },
-      {
-        url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format",
-        date: "2025-06-25T10:00:00Z",
-        notasi: "kopi pagi"
-      }
+      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-03-05T10:00:00Z", notasi: "struk gaji" },
+      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-02-15T10:00:00Z", notasi: "sepatu bapak" },
+      { url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=640&fit=crop&auto=format", date: "2025-01-20T10:00:00Z", notasi: "karcis konser" },
+      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-04-05T10:00:00Z", notasi: "surat lama" },
+      { url: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format", date: "2025-05-10T10:00:00Z", notasi: "tiket bioskop" },
+      { url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=640&fit=crop&auto=format", date: "2025-06-25T10:00:00Z", notasi: "kopi pagi" }
     ];
     let currentNotasiUrl = '';
-
-    // ==== Fungsi Validasi Upload ====
-    function canUploadNewArtefact() {
-      if (savedArtefacts.length === 0) return true;
-      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
-      const now = new Date();
-      const diffTime = Math.abs(now - lastUpload);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays >= 30;
-    }
-
-    // ==== Deteksi Kategori Emosi ====
-    function getStampClass(notasi) {
-      const text = notasi.toLowerCase();
-      if (/bapak|ibu|kakak|adik|keluarga|sepatu|hadiah|kado/i.test(text)) return 'family';
-      if (/gaji|kerja|lulus|ujian|pertama|struk|slip|kantor/i.test(text)) return 'achievement';
-      if (/konser|nonton|jalan|teman|bareng|karcis|bioskop|cafe/i.test(text)) return 'social';
-      if (/terakhir|pergi|rindu|sunyi|sendiri|hilang|akhir/i.test(text)) return 'melancholy';
-      return '';
-    }
 
     // ==== Render Artefak Utama ====
     function renderMainArtefact() {
       const imageEl = document.getElementById('artefactImage');
+      const notasiEl = document.getElementById('artefactNotasi');
       const stampEl = document.getElementById('artefactStamp');
 
       if (savedArtefacts.length > 0) {
         const latest = savedArtefacts[savedArtefacts.length - 1];
         imageEl.src = latest.url;
-        
-        const dateStr = new Date(latest.date).toLocaleDateString('id-ID', {
+        notasiEl.textContent = latest.notasi;
+        stampEl.textContent = new Date(latest.date).toLocaleDateString('id-ID', {
           day: 'numeric',
           month: 'short',
           year: 'numeric'
         });
-        
-        const displayText = latest.notasi ? `${latest.notasi} | ${dateStr}` : dateStr;
-        stampEl.textContent = displayText;
-        
-        stampEl.className = 'artefact-stamp';
-        const cat = getStampClass(latest.notasi);
-        if (cat === 'family') stampEl.style.fontFamily = "Georgia, 'Times New Roman', serif";
-        else if (cat === 'achievement') stampEl.style.fontFamily = "'Courier New', monospace";
-        else if (cat === 'social') stampEl.style.fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
-        else if (cat === 'melancholy') stampEl.style.fontFamily = "'Times New Roman', Georgia, serif";
-        // else default
       } else {
         imageEl.src = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&h=640&fit=crop&auto=format';
+        notasiEl.textContent = '—';
         stampEl.textContent = '—';
       }
     }
@@ -533,6 +454,15 @@
         return;
       }
       document.getElementById('artefactInput').click();
+    }
+
+    function canUploadNewArtefact() {
+      if (savedArtefacts.length === 0) return true;
+      const lastUpload = new Date(savedArtefacts[savedArtefacts.length - 1].date);
+      const now = new Date();
+      const diffTime = Math.abs(now - lastUpload);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays >= 30;
     }
 
     function handleArtefactUpload(event) {
@@ -576,8 +506,10 @@
 
     function submitRant() {
       const text = rantInput.value.trim();
-      if (!text) { alert('Tulis dulu jejakmu.'); return; }
-      if (text.length > 280) { alert('Maksimal 280 karakter.'); return; }
+      if (!text || text.length > 280) {
+        alert(text ? 'Maksimal 280 karakter.' : 'Tulis dulu jejakmu.');
+        return;
+      }
       alert('Jejak terkirim. 🖤');
       rantInput.value = '';
       charCount.textContent = '0';
