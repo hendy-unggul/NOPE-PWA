@@ -146,7 +146,6 @@
       font-family: inherit;
     }
 
-    /* ✅ CTA "Gaskeun!" — kecil, rata kanan, lebar sesuai teks */
     .submit-btn {
       padding: 6px 12px;
       background: #0b2a4d;
@@ -213,7 +212,7 @@
       margin-top: 4px;
     }
 
-    /* 5. Tray artefak — ✅ GRID 2x3 */
+    /* 5. Tray artefak — 3 kolom × 2 baris, rapat seperti mozaik */
     .tray-title {
       padding: 0 12px;
       font-size: 14px;
@@ -224,16 +223,17 @@
 
     .artefact-tray {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding: 0 12px 16px;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 72px);
+      gap: 4px; /* rapat */
+      padding: 0 12px 12px;
       justify-items: center;
     }
 
     .tray-item {
       width: 72px;
       height: 72px;
-      border-radius: 8px;
+      border-radius: 6px;
       background: #111;
       position: relative;
       overflow: hidden;
@@ -243,7 +243,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 6px;
     }
 
     .tray-item .stamp {
@@ -252,21 +252,13 @@
       left: 0;
       right: 0;
       background: rgba(0,0,0,0.5);
-      padding: 1px 3px;
-      font-size: 7px;
+      padding: 1px 2px;
+      font-size: 6px;
       color: rgba(255,255,255,0.5);
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-    }
-
-    /* Hover effect halus (opsional) */
-    .tray-item:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(11, 42, 77, 0.4);
-      z-index: 1;
-      transition: all 0.2s ease;
     }
 
     /* Bottom nav */
@@ -390,7 +382,7 @@
       <!-- Diisi oleh JS -->
     </div>
 
-    <!-- 5. Tray artefak — ✅ GRID 2x3 -->
+    <!-- 5. Tray artefak (3x2 mozaik) -->
     <div class="tray-title">Jejak Terkirim</div>
     <div class="artefact-tray" id="trayList">
       <!-- Diisi oleh JS -->
@@ -452,11 +444,11 @@
       }
     }
 
-    // ==== Render Tray (2x3 grid) ====
+    // ==== Render Tray (3x2) ====
     function renderTray() {
       const tray = document.getElementById('trayList');
       tray.innerHTML = '';
-      const recent = savedArtefacts.slice(-6).reverse(); // Ambil 6 terakhir, urut terbaru dulu
+      const recent = savedArtefacts.slice(-6).reverse(); // 6 terakhir, urut terbaru
       recent.forEach(art => {
         const div = document.createElement('div');
         div.className = 'tray-item';
@@ -521,8 +513,6 @@
 
     // ==== Rantbox ====
     const rantInput = document.getElementById('rantInput');
-    rantInput.addEventListener('input', () => {});
-
     function submitRant() {
       const text = rantInput.value.trim();
       if (!text) { alert('Tulis dulu jejakmu.'); return; }
@@ -600,4 +590,3 @@
   <input type="file" id="artefactInput" accept="image/*" style="display:none;" onchange="handleArtefactUpload(event)">
 </body>
 </html>
-Aku di sini. 💙
