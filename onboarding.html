@@ -23,81 +23,67 @@
       background: #000;
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 13px;
+      font-size: 14px;
       padding-top: var(--safe-top);
       padding-bottom: var(--safe-bottom);
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     .container {
       max-width: 390px;
       margin: 0 auto;
-      padding: 20px 16px;
+      padding: 28px 20px 80px; /* extra padding bawah untuk tombol */
     }
 
     .user-info {
       text-align: right;
       font-size: 12px;
       color: #0b2a4d;
-      margin-bottom: 16px;
-      padding: 0 8px;
+      margin-bottom: 20px;
     }
 
     .section-title {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 600;
-      margin: 0 0 20px;
       text-align: center;
+      margin-bottom: 32px;
       padding: 0 8px;
-    }
-
-    /* Grid 2x2 untuk 4 zona */
-    .zones-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
     }
 
     .zone {
       background: #0a0a0a;
-      border-radius: 16px;
-      padding: 14px;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 28px;
     }
 
     .zone-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: #0b2a4d;
-      margin-bottom: 10px;
-      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .hashtags {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    /* Baris pertama: 3 item, baris kedua: 2 item → pakai grid span */
     .hashtag {
       background: #111;
       border: 1px solid #222;
       color: #aaa;
-      padding: 6px 4px;
-      border-radius: 12px;
-      font-size: 12px;
-      text-align: center;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .hashtag:nth-child(4),
-    .hashtag:nth-child(5) {
-      grid-column: span 2; /* baris kedua: 2 kolom lebar */
     }
 
     .hashtag.selected {
@@ -112,27 +98,38 @@
       pointer-events: none;
     }
 
+    .locked-note {
+      color: #ff6b00;
+      font-size: 11px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
     .status-bar {
       background: #0a0a0a;
-      padding: 10px 14px;
-      border-radius: 12px;
-      margin: 20px 0;
-      font-size: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      margin: 28px 0;
+      font-size: 13px;
       color: #777;
       text-align: center;
     }
 
     .continue-btn {
-      width: 100%;
-      padding: 16px;
+      position: fixed;
+      bottom: calc(var(--safe-bottom) + 24px);
+      left: 20px;
+      right: 20px;
+      width: auto;
+      padding: 17px;
       background: #0b2a4d;
       color: white;
       border: none;
       border-radius: 16px;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 8px;
+      z-index: 10;
     }
 
     .continue-btn:disabled {
@@ -147,64 +144,62 @@
 
     <h1 class="section-title">HAL APA YANG PALING BIKIN LU KESEL?</h1>
 
-    <div class="zones-grid">
-      <!-- ZONE 1: POP CULTURE -->
-      <div class="zone">
-        <div class="zone-title">🔥 POP CULTURE</div>
-        <div class="hashtags" data-zone="pop">
-          <div class="hashtag" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
-          <div class="hashtag" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
-          <div class="hashtag" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
-          <div class="hashtag" data-tag="#TikTokCringe">#TikTokCringe</div>
-          <div class="hashtag" data-tag="#CelebrityFail">#CelebrityFail</div>
-        </div>
+    <!-- ZONE 1: POP CULTURE -->
+    <div class="zone">
+      <div class="zone-title">🔥 POP CULTURE</div>
+      <div class="hashtags" data-zone="pop">
+        <div class="hashtag" data-tag="#BeliTiketJualGinjal">#BeliTiketJualGinjal</div>
+        <div class="hashtag" data-tag="#InfluencerNgehek">#InfluencerNgehek</div>
+        <div class="hashtag" data-tag="#FilmEndingGaje">#FilmEndingGaje</div>
+        <div class="hashtag" data-tag="#TikTokCringe">#TikTokCringe</div>
+        <div class="hashtag" data-tag="#CelebrityFail">#CelebrityFail</div>
       </div>
+    </div>
 
-      <!-- ZONE 2: PERSONAL PAIN -->
-      <div class="zone">
-        <div class="zone-title">💀 PERSONAL PAIN</div>
-        <div class="hashtags" data-zone="pain">
-          <div class="hashtag" data-tag="#DighostingGebetan">#DighostingGebetan</div>
-          <div class="hashtag" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
-          <div class="hashtag" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
-          <div class="hashtag" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
-          <div class="hashtag" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
-        </div>
+    <!-- ZONE 2: PERSONAL PAIN -->
+    <div class="zone">
+      <div class="zone-title">💀 PERSONAL PAIN</div>
+      <div class="hashtags" data-zone="pain">
+        <div class="hashtag" data-tag="#DighostingGebetan">#DighostingGebetan</div>
+        <div class="hashtag" data-tag="#DiajakJalanTapiKempes">#DiajakJalanTapiKempes</div>
+        <div class="hashtag" data-tag="#MagangDigajiSertifikat">#MagangDigajiSertifikat</div>
+        <div class="hashtag" data-tag="#MinjemDuitGaBalik">#MinjemDuitGaBalik</div>
+        <div class="hashtag" data-tag="#ProjectLastMinute">#ProjectLastMinute</div>
       </div>
+    </div>
 
-      <!-- ZONE 3: SOCIAL SICKNESS -->
-      <div class="zone">
-        <div class="zone-title">🤮 SOCIAL SICKNESS</div>
-        <div class="hashtags" data-zone="sick">
-          <div class="hashtag" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
-          <div class="hashtag" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
-          <div class="hashtag" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
-          <div class="hashtag" data-tag="#GhostingCulture">#GhostingCulture</div>
-          <div class="hashtag" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
-        </div>
+    <!-- ZONE 3: SOCIAL SICKNESS -->
+    <div class="zone">
+      <div class="zone-title">🤮 SOCIAL SICKNESS</div>
+      <div class="hashtags" data-zone="sick">
+        <div class="hashtag" data-tag="#RencanaPlinPlan">#RencanaPlinPlan</div>
+        <div class="hashtag" data-tag="#DramaQueenAnjay">#DramaQueenAnjay</div>
+        <div class="hashtag" data-tag="#BacotLambeTurah">#BacotLambeTurah</div>
+        <div class="hashtag" data-tag="#GhostingCulture">#GhostingCulture</div>
+        <div class="hashtag" data-tag="#FlexingGaJelas">#FlexingGaJelas</div>
       </div>
+    </div>
 
-      <!-- ZONE 4: MOVEMENT (LOCKED) -->
-      <div class="zone">
-        <div class="zone-title">⚡ MOVEMENT (LOCKED)</div>
-        <div class="hashtags">
-          <div class="hashtag locked">#SayNOPEBukanPilihan</div>
-          <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
-          <div class="hashtag locked">#ReformasiSistem</div>
-          <div class="hashtag locked">#AksiNyata2024</div>
-          <div class="hashtag locked">#VoiceForChange</div>
-        </div>
-        <p style="color: #ff6b00; font-size: 10px; margin-top: 8px; text-align: center;">🔒 6 bulan atau undangan</p>
+    <!-- ZONE 4: MOVEMENT (LOCKED) -->
+    <div class="zone">
+      <div class="zone-title">⚡ MOVEMENT (LOCKED)</div>
+      <div class="hashtags">
+        <div class="hashtag locked">#SayNOPEBukanPilihan</div>
+        <div class="hashtag locked">#NOPEBersamaKitaKuat</div>
+        <div class="hashtag locked">#ReformasiSistem</div>
+        <div class="hashtag locked">#AksiNyata2024</div>
+        <div class="hashtag locked">#VoiceForChange</div>
       </div>
+      <p class="locked-note">🔒 Aktif setelah 6 bulan atau undangan</p>
     </div>
 
     <div class="status-bar">
-      Pilih 1 dari tiap zona.<br>
+      Pilih 1 dari tiap zona di atas.<br>
       <span id="statusText">Belum lengkap (0/3)</span>
     </div>
-
-    <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">temukan frekuensimu...</button>
   </div>
+
+  <button class="continue-btn" id="continueBtn" disabled onclick="saveAndRedirect()">lanjut ke inner</button>
 
   <script>
     let selections = { pop: null, pain: null, sick: null };
@@ -233,13 +228,13 @@
     const username = getOrCreateUsername();
     document.getElementById('usernameDisplay').innerText = username;
 
-    // Event listener untuk hashtag yang bisa dipilih
+    // Event listener untuk setiap hashtag yang bisa dipilih
     document.querySelectorAll('.hashtag:not(.locked)').forEach(el => {
       el.addEventListener('click', () => {
         const zone = el.closest('.hashtags').dataset.zone;
         if (!zone) return;
 
-        // Hapus selected di zona ini
+        // Hapus seleksi sebelumnya di zona ini
         el.closest('.hashtags').querySelectorAll('.hashtag').forEach(h => {
           h.classList.remove('selected');
         });
@@ -247,6 +242,7 @@
         el.classList.add('selected');
         selections[zone] = el.dataset.tag;
 
+        // Update status
         const count = Object.values(selections).filter(Boolean).length;
         document.getElementById('statusText').textContent = 
           count === 3 ? 'Sudah lengkap!' : `Belum lengkap (${count}/3)`;
